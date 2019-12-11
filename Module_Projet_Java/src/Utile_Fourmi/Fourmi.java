@@ -8,6 +8,7 @@ public class Fourmi {
         this.nb=nbFourmi;
         nbFourmi++;
     }
+    //tests
 
     public String toString(){
         return ""+nb;
