@@ -46,6 +46,11 @@ public class Monde {
        this(hauteur,largeur,nbFourmisDefaut);
     }
 
+    //Sauvegarder l'état de la carte du monde
+    public void sauvegarder(String nomFichier) throws IOException {
+        this.carte.sauvegarder(nomFichier);
+    }
+
     public Carte getCarte() {
         return carte;
     }
