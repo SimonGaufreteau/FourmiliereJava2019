@@ -10,4 +10,8 @@ public class Noeud {
     public String getText () {
         return text;
     }
+
+    public String toString() {
+        return "Noeud : " + text;
+    }
 }

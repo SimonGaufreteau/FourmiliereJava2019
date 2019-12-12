@@ -6,4 +6,7 @@ public class Condition extends Noeud {
         super(text);
     }
 
+    public String toString() {
+        return this.toString();
+    }
 }
