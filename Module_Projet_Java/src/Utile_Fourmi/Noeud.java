@@ -12,6 +12,6 @@ public class Noeud {
     }
 
     public String toString() {
-        return "Noeud : " + text;
+        return text;
     }
 }
