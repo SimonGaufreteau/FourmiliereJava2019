@@ -52,16 +52,19 @@ public class ProgrammeGenetique {
             allConditions[i] = new Condition(listConditions.get(i));
         }
 
-        int aleat = (int)(Math.random()*13);
-        System.out.println("Valeur aleatoire : " + aleat);
+        int aleatNoeud = (int) (Math.random() * 2); // On tire au sort un numéro entre 0 et 1 (0:action, 1:condition)
+        //System.out.println("Valeur aleatoire : " + aleatNoeud);
 
-        if(aleat < 8){
-            valeur = allActions[aleat];
+        if(aleatNoeud == 0){ // On sélectionne une action
+            int aleatAct = (int) (Math.random() * 8);
+            valeur = allActions[aleatAct];
             aGauche = null;
             aDroite = null;
         }
-        else{
-            valeur = allActions[aleat%8];
+
+        else { // On sélectionne une condition
+            int aleatCond = (int) (Math.random() * 3);
+            valeur = allConditions[aleatCond];
             aGauche = new ProgrammeGenetique();
             aDroite = new ProgrammeGenetique();
         }
@@ -90,6 +93,15 @@ public class ProgrammeGenetique {
 
     public ProgrammeGenetique getADroite(){
         return aDroite;
+    }
+
+    public void afficherArbre(int hauteur){
+        //System.out.println(valeur.getClass().getName());
+        System.out.println(hauteur + "." + valeur.getText());
+        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+            aGauche.afficherArbre(hauteur+1);
+            aDroite.afficherArbre(hauteur+1);
+        }
     }
     /*
     public String getValeurNoeud(){

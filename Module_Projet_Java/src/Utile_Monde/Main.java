@@ -36,10 +36,7 @@ public class Main {
             //System.out.println(monde1);
             //monde1.sauvegarder("Save_Carte_Test.carte");
             ProgrammeGenetique prog = new ProgrammeGenetique();
-            System.out.println(prog.getNoeud().getText());
-            System.out.println(prog.getAGauche().getNoeud().getText());
-            System.out.println(prog.getADroite().getNoeud().getText());
-            System.out.println(prog.getNoeud().getClass().getName());
+            prog.afficherArbre(1);
         }
         catch(Exception e){
             System.out.println(e.getMessage());
