@@ -36,7 +36,11 @@ public class Main {
             //System.out.println(monde1);
             //monde1.sauvegarder("Save_Carte_Test.carte");
             ProgrammeGenetique prog = new ProgrammeGenetique();
-            prog.afficherArbre(1);
+            prog.afficherArbre(1, "");
+            System.out.println("");
+            prog.simplifier();
+            prog.afficherArbre(1, "");
+            //prog.sauvegarder("test_arbre.txt");
         }
         catch(Exception e){
             System.out.println(e.getMessage());

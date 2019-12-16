@@ -1,0 +1,5 @@
+1.cond_possedeNourriture
+  2.cond_fourmiliere
+    3.act_deposer
+    3.act_ramasser
+  2.act_deposer

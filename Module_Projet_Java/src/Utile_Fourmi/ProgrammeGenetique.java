@@ -2,9 +2,8 @@ package Utile_Fourmi;
 
 import Exceptions_Monde.InvalidFileFormatException;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ public class ProgrammeGenetique {
         this.aGauche = null;
         this.aDroite = null;
     }
-
 
     // Dans le cas d'un noeud contenant une condition, on crée un fils gauche et droite
     public ProgrammeGenetique(Noeud valeur, ProgrammeGenetique aGauche, ProgrammeGenetique aDroite){
@@ -70,6 +68,20 @@ public class ProgrammeGenetique {
         }
     }
 
+    public Noeud getNoeud(){
+        return valeur;
+    }
+
+    public String getValeurNoeud() { return valeur.getText(); }
+
+    public ProgrammeGenetique getAGauche(){
+        return aGauche;
+    }
+
+    public ProgrammeGenetique getADroite(){
+        return aDroite;
+    }
+
     // Fonction interne permettant de récupérer le texte présent dans les fichiers de Noeuds (Conditions et Actions)
     private  List<String> getLignes(String nomFichier) throws IOException { // Réutilisation de getLignes, présent dans la classe Case, faut-il le généraliser dans un classe mère ?
         List<String> lignes  = new ArrayList<String>();
@@ -83,36 +95,50 @@ public class ProgrammeGenetique {
         return lignes;
     }
 
-    public Noeud getNoeud(){
-        return valeur;
-    }
-
-    public ProgrammeGenetique getAGauche(){
-        return aGauche;
-    }
-
-    public ProgrammeGenetique getADroite(){
-        return aDroite;
-    }
-
-    public void afficherArbre(int hauteur){
-        //System.out.println(valeur.getClass().getName());
-        System.out.println(hauteur + "." + valeur.getText());
+    public void afficherArbre(int hauteur, String espace){
+        System.out.println(espace + hauteur + "." + valeur.getText());
         if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
-            aGauche.afficherArbre(hauteur+1);
-            aDroite.afficherArbre(hauteur+1);
+            aGauche.afficherArbre(hauteur+1, espace+="  ");
+            aDroite.afficherArbre(hauteur+1, espace);
         }
     }
-    /*
-    public String getValeurNoeud(){
-        return valeur.toString();
+
+    public void sauvegarder(String nomFichier) throws IOException {
+        nomFichier = System.getProperty("user.dir")+ "\\Module_Projet_Java\\Sauvegardes\\"+nomFichier;
+
+        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), StandardCharsets.UTF_8));
+        writer.write(this.toString(1,""));
+        writer.close();
     }
 
-    public String getValeurNoeudAGauche(){
-        return aGauche.getValeurNoeud();
+    public void charger(String nomFichier) throws IOException {
+
     }
 
-    public String getValeurNoeudADroite(){
-        return aDroite.getValeurNoeud();
-    }*/
+    public void simplifier () {
+        /*if(valeur.getClass().getName() == "Utile_Fourmi.Condition") {
+            if (valeur.getText() == getAGauche().getValeurNoeud())
+                aGauche = aGauche.getAGauche();
+            if (valeur.getText() == getADroite().getValeurNoeud())
+                aDroite = aDroite.getADroite();
+            aGauche.simplifier();
+            aDroite.simplifier();
+        }*/
+        Noeud n = new Noeud("cond_test");
+        ProgrammeGenetique gen = new ProgrammeGenetique(n);
+        if(valeur.getClass().getName() == "Utile_Fourmi.Condition") {
+            aGauche = gen;
+            aDroite.simplifier();
+        }
+    }
+
+    public String toString(int hauteur, String espace) {
+        String S = "";
+        S += espace + hauteur + "." + valeur.getText() + "\n";
+        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+            S+=aGauche.toString(hauteur+1, espace+="  ");
+            S+=aDroite.toString(hauteur+1, espace);
+        }
+        return S;
+    }
 }
