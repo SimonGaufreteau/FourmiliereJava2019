@@ -1,6 +1,9 @@
 package Utile_Monde;
 
 import Exceptions_Monde.OutOfMapException;
+import Utile_Fourmi.Action;
+import Utile_Fourmi.Condition;
+import Utile_Fourmi.Noeud;
 import Utile_Fourmi.ProgrammeGenetique;
 
 
@@ -35,12 +38,31 @@ public class Main {
             //Monde monde1 = new Monde(nomCarte, 5);
             //System.out.println(monde1);
             //monde1.sauvegarder("Save_Carte_Test.carte");
-            ProgrammeGenetique prog = new ProgrammeGenetique();
+            /*ProgrammeGenetique prog = new ProgrammeGenetique();
             prog.afficherArbre(1, "");
             System.out.println("");
             prog.simplifier();
             prog.afficherArbre(1, "");
-            //prog.sauvegarder("test_arbre.txt");
+            //prog.sauvegarder("test_arbre.txt");*/
+
+            ProgrammeGenetique prog = new ProgrammeGenetique();
+
+            Noeud n1 = new Action("act_allerBas");
+            Noeud n2 = new Action("act_rentrer");
+            Noeud n3 = new Condition("cond_fourmiliere");
+            Noeud n4 = new Condition("cond_nourriture");
+
+            ProgrammeGenetique gen1 = new ProgrammeGenetique(n1);
+            ProgrammeGenetique gen2 = new ProgrammeGenetique(n2);
+            ProgrammeGenetique gen3 = new ProgrammeGenetique(n3,gen1,gen2);
+            ProgrammeGenetique gen4 = new ProgrammeGenetique(n3,gen1,gen3);
+            ProgrammeGenetique gen5 = new ProgrammeGenetique(n4,gen1,gen4);
+
+            prog.afficherArbre(1,"");
+            prog.simplifier();
+            System.out.println("");
+            prog.afficherArbre(1,"");
+
         }
         catch(Exception e){
             System.out.println(e.getMessage());

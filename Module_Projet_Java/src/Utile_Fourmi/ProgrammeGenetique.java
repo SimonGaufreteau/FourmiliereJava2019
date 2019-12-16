@@ -115,19 +115,14 @@ public class ProgrammeGenetique {
 
     }
 
+    // Fonction qui permet de simplifier un arbre en supprimant les conditions qui se répètent
     public void simplifier () {
-        /*if(valeur.getClass().getName() == "Utile_Fourmi.Condition") {
-            if (valeur.getText() == getAGauche().getValeurNoeud())
+        if(valeur.getClass().getName() == "Utile_Fourmi.Condition") {
+            if (valeur.getText().equals(getAGauche().getValeurNoeud())) // Si la valeur du noeud est égale à la valeur du noeud gauche, supprime le noeud et on remplace par l'arbre gauche
                 aGauche = aGauche.getAGauche();
-            if (valeur.getText() == getADroite().getValeurNoeud())
+            if (valeur.getText().equals(getADroite().getValeurNoeud()))
                 aDroite = aDroite.getADroite();
             aGauche.simplifier();
-            aDroite.simplifier();
-        }*/
-        Noeud n = new Noeud("cond_test");
-        ProgrammeGenetique gen = new ProgrammeGenetique(n);
-        if(valeur.getClass().getName() == "Utile_Fourmi.Condition") {
-            aGauche = gen;
             aDroite.simplifier();
         }
     }
