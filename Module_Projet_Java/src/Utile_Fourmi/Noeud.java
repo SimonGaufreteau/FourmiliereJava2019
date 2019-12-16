@@ -1,6 +1,8 @@
 package Utile_Fourmi;
 
-public class Noeud {
+import java.io.Serializable;
+
+public class Noeud implements Serializable {
     protected String text;
 
     public Noeud(String text) {

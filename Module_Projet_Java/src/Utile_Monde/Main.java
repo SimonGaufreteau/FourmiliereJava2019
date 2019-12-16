@@ -7,8 +7,7 @@ import Utile_Fourmi.Noeud;
 import Utile_Fourmi.ProgrammeGenetique;
 
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 
 public class Main {
 
@@ -38,33 +37,37 @@ public class Main {
             //Monde monde1 = new Monde(nomCarte, 5);
             //System.out.println(monde1);
             //monde1.sauvegarder("Save_Carte_Test.carte");
-            /*ProgrammeGenetique prog = new ProgrammeGenetique();
-            prog.afficherArbre(1, "");
+            ProgrammeGenetique prog = new ProgrammeGenetique();
+            //prog.afficherArbre(1, "");
             System.out.println("");
             prog.simplifier();
             prog.afficherArbre(1, "");
-            //prog.sauvegarder("test_arbre.txt");*/
 
-            ProgrammeGenetique prog = new ProgrammeGenetique();
+            //prog.serialiser("test_arbre.ser");
 
+            /*
             Noeud n1 = new Action("act_allerBas");
-            Noeud n2 = new Action("act_rentrer");
-            Noeud n3 = new Condition("cond_fourmiliere");
-            Noeud n4 = new Condition("cond_nourriture");
+            Noeud n2 = new Action("act_allerDroite");
+            Noeud n3 = new Action("act_allerHaut");
+            Noeud n4 = new Action("act_allerGauche");
+            Noeud n5 = new Condition("cond_nourriture");
 
             ProgrammeGenetique gen1 = new ProgrammeGenetique(n1);
             ProgrammeGenetique gen2 = new ProgrammeGenetique(n2);
-            ProgrammeGenetique gen3 = new ProgrammeGenetique(n3,gen1,gen2);
-            ProgrammeGenetique gen4 = new ProgrammeGenetique(n3,gen1,gen3);
-            ProgrammeGenetique gen5 = new ProgrammeGenetique(n4,gen1,gen4);
+            ProgrammeGenetique gen3 = new ProgrammeGenetique(n3);
+            ProgrammeGenetique gen4 = new ProgrammeGenetique(n4);
+            ProgrammeGenetique gen5 = new ProgrammeGenetique(n5,gen3,gen1);
+            ProgrammeGenetique gen6 = new ProgrammeGenetique(n5,gen2,gen5);
+            ProgrammeGenetique gen7 = new ProgrammeGenetique(n5,gen4,gen6);
 
-            prog.afficherArbre(1,"");
-            prog.simplifier();
+            gen7.afficherArbre(1,"");
+            gen7.simplifier();
             System.out.println("");
-            prog.afficherArbre(1,"");
+            gen7.afficherArbre(1,"");
+            */
 
         }
-        catch(Exception e){
+        catch(Exception e) {
             System.out.println(e.getMessage());
         }
     }

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 
-public class ProgrammeGenetique {
+public class ProgrammeGenetique implements  Serializable {
     private Noeud valeur;
     private ProgrammeGenetique aGauche;
     private ProgrammeGenetique aDroite;
@@ -95,6 +95,7 @@ public class ProgrammeGenetique {
         return lignes;
     }
 
+    // Fonction permettant d'afficher l'arbre en console
     public void afficherArbre(int hauteur, String espace){
         System.out.println(espace + hauteur + "." + valeur.getText());
         if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
@@ -103,12 +104,26 @@ public class ProgrammeGenetique {
         }
     }
 
+    /*// Fonction permettant de sauvegarder un arbre dans un fichier texte
     public void sauvegarder(String nomFichier) throws IOException {
         nomFichier = System.getProperty("user.dir")+ "\\Module_Projet_Java\\Sauvegardes\\"+nomFichier;
 
         Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), StandardCharsets.UTF_8));
         writer.write(this.toString(1,""));
         writer.close();
+    }*/
+
+    public void serialiser(String nomFichier) {
+        nomFichier = System.getProperty("user.dir")+ "\\Module_Projet_Java\\Sauvegardes\\"+ nomFichier;
+        try {
+            FileOutputStream fs = new FileOutputStream(nomFichier);
+            ObjectOutputStream os = new ObjectOutputStream(fs);
+            os.writeObject(this);
+            os.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void charger(String nomFichier) throws IOException {
@@ -118,10 +133,14 @@ public class ProgrammeGenetique {
     // Fonction qui permet de simplifier un arbre en supprimant les conditions qui se répètent
     public void simplifier () {
         if(valeur.getClass().getName() == "Utile_Fourmi.Condition") {
-            if (valeur.getText().equals(getAGauche().getValeurNoeud())) // Si la valeur du noeud est égale à la valeur du noeud gauche, supprime le noeud et on remplace par l'arbre gauche
+            if (valeur.getText().equals(getAGauche().getValeurNoeud())) { // Si la valeur du noeud est égale à la valeur du noeud gauche, supprime le noeud et on remplace par l'arbre gauche
                 aGauche = aGauche.getAGauche();
-            if (valeur.getText().equals(getADroite().getValeurNoeud()))
+                this.simplifier();
+            }
+            if (valeur.getText().equals(getADroite().getValeurNoeud())) {
                 aDroite = aDroite.getADroite();
+                this.simplifier();
+            }
             aGauche.simplifier();
             aDroite.simplifier();
         }
