@@ -4,9 +4,8 @@ import Exceptions_Monde.InvalidFileFormatException;
 import Exceptions_Monde.InvalidMapSizeException;
 import Exceptions_Monde.OutOfMapException;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -130,6 +129,17 @@ public class Carte {
             this.grille[c.getY()][c.getX()] = c;
         }
     }
+
+    //Méthode de sauveagarde de la carte. On prend en paramètre un nom de carte à sauvegarder dans le dossier "Sauvegardes"
+    //Throws une IOException si on a un problème d'ouverture du fichier en écriture
+    public void sauvegarder(String nomFichier) throws IOException {
+        nomFichier = System.getProperty("user.dir")+ "\\Module_Projet_Java\\Sauvegardes\\"+nomFichier;
+
+        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), StandardCharsets.UTF_8));
+        writer.write(hauteur + " "+largeur + "\n"+this.toString());
+        writer.close();
+    }
+
     //Getters
     public Case[][] getGrille() {
         return grille;
@@ -144,22 +154,21 @@ public class Carte {
     }
 
     /*Affichage d'une Carte sous le format suivant :
-    [ C N C C C ]
-    [ C C C C N ]
-    [ C C F C C ]
-    [ C C C C C ]
+    C N C C C
+    C C C C N
+    C C F C C
+    C C C C C
     (C = Case normale, N = Nourriture, F = Fourmiliere)
     (Voir toString() de chaque case pour detail)
     * */
     public String toString(){
-        String s ="";
+        StringBuilder s = new StringBuilder();
         for (int h=0;h<hauteur;h++){            //Affichage une par une des lignes
-            s+="[ ";
             for (int l=0;l<largeur;l++){        //Affichage d'une ligne
-                s+=grille[h][l].toString()+" ";
+                s.append(grille[h][l].toString()).append(" ");
             }
-            s+="]\n";
+            s.append("\n");
         }
-        return s ;
+        return s.toString();
     }
 }

@@ -34,6 +34,7 @@ public class Main {
         try {
             Monde monde1 = new Monde(nomCarte, 5);
             System.out.println(monde1);
+            monde1.sauvegarder("Save_Carte_Test.carte");
         }
         catch(Exception e){
             System.out.println(e.getMessage());
