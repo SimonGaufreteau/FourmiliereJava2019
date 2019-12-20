@@ -38,10 +38,34 @@ public class Main {
             //System.out.println(monde1);
             //monde1.sauvegarder("Save_Carte_Test.carte");
             ProgrammeGenetique prog = new ProgrammeGenetique();
-            //prog.afficherArbre(1, "");
-            System.out.println("");
+            //ProgrammeGenetique prog2 = new ProgrammeGenetique();
             prog.simplifier();
-            prog.afficherArbre(1, "");
+            //prog2.simplifier();
+            System.out.println("ARBRE 1 :");
+            prog.afficherArbre(0, "");
+            //System.out.println("\nARBRE 2 :");
+            //prog2.afficherArbre(0, "");
+            prog.numerotationNoeud();
+            prog.numerotationFeuille();
+            //prog.setNbActu(1);
+            //prog2.numerotationNoeud();
+            //prog2.numerotationFeuille();
+            System.out.println("\n\nARBRE 1 NUM :");
+            prog.afficherArbre(0, "");
+            //System.out.println("\nARBRE 2 NUM :");
+            //prog2.afficherArbre(0, "");
+            prog.remplacerNoeud();
+            System.out.println("\n\nARBRE 1 REMPLACE :");
+            prog.afficherArbre(0, "");
+            /*
+            System.out.println("");
+
+            prog2.afficherArbre(0, "");*/
+            /*System.out.println(prog.nbConditions());
+            System.out.println("Nombre de noeuds : " + prog.nbConditions());
+
+            int aleatCond = (int) (Math.random() * prog.nbConditions()); // On choisit un nombre entre 1 et le nombre de conditions
+            System.out.println("Noeud de condition choisi : " + aleatCond);*/
 
             //prog.serialiser("test_arbre.ser");
 

@@ -11,7 +11,10 @@ import java.util.List;
 import java.util.ListIterator;
 
 
-public class ProgrammeGenetique implements  Serializable {
+public class ProgrammeGenetique implements  Serializable, Cloneable {
+    private int id;
+    private static int nbTempNoeud = 1;
+    private static int nbTempFeuille = 1;
     private Noeud valeur;
     private ProgrammeGenetique aGauche;
     private ProgrammeGenetique aDroite;
@@ -97,11 +100,78 @@ public class ProgrammeGenetique implements  Serializable {
 
     // Fonction permettant d'afficher l'arbre en console
     public void afficherArbre(int hauteur, String espace){
-        System.out.println(espace + hauteur + "." + valeur.getText());
+        System.out.println(espace + hauteur + "." + valeur.getText() + "(" + id + ")");
         if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
             aGauche.afficherArbre(hauteur+1, espace+="  ");
             aDroite.afficherArbre(hauteur+1, espace);
         }
+    }
+
+    private void interneRemplacerNoeud(int aleatCond) throws IOException {
+        if(id == aleatCond){
+            System.out.println("Condition à modifier : " + valeur.getText());
+            String nomFichierConditions = "Noeuds\\Conditions.txt";
+            List<String> listConditions = getLignes(nomFichierConditions);
+            Noeud allConditions[] = new Condition[listConditions.size()];
+
+            for(int i=0;i<listConditions.size();i++) {
+                allConditions[i] = new Condition(listConditions.get(i));
+            }
+            int newNuCond = (int) (Math.random() * 3);
+            while(allConditions[newNuCond].getText().equals(valeur.getText())){
+                newNuCond = (int) (Math.random() * 3);
+            }
+            System.out.println("Nouvelle valeur : " + allConditions[newNuCond].getText());
+            valeur = allConditions[newNuCond];
+            //simplifier();
+            //numerotationNoeud();
+        }
+        else{
+            if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+                aGauche.interneRemplacerNoeud(aleatCond);
+                aDroite.interneRemplacerNoeud(aleatCond);
+            }
+        }
+    }
+
+    public void remplacerNoeud() throws IOException {
+        int nbCond = nbConditions();
+        System.out.println("\nNombre de conditions : " + nbCond);
+        if(nbCond != 0){
+            int aleatCond = (int) (Math.random() * nbCond)+1;
+            System.out.println("N° du noeud à modifier : " + aleatCond);
+            interneRemplacerNoeud(aleatCond);
+        }
+    }
+
+    private void interneNumerotationNoeud() {
+        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+            id = nbTempNoeud;
+            nbTempNoeud++;
+            aGauche.interneNumerotationNoeud();
+            aDroite.interneNumerotationNoeud();
+        }
+    }
+
+    public void numerotationNoeud(){
+        interneNumerotationNoeud();
+        nbTempNoeud = 1;
+    }
+
+    private void interneNumerotationFeuille() {
+        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+            aGauche.interneNumerotationFeuille();
+            aDroite.interneNumerotationFeuille();
+        }
+        else {
+            id = nbTempFeuille + 100; // On ajoute temporairement 100 pour différencier les noeuds des feuilles ensuite
+            nbTempFeuille++;
+        }
+    }
+
+    public void numerotationFeuille(){
+        interneNumerotationFeuille();
+        nbTempFeuille = 1;
     }
 
     /*// Fonction permettant de sauvegarder un arbre dans un fichier texte
@@ -143,6 +213,36 @@ public class ProgrammeGenetique implements  Serializable {
             }
             aGauche.simplifier();
             aDroite.simplifier();
+        }
+    }
+
+    public ProgrammeGenetique clone() throws CloneNotSupportedException  {
+        return (ProgrammeGenetique)super.clone();
+    }
+
+    public int hauteur() {
+        if(this.getADroite() == null && this.getAGauche() == null)
+            return 0;
+        else
+            return (1 + Math.max(getAGauche().hauteur(),getADroite().hauteur()));
+    }
+
+    // Fonction qui retourne le nombre de conditions présentes dans l'arbre
+    public int nbConditions(){
+        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+            return 1 + aGauche.nbConditions() + aDroite.nbConditions();
+        }
+        else{
+            return 0;
+        }
+    }
+
+    public int nbNoeudTotal(){
+        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+            return 1 + aGauche.nbNoeudTotal() + aDroite.nbNoeudTotal();
+        }
+        else{
+            return 1;
         }
     }
 
