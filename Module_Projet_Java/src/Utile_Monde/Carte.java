@@ -1,5 +1,6 @@
 package Utile_Monde;
 
+import Exceptions_Monde.InvalidDirectionException;
 import Exceptions_Monde.InvalidFileFormatException;
 import Exceptions_Monde.InvalidMapSizeException;
 import Exceptions_Monde.OutOfMapException;
@@ -31,7 +32,7 @@ public class Carte {
         this.grille=new Case[hauteur][largeur];
         for (int ligne=0;ligne<hauteur;ligne++){
             for (int colonne=0;colonne<largeur;colonne++){
-                this.grille[ligne][colonne]=new Case(colonne,ligne);
+                this.grille[ligne][colonne]=new Case(colonne,ligne,this);
             }
         }
     }
@@ -60,9 +61,9 @@ public class Carte {
             throw new InvalidFileFormatException(nomCarte);
         }
 
-        //On compte la taille de la grille manuellement avec "hauteur" et "largeur_reele", pour vérifier que le format est respecté
+        //On compte la taille de la grille manuellement avec "hauteur" et "largeur_reelle", pour vérifier que le format est respecté
         int hauteur=0;
-        int largeur_reele;
+        int largeur_reelle;
         while(iterator.hasNext()){
 
             //On récupère la ligne dans l, si la taille n'est pas la bonne (en enlevant les espaces entre les caractères), on throw une exception
@@ -71,24 +72,24 @@ public class Carte {
                 throw new InvalidMapSizeException(this.largeur,l.split(" ").length);
             }
 
-            largeur_reele=0;
+            largeur_reelle=0;
             for (int largeur_actuelle = 0 ; largeur_actuelle < l.length() ;largeur_actuelle++) {
                 //on réalise un switch sur chaque caractère de la ligne
 
                 car = l.charAt(largeur_actuelle);
                 switch (car) {
                     case 'C':
-                        //A chaque fois qu'on a un caractere reconnu, on incremente la largeur "reele" de la ligne
-                        this.grille[hauteur][largeur_reele] = new Case(hauteur, largeur_reele);
-                        largeur_reele++;
+                        //A chaque fois qu'on a un caractere reconnu, on incremente la largeur "reelle" de la ligne
+                        this.grille[hauteur][largeur_reelle] = new Case(hauteur, largeur_reelle,this);
+                        largeur_reelle++;
                         break;
                     case 'F':
-                        this.grille[hauteur][largeur_reele] = new CaseFourmiliere(hauteur, largeur_reele);
-                        largeur_reele++;
+                        this.grille[hauteur][largeur_reelle] = new CaseFourmiliere(hauteur, largeur_reelle,this);
+                        largeur_reelle++;
                         break;
                     case 'N':
-                        this.grille[hauteur][largeur_reele] = new CaseNourriture(hauteur, largeur_reele);
-                        largeur_reele++;
+                        this.grille[hauteur][largeur_reelle] = new CaseNourriture(hauteur, largeur_reelle,7,this);
+                        largeur_reelle++;
                         break;
                 }
             }
@@ -99,6 +100,8 @@ public class Carte {
             throw new InvalidMapSizeException(this.hauteur,hauteur);
         }
     }
+
+    public Carte() {    }
 
     //Méthode permettant de renvoyer la liste des lignes d'un fichier
     private  List<String> getLignes(String nomCarte) throws IOException {
@@ -113,7 +116,49 @@ public class Carte {
         return lignes;
     }
 
+    public  int distanceEntreDeuxCases(Case case1, Case case2){
+        int xMin = case1.getX();
+        int xMax= case2.getX();
+        int yMin = case1.getY();
+        int yMax = case2.getY();
+        if(case1.getX() > case2.getX()){
+            xMin=case2.getX();
+            xMax=case1.getX();
+        }
+        if(case1.getY() > case2.getY()){
+            yMin=case2.getY();
+            yMax=case1.getY();
+        }
+        int deltaX = Math.min(xMax-xMin,(largeur-xMax)+xMin);
+        int deltaY = Math.min(yMax-yMin,(largeur-yMax)+yMin);
+        return deltaX + deltaY;
+    }
 
+    public Case getVoisin(int x, int y, int direction) throws InvalidDirectionException {
+        switch (direction){
+            case 0:
+                if(y==0) {
+                    return grille[hauteur-1][x];
+                }
+                return grille[y-1][x];
+            case 1:
+                if(x==largeur-1){
+                    return grille[y][0];
+                }
+                return grille[y][x+1];
+            case 2:
+                if(y==hauteur-1){
+                    return grille[0][x];
+                }
+                return grille[y+1][x];
+            case 3:
+                if(x==0){
+                    return grille[y][largeur-1]; }
+                return grille[y][x-1];
+            default:
+                throw new InvalidDirectionException(direction);
+        }
+    }
 
     /*Méthode permettant de modifier certaines Cases de la Utile_Monde.Carte.
     Entrée : un tableau de Cases
