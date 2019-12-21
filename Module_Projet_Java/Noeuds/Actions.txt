@@ -1,0 +1,8 @@
+act_allerGauche
+act_allerDroite
+act_allerHaut
+act_allerBas
+act_allerAleat
+act_ramasser
+act_rentrer
+act_deposer
