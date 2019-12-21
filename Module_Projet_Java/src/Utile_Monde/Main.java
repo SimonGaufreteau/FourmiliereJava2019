@@ -38,25 +38,25 @@ public class Main {
             //System.out.println(monde1);
             //monde1.sauvegarder("Save_Carte_Test.carte");
             ProgrammeGenetique prog = new ProgrammeGenetique();
-            //ProgrammeGenetique prog2 = new ProgrammeGenetique();
-            prog.simplifier();
-            //prog2.simplifier();
+            prog.simplifier(); // Simplification de l'arbre
+            prog.numerotationNoeud(); // Numérotation des conditions
+            prog.numerotationFeuille(); // Numérotation des actions
+            ProgrammeGenetique prog2 = prog.clone();
             System.out.println("ARBRE 1 :");
             prog.afficherArbre(0, "");
-            //System.out.println("\nARBRE 2 :");
-            //prog2.afficherArbre(0, "");
-            prog.numerotationNoeud();
-            prog.numerotationFeuille();
-            //prog.setNbActu(1);
-            //prog2.numerotationNoeud();
-            //prog2.numerotationFeuille();
-            System.out.println("\n\nARBRE 1 NUM :");
+            System.out.println("\n\nARBRE 2 :");
+            prog2.afficherArbre(0, "");
+            prog.remplacerAction();
+            prog2.remplacerAction();
+            System.out.println("\n\nARBRE 1 REMPLACE ACT :");
             prog.afficherArbre(0, "");
-            //System.out.println("\nARBRE 2 NUM :");
-            //prog2.afficherArbre(0, "");
-            prog.remplacerNoeud();
-            System.out.println("\n\nARBRE 1 REMPLACE :");
-            prog.afficherArbre(0, "");
+            System.out.println("\n\nARBRE 2 REMPLACE ACT :");
+            prog2.afficherArbre(0, "");
+
+
+            /*prog.remplacerAction();
+            System.out.println("\n\nARBRE 1 REMPLACE ACT :");
+            prog.afficherArbre(0, "");*/
             /*
             System.out.println("");
 

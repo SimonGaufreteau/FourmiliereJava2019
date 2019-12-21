@@ -107,7 +107,18 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         }
     }
 
-    private void interneRemplacerNoeud(int aleatCond) throws IOException {
+    // Fonction permettant de remplacer une condition par une autre afin de muter
+    public void remplacerCondition() throws IOException {
+        int nbCond = nbConditions();
+        System.out.println("\nNombre de conditions : " + nbCond);
+        if(nbCond != 0){
+            int aleatCond = (int) (Math.random() * nbCond)+1;
+            System.out.println("N° du noeud à modifier : " + aleatCond);
+            interneRemplacerCondition(aleatCond);
+        }
+    }
+
+    private void interneRemplacerCondition(int aleatCond) throws IOException {
         if(id == aleatCond){
             System.out.println("Condition à modifier : " + valeur.getText());
             String nomFichierConditions = "Noeuds\\Conditions.txt";
@@ -128,20 +139,52 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         }
         else{
             if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
-                aGauche.interneRemplacerNoeud(aleatCond);
-                aDroite.interneRemplacerNoeud(aleatCond);
+                aGauche.interneRemplacerCondition(aleatCond);
+                aDroite.interneRemplacerCondition(aleatCond);
             }
         }
     }
 
-    public void remplacerNoeud() throws IOException {
-        int nbCond = nbConditions();
-        System.out.println("\nNombre de conditions : " + nbCond);
-        if(nbCond != 0){
-            int aleatCond = (int) (Math.random() * nbCond)+1;
-            System.out.println("N° du noeud à modifier : " + aleatCond);
-            interneRemplacerNoeud(aleatCond);
+    // Fonction permettant de remplacer une action par une autre afin de muter
+    public void remplacerAction() throws IOException {
+        int nbAct = nbActions();
+        System.out.println("\nNombre d'actions : " + nbAct);
+        int aleatAct = (int) (Math.random() * nbAct)+101; // A modifier ensuite selon nos choix de numérotation
+        System.out.println("N° de la feuille à modifier : " + aleatAct);
+        interneRemplacerAction(aleatAct);
+    }
+
+    private void interneRemplacerAction(int aleatAct) throws IOException {
+        if(id == aleatAct){
+            System.out.println("Action à modifier : " + valeur.getText());
+            String nomFichierActions = "Noeuds\\Actions.txt";
+            List<String> listActions = getLignes(nomFichierActions);
+            Noeud allActions[] = new Action[listActions.size()];
+
+            for(int i=0;i<listActions.size();i++) {
+                allActions[i] = new Action(listActions.get(i));
+            }
+            int newNuAct = (int) (Math.random() * 8);
+            while(allActions[newNuAct].getText().equals(valeur.getText())){
+                newNuAct = (int) (Math.random() * 8);
+            }
+            System.out.println("Nouvelle valeur : " + allActions[newNuAct].getText());
+            valeur = allActions[newNuAct];
+            //simplifier();
+            //numerotationNoeud();
         }
+        else{
+            if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+                aGauche.interneRemplacerAction(aleatAct);
+                aDroite.interneRemplacerAction(aleatAct);
+            }
+        }
+    }
+
+    // Fonction permettant de numéroter les noeuds (ici les conditions) de 1 à nbNoeuds afin de les retrouver par la suite
+    public void numerotationNoeud(){
+        interneNumerotationNoeud();
+        nbTempNoeud = 1;
     }
 
     private void interneNumerotationNoeud() {
@@ -153,9 +196,10 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         }
     }
 
-    public void numerotationNoeud(){
-        interneNumerotationNoeud();
-        nbTempNoeud = 1;
+    // Fonction permettant de numéroter les feuilles (ici les actions) de 1 à nbFeuilles afin de les retrouver par la suite
+    public void numerotationFeuille(){
+        interneNumerotationFeuille();
+        nbTempFeuille = 1;
     }
 
     private void interneNumerotationFeuille() {
@@ -167,11 +211,6 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             id = nbTempFeuille + 100; // On ajoute temporairement 100 pour différencier les noeuds des feuilles ensuite
             nbTempFeuille++;
         }
-    }
-
-    public void numerotationFeuille(){
-        interneNumerotationFeuille();
-        nbTempFeuille = 1;
     }
 
     /*// Fonction permettant de sauvegarder un arbre dans un fichier texte
@@ -216,8 +255,16 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         }
     }
 
-    public ProgrammeGenetique clone() throws CloneNotSupportedException  {
-        return (ProgrammeGenetique)super.clone();
+    // Fonction permettant de cloner l'arbre et d'en créer un nouveau ayant les mêmes valeurs
+    public ProgrammeGenetique clone() {
+        ProgrammeGenetique o = null;
+        try {
+            o = (ProgrammeGenetique) super.clone();
+        }
+        catch(CloneNotSupportedException cnse){
+            cnse.printStackTrace(System.err);
+        }
+        return o;
     }
 
     public int hauteur() {
@@ -235,6 +282,10 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         else{
             return 0;
         }
+    }
+
+    public int nbActions(){
+        return nbNoeudTotal() - nbConditions();
     }
 
     public int nbNoeudTotal(){
