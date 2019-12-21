@@ -1,0 +1,3 @@
+cond_nourriture
+cond_fourmiliere
+cond_possedeNourriture
