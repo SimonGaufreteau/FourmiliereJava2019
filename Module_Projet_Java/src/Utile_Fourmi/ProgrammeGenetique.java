@@ -181,6 +181,35 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         }
     }
 
+    // Fonction permettant d'échanger deux sous arbres d'une condition afin de muter
+    public void echangerSousArbres() throws IOException {
+        int nbCond = nbConditions();
+        System.out.println("\nNombre de conditions : " + nbCond);
+        if(nbCond != 0){
+            int aleatCond = (int) (Math.random() * nbCond)+1;
+            System.out.println("N° du noeud où échanger ses sous arbres : " + aleatCond);
+            interneEchangerSousArbres(aleatCond);
+        }
+    }
+
+    private void interneEchangerSousArbres(int aleatCond) throws IOException {
+        if(id == aleatCond){
+            System.out.println("Condition où échanger ses sous arbres : " + valeur.getText());
+            ProgrammeGenetique temp = new ProgrammeGenetique(null);
+            temp = aGauche;
+            aGauche = aDroite;
+            aDroite = temp;
+            //simplifier();
+            //numerotationNoeud();
+        }
+        else{
+            if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+                aGauche.interneEchangerSousArbres(aleatCond);
+                aDroite.interneEchangerSousArbres(aleatCond);
+            }
+        }
+    }
+
     // Fonction permettant de numéroter les noeuds (ici les conditions) de 1 à nbNoeuds afin de les retrouver par la suite
     public void numerotationNoeud(){
         interneNumerotationNoeud();

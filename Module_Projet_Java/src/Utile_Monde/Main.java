@@ -41,17 +41,14 @@ public class Main {
             prog.simplifier(); // Simplification de l'arbre
             prog.numerotationNoeud(); // Numérotation des conditions
             prog.numerotationFeuille(); // Numérotation des actions
-            ProgrammeGenetique prog2 = prog.clone();
             System.out.println("ARBRE 1 :");
             prog.afficherArbre(0, "");
-            System.out.println("\n\nARBRE 2 :");
-            prog2.afficherArbre(0, "");
-            prog.remplacerAction();
-            prog2.remplacerAction();
+            /*prog.remplacerAction();
             System.out.println("\n\nARBRE 1 REMPLACE ACT :");
+            prog.afficherArbre(0, "");*/
+            prog.echangerSousArbres();
+            System.out.println("\n\nARBRE 1 ECHANGE :");
             prog.afficherArbre(0, "");
-            System.out.println("\n\nARBRE 2 REMPLACE ACT :");
-            prog2.afficherArbre(0, "");
 
 
             /*prog.remplacerAction();
