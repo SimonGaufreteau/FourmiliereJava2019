@@ -52,6 +52,10 @@ public class Main {
             prog.croiserProgrammes(prog2);
             System.out.println("\nARBRE 1 CROISEMENT :");
             prog.afficherArbre(0, "");
+            prog.numerotationNoeud();
+            prog.numerotationFeuille();
+            System.out.println("\nARBRE 1 NUM :");
+            prog.afficherArbre(0, "");
 
 
             /*prog.remplacerAction();

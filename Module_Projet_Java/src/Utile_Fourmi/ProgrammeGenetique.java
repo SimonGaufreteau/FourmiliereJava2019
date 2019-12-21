@@ -1,14 +1,8 @@
 package Utile_Fourmi;
 
-import Exceptions_Monde.InvalidFileFormatException;
-
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 
 public class ProgrammeGenetique implements  Serializable, Cloneable {
@@ -19,21 +13,23 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     private ProgrammeGenetique aGauche;
     private ProgrammeGenetique aDroite;
 
-    // Dans le cas d'un noeud contenant une action, on s'arrête ici
+    // Constructeur avec seulement une valeur (sans fils)
     public ProgrammeGenetique(Noeud valeur){
         this.valeur = valeur;
         this.aGauche = null;
         this.aDroite = null;
     }
 
-    // Dans le cas d'un noeud contenant une condition, on crée un fils gauche et droite
+    // Constructeur avec une valeur, un fils droit et un fils gauche
     public ProgrammeGenetique(Noeud valeur, ProgrammeGenetique aGauche, ProgrammeGenetique aDroite){
         this.valeur = valeur;
         this.aGauche = aGauche;
         this.aDroite = aDroite;
     }
 
+    // Constructeur utilisé par défaut, il crée un programme génétique aléatoirement
     public ProgrammeGenetique() throws IOException{ // A voir si on a besoin de passer le nom des fichiers en paramètre ou les mettre directement comme des variables internes
+
         // Chemin des fichiers contenant les actions et les conditions
         String nomFichierActions = "Noeuds\\Actions.txt";
         String nomFichierConditions = "Noeuds\\Conditions.txt";
@@ -42,6 +38,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         List<String> listActions = getLignes(nomFichierActions);
         List<String> listConditions = getLignes(nomFichierConditions);
 
+        // Les listes sont transformées en tableau contenant soit des actions, soit des conditions
         Noeud allActions[] = new Action[listActions.size()];
         Noeud allConditions[] = new Condition[listConditions.size()];
 
@@ -54,17 +51,16 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         }
 
         int aleatNoeud = (int) (Math.random() * 2); // On tire au sort un numéro entre 0 et 1 (0:action, 1:condition)
-        //System.out.println("Valeur aleatoire : " + aleatNoeud);
 
         if(aleatNoeud == 0){ // On sélectionne une action
-            int aleatAct = (int) (Math.random() * 8);
+            int aleatAct = (int) (Math.random() * listActions.size());
             valeur = allActions[aleatAct];
             aGauche = null;
             aDroite = null;
         }
 
         else { // On sélectionne une condition
-            int aleatCond = (int) (Math.random() * 3);
+            int aleatCond = (int) (Math.random() * listConditions.size());
             valeur = allConditions[aleatCond];
             aGauche = new ProgrammeGenetique();
             aDroite = new ProgrammeGenetique();
@@ -106,6 +102,54 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
             aGauche.afficherArbre(hauteur+1, espace+="  ");
             aDroite.afficherArbre(hauteur+1, espace);
+        }
+    }
+
+    // Fonction qui permet de simplifier un arbre en supprimant les conditions qui se répètent
+    public void simplifier () {
+        if(valeur.getClass().getName() == "Utile_Fourmi.Condition") {
+            if (valeur.getText().equals(getAGauche().getValeurNoeud())) { // Si la valeur du noeud est égale à la valeur du noeud gauche, supprime le noeud et on remplace par l'arbre gauche
+                aGauche = aGauche.getAGauche();
+                this.simplifier();
+            }
+            if (valeur.getText().equals(getADroite().getValeurNoeud())) {
+                aDroite = aDroite.getADroite();
+                this.simplifier();
+            }
+            aGauche.simplifier();
+            aDroite.simplifier();
+        }
+    }
+
+    // Fonction permettant de numéroter les noeuds (ici les conditions) de 1 à nbNoeuds afin de les retrouver par la suite
+    public void numerotationNoeud(){
+        interneNumerotationNoeud();
+        nbTempNoeud = 1;
+    }
+
+    private void interneNumerotationNoeud() {
+        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+            id = nbTempNoeud;
+            nbTempNoeud++;
+            aGauche.interneNumerotationNoeud();
+            aDroite.interneNumerotationNoeud();
+        }
+    }
+
+    // Fonction permettant de numéroter les feuilles (ici les actions) de 1 à nbFeuilles afin de les retrouver par la suite
+    public void numerotationFeuille(){
+        interneNumerotationFeuille();
+        nbTempFeuille = 1;
+    }
+
+    private void interneNumerotationFeuille() {
+        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+            aGauche.interneNumerotationFeuille();
+            aDroite.interneNumerotationFeuille();
+        }
+        else {
+            id = nbTempFeuille + 100; // On ajoute temporairement 100 pour différencier les noeuds des feuilles ensuite
+            nbTempFeuille++;
         }
     }
 
@@ -235,7 +279,6 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         }
         else {
             if(prog2.getNoeud().getClass().getName() == "Utile_Fourmi.Condition"){
-                System.out.println(prog2.getNoeud().getClass().getName());
                 selectionNoeudAInserer(aleatCond1, aleatCond2, prog2.getAGauche());
                 selectionNoeudAInserer(aleatCond1, aleatCond2, prog2.getADroite());
             }
@@ -258,47 +301,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         }
     }
 
-    // Fonction permettant de numéroter les noeuds (ici les conditions) de 1 à nbNoeuds afin de les retrouver par la suite
-    public void numerotationNoeud(){
-        interneNumerotationNoeud();
-        nbTempNoeud = 1;
-    }
-
-    private void interneNumerotationNoeud() {
-        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
-            id = nbTempNoeud;
-            nbTempNoeud++;
-            aGauche.interneNumerotationNoeud();
-            aDroite.interneNumerotationNoeud();
-        }
-    }
-
-    // Fonction permettant de numéroter les feuilles (ici les actions) de 1 à nbFeuilles afin de les retrouver par la suite
-    public void numerotationFeuille(){
-        interneNumerotationFeuille();
-        nbTempFeuille = 1;
-    }
-
-    private void interneNumerotationFeuille() {
-        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
-            aGauche.interneNumerotationFeuille();
-            aDroite.interneNumerotationFeuille();
-        }
-        else {
-            id = nbTempFeuille + 100; // On ajoute temporairement 100 pour différencier les noeuds des feuilles ensuite
-            nbTempFeuille++;
-        }
-    }
-
-    /*// Fonction permettant de sauvegarder un arbre dans un fichier texte
-    public void sauvegarder(String nomFichier) throws IOException {
-        nomFichier = System.getProperty("user.dir")+ "\\Module_Projet_Java\\Sauvegardes\\"+nomFichier;
-
-        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), StandardCharsets.UTF_8));
-        writer.write(this.toString(1,""));
-        writer.close();
-    }*/
-
+    // Fonction permettant de sérialiser un programme génétique dans un fichier passé en paramètre
     public void serialiser(String nomFichier) {
         nomFichier = System.getProperty("user.dir")+ "\\Module_Projet_Java\\Sauvegardes\\"+ nomFichier;
         try {
@@ -309,26 +312,6 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         }
         catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public void charger(String nomFichier) throws IOException {
-
-    }
-
-    // Fonction qui permet de simplifier un arbre en supprimant les conditions qui se répètent
-    public void simplifier () {
-        if(valeur.getClass().getName() == "Utile_Fourmi.Condition") {
-            if (valeur.getText().equals(getAGauche().getValeurNoeud())) { // Si la valeur du noeud est égale à la valeur du noeud gauche, supprime le noeud et on remplace par l'arbre gauche
-                aGauche = aGauche.getAGauche();
-                this.simplifier();
-            }
-            if (valeur.getText().equals(getADroite().getValeurNoeud())) {
-                aDroite = aDroite.getADroite();
-                this.simplifier();
-            }
-            aGauche.simplifier();
-            aDroite.simplifier();
         }
     }
 
@@ -344,6 +327,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         return o;
     }
 
+    // Fonction qui retourne la hauteur de l'arbre
     public int hauteur() {
         if(this.getADroite() == null && this.getAGauche() == null)
             return 0;
@@ -361,10 +345,12 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         }
     }
 
+    // Fonction qui retourne le nombre d'actions présentes dans l'arbre
     public int nbActions(){
         return nbNoeudTotal() - nbConditions();
     }
 
+    // Fonction qui retourne le nombre de noeuds (Actions + Conditions) présents dans l'arbre
     public int nbNoeudTotal(){
         if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
             return 1 + aGauche.nbNoeudTotal() + aDroite.nbNoeudTotal();
@@ -374,6 +360,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         }
     }
 
+    // Fonction toString du programme génétique
     public String toString(int hauteur, String espace) {
         String S = "";
         S += espace + hauteur + "." + valeur.getText() + "\n";
