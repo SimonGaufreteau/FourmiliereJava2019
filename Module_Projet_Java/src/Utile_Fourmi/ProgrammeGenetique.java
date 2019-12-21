@@ -85,6 +85,8 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         return aDroite;
     }
 
+    public int getId(){ return id; }
+
     // Fonction interne permettant de récupérer le texte présent dans les fichiers de Noeuds (Conditions et Actions)
     private  List<String> getLignes(String nomFichier) throws IOException { // Réutilisation de getLignes, présent dans la classe Case, faut-il le généraliser dans un classe mère ?
         List<String> lignes  = new ArrayList<String>();
@@ -206,6 +208,52 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
                 aGauche.interneEchangerSousArbres(aleatCond);
                 aDroite.interneEchangerSousArbres(aleatCond);
+            }
+        }
+    }
+
+    // Fonction permettant de remplacer un sous arbre d'un programme génétique par un sous arbre d'un autre programme génétique
+    // Le programme génétique sur lequel on appelle la fonction sera celui sur lequel on remplace un sous-arbre
+    // Le programme génétique passé en paramètre sera celui sur lequel on récupère le sous arbre
+    public void croiserProgrammes(ProgrammeGenetique prog2) throws IOException {
+        int nbCond1 = nbConditions();
+        int nbCond2 = prog2.nbConditions();
+        //System.out.println("\nNombre de conditions arbre 1 : " + nbCond1);
+        //System.out.println("\nNombre de conditions arbre 2 : " + nbCond2);
+        if(nbCond1 != 0 && nbCond2 != 0){ // Ce cas ne devrait jamais arriver ensuite puisque la fonction sera appliquée sur les meilleurs arbres génétiques
+            int aleatCond1 = (int) (Math.random() * nbCond1)+1;
+            int aleatCond2 = (int) (Math.random() * nbCond2)+1;
+            System.out.println("\nN° du noeud à modifier (arbre 1) : " + aleatCond1);
+            System.out.println("N° du noeud à muter (arbre 2) : " + aleatCond2);
+            selectionNoeudAInserer(aleatCond1, aleatCond2, prog2);
+        }
+    }
+
+    private void selectionNoeudAInserer(int aleatCond1, int aleatCond2, ProgrammeGenetique prog2) throws IOException {
+        if(prog2.getId() == aleatCond2){
+            interneCroiserProgrammes(aleatCond1, aleatCond2, prog2);
+        }
+        else {
+            if(prog2.getNoeud().getClass().getName() == "Utile_Fourmi.Condition"){
+                System.out.println(prog2.getNoeud().getClass().getName());
+                selectionNoeudAInserer(aleatCond1, aleatCond2, prog2.getAGauche());
+                selectionNoeudAInserer(aleatCond1, aleatCond2, prog2.getADroite());
+            }
+        }
+    }
+
+    private void interneCroiserProgrammes(int aleatCond1, int aleatCond2, ProgrammeGenetique prog2) throws IOException {
+        if(id == aleatCond1){
+            //System.out.println("Condition où insérer nouvel arbre : " + valeur.getText());
+            //System.out.println("Condition de l'arbre à insérer : " + prog2.getValeurNoeud());
+            valeur = prog2.getNoeud();
+            aGauche = prog2.getAGauche();
+            aDroite = prog2.getADroite();
+        }
+        else{
+            if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+                aGauche.interneCroiserProgrammes(aleatCond1, aleatCond2, prog2);
+                aDroite.interneCroiserProgrammes(aleatCond1, aleatCond2, prog2);
             }
         }
     }
