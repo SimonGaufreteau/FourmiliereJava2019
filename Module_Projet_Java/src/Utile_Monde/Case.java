@@ -11,6 +11,8 @@ public class Case {
         this.carteCourante=carteCourante;
     }
 
+    /*La case a besoin de connaitre la carte sur
+    laquelle elle se trouve pour calculer la distance utile à la fourmi*/
     public Carte getCarteCourante() {
         return carteCourante;
     }

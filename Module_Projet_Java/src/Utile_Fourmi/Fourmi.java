@@ -11,8 +11,9 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     private boolean porteNourriture;
     private ArrayList<CaseFourmiliere> listeFourmilieres;
 
-    /*on passe la liste des fourmilieres en paramètres car la fourmi doit
-    connaitre toutes ses fourmilieres de son monde
+    /*Pour rentrer à la fourmilière la plus proche la fourmi a besoin de connaître toutes les fourmilières
+    du Monde dans lequel elle évolue
+    On lui passe une case position(son X et son Y sont contenus dans la case)
     */
     public Fourmi (Case position, ArrayList<CaseFourmiliere> listeFourmilieres) {
         this.position = position;
@@ -21,7 +22,7 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     }
 
     public Fourmi() {
-        //pour initiliser monde
+        //pour initialiser monde
     }
 
     public int getScore() {
@@ -34,15 +35,12 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
         this.score = score;
     }
 
+
     public boolean transporteNourriture() {
         return porteNourriture;
     }
 
-    public void setPorteNourriture(boolean porteNourriture) {
-        this.porteNourriture = porteNourriture;
-    }
-
-    /*fonction qui aide à ramasser la nourriture*/
+    /*Fonction utilisée pour ramasser la nourriture*/
     public boolean ramasser() {
         if(detecterCaseNourriture() && !porteNourriture){
             porteNourriture = ((CaseNourriture)position).enleverNourriture();
@@ -51,10 +49,8 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
         return false;
     }
 
-    public ArrayList<CaseFourmiliere> getListeFourmilieres() {
-        return listeFourmilieres;
-    }
-
+    /*Pour rentrer à la fourmilière la plus proche la fourmi a besoin de savoir où se situe la
+    plus proche des fourmilières comme elle connait toutes la liste il lui suffit de la parcourir*/
     public CaseFourmiliere trouverFourmilierePlusProche(){
         int min = Integer.MAX_VALUE;
         int distance;
@@ -69,6 +65,10 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
         return caseFourmilierePlusProche;
     }
 
+    /*Permet à la fourmi d'effectuer le trajet d'une case de moins vers la fourmilière
+    * à effectuer autant de fois jsq à atteindre la fourmilière
+    * Chaque fourmi effectue une action à la fois, donc elle ne peut pas se déplacer en une seule fois
+    * vers la fourmilière. */
     public void rentrerFourmiliere(){
         CaseFourmiliere fourmiliere = trouverFourmilierePlusProche();
         try {
@@ -100,14 +100,13 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
         }
     }
 
+    //Permets à la fourmi de savoir si elle est sur une case nourriture(true:si oui, false:sinon)
     public boolean detecterCaseNourriture(){
-        if(this.position instanceof CaseNourriture){
-            return true;
-        }
-        return false;
+        return this.position instanceof CaseNourriture;
     }
 
     @Override
+    //true si sur CaseFourmiliere
     public boolean detecterCaseFourmiliere() {
         return this.position instanceof CaseFourmiliere;
     }

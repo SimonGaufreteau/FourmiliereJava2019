@@ -116,8 +116,9 @@ public class Carte {
         return lignes;
     }
 
+    /*Calcul de la distance entre deux cases, nécessaires à la fourmi pour rentrer au plus proche*/
     public  int distanceEntreDeuxCases(Case case1, Case case2){
-        int xMin = case1.getX();
+        int xMin = case1.getX(); //récupèration des coordonnées des cases
         int xMax= case2.getX();
         int yMin = case1.getY();
         int yMax = case2.getY();
@@ -129,13 +130,16 @@ public class Carte {
             yMin=case2.getY();
             yMax=case1.getY();
         }
+        //calcul de la distance dans un monde torique
         int deltaX = Math.min(xMax-xMin,(largeur-xMax)+xMin);
         int deltaY = Math.min(yMax-yMin,(largeur-yMax)+yMin);
         return deltaX + deltaY;
     }
-
+    /*Pour rentrer à la fourmilière la plus proche la fourmi doit savoir dans quelle direction partir, il faut donc examiner
+    * les cases voisines pour calculer leur distance à la fourmilière. */
     public Case getVoisin(int x, int y, int direction) throws InvalidDirectionException {
         switch (direction){
+            //en fonction de la direction, donne la case voisine
             case 0:
                 if(y==0) {
                     return grille[hauteur-1][x];
