@@ -4,7 +4,6 @@ public class Fourmi {
     //Classe définie dans "master". Utilisée ici pour avoid les erreurs.
     private static int nbFourmi=0;
     private int nb;
-    private ProgrammeGenetique arbre;
 
     public Fourmi(){
         this.nb=nbFourmi;
