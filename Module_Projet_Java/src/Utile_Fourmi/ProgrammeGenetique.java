@@ -12,6 +12,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     private Noeud valeur;
     private ProgrammeGenetique aGauche;
     private ProgrammeGenetique aDroite;
+    //TEST
 
     // Constructeur avec seulement une valeur (sans fils)
     public ProgrammeGenetique(Noeud valeur){
