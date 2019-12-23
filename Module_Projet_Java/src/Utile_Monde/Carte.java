@@ -137,25 +137,25 @@ public class Carte {
     }
     /*Pour rentrer à la fourmilière la plus proche la fourmi doit savoir dans quelle direction partir, il faut donc examiner
     * les cases voisines pour calculer leur distance à la fourmilière. */
-    public Case getVoisin(int x, int y, int direction) throws InvalidDirectionException {
+    public Case getVoisin(int x, int y, char direction) throws InvalidDirectionException {
         switch (direction){
             //en fonction de la direction, donne la case voisine
-            case 0:
+            case 'H':
                 if(y==0) {
                     return grille[hauteur-1][x];
                 }
                 return grille[y-1][x];
-            case 1:
+            case 'D':
                 if(x==largeur-1){
                     return grille[y][0];
                 }
                 return grille[y][x+1];
-            case 2:
+            case 'B':
                 if(y==hauteur-1){
                     return grille[0][x];
                 }
                 return grille[y+1][x];
-            case 3:
+            case 'G':
                 if(x==0){
                     return grille[y][largeur-1]; }
                 return grille[y][x-1];
