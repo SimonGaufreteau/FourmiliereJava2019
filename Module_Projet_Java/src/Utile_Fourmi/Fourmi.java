@@ -6,6 +6,7 @@ import Interfaces_Global.*;
 import java.util.ArrayList;
 
 public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
+    private Carte ma_carte;
     private Case position;
     private int score; //variable qui sera incrémentée au cours du déroulement du jeu
     private boolean porteNourriture;
@@ -112,8 +113,9 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     }
 
     @Override
-    public boolean deplacer(int direction) {
-        return false;
+    public boolean deplacer(int direction) throws InvalidDirectionException {
+
+         position=ma_carte.getVoisin(position.getX(), position.getY(), direction);
     }
 
     @Override
