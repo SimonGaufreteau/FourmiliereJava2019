@@ -118,6 +118,11 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
 
     @Override
     public boolean deposer() {
+        if (porteNourriture){
+            porteNourriture=false;
+            if(detecterCaseFourmiliere())
+                return true;
+        }
         return false;
     }
 }
