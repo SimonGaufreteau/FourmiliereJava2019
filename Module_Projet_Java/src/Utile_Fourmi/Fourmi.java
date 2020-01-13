@@ -3,6 +3,7 @@ import Exceptions_Monde.InvalidDirectionException;
 import Utile_Monde.*;
 import Interfaces_Global.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
@@ -10,18 +11,21 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     private int score; //variable qui sera incrémentée au cours du déroulement du jeu
     private boolean porteNourriture;
     private ArrayList<CaseFourmiliere> listeFourmilieres;
+    private ProgrammeGenetique intelligence;
 
     /*Pour rentrer à la fourmilière la plus proche la fourmi a besoin de connaître toutes les fourmilières
     du Monde dans lequel elle évolue
     On lui passe une case position(son X et son Y sont contenus dans la case)
     */
-    public Fourmi (Case position, ArrayList<CaseFourmiliere> listeFourmilieres) {
+    public Fourmi (Case position, ArrayList<CaseFourmiliere> listeFourmilieres) throws IOException {
         this.position = position;
         this.listeFourmilieres = listeFourmilieres;
         this.score=0; //initialisation à zéro
+        intelligence = new ProgrammeGenetique();
     }
 
-    public Fourmi() {
+    public Fourmi() throws IOException {
+        intelligence = new ProgrammeGenetique();
         //pour initialiser monde
     }
 
@@ -118,6 +122,42 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
 
     @Override
     public boolean deposer() {
+        if (porteNourriture){
+            porteNourriture=false;
+            if(detecterCaseFourmiliere())
+                return true;
+        }
         return false;
+    }
+
+    // Cette fonction permet d'agir en fonction de son arbre de décision
+    public void agir(){
+        ProgrammeGenetique noeudEnCours = intelligence;
+        while((noeudEnCours.getNoeud().getClass().getName()).equals("Utile_Fourmi.Condition")){
+            System.out.println(noeudEnCours.getValeurNoeud());
+            if((noeudEnCours.getValeurNoeud()).equals("cond_nourriture")){
+                if(detecterCaseNourriture())
+                    noeudEnCours = noeudEnCours.getAGauche();
+                else
+                    noeudEnCours = noeudEnCours.getADroite();
+            }
+            else if ((noeudEnCours.getValeurNoeud()).equals("cond_fourmiliere")){
+                if(detecterCaseNourriture())
+                    noeudEnCours = noeudEnCours.getAGauche();
+                else
+                    noeudEnCours = noeudEnCours.getADroite();
+            }
+            else if ((noeudEnCours.getValeurNoeud()).equals("cond_possedeNourriture")){
+                if(transporteNourriture())
+                    noeudEnCours = noeudEnCours.getAGauche();
+                else
+                    noeudEnCours = noeudEnCours.getADroite();
+            }
+        }
+
+    }
+
+    public ProgrammeGenetique getIntelligence() {
+        return intelligence;
     }
 }

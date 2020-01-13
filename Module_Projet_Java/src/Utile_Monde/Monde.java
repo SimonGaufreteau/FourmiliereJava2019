@@ -30,7 +30,7 @@ public class Monde {
     /*Constructeur par défaut avec un nombre de fourmis à créer :
     prend la hauteur + la largeur pour créer la grille, ainsi qu'un nombre de fourmis à créer.
     * */
-    public Monde(int hauteur,int largeur,int nbFourmi){
+    public Monde(int hauteur,int largeur,int nbFourmi) throws IOException {
         this.carte= new Carte(hauteur,largeur);
         this.fourmis=new Fourmi[nbFourmi];
         for (int i=0;i<nbFourmi;i++){
@@ -42,7 +42,7 @@ public class Monde {
     /*Constructeur par défaut :
         On utilise deux entiers pour établir la taille de la grille du monde (i.e.la carte)
     */
-    public Monde(int hauteur, int largeur){
+    public Monde(int hauteur, int largeur) throws IOException {
        this(hauteur,largeur,nbFourmisDefaut);
     }
 

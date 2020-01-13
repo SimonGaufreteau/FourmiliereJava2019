@@ -28,43 +28,31 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     }
 
     // Constructeur utilisé par défaut, il crée un programme génétique aléatoirement
-    public ProgrammeGenetique() throws IOException{ // A voir si on a besoin de passer le nom des fichiers en paramètre ou les mettre directement comme des variables internes
+    // A voir si on a besoin de passer le nom des fichiers en paramètre ou les mettre directement comme des variables internes
+    public ProgrammeGenetique() throws IOException {
 
-        // Chemin des fichiers contenant les actions et les conditions
-        String nomFichierActions = "Noeuds\\Actions.txt";
-        String nomFichierConditions = "Noeuds\\Conditions.txt";
-
-        // On récupère les conditions et les actions puis on les met chacun dans une liste
-        List<String> listActions = getLignes(nomFichierActions);
-        List<String> listConditions = getLignes(nomFichierConditions);
-
-        // Les listes sont transformées en tableau contenant soit des actions, soit des conditions
-        Noeud allActions[] = new Action[listActions.size()];
-        Noeud allConditions[] = new Condition[listConditions.size()];
-
-        for(int i=0;i<listActions.size();i++) {
-            allActions[i] = new Action(listActions.get(i));
-        }
-
-        for(int i=0;i<listConditions.size();i++) {
-            allConditions[i] = new Condition(listConditions.get(i));
-        }
+        Noeud allActions[] = recupererActTab();
+        Noeud allConditions[] = recupererCondTab();
 
         int aleatNoeud = (int) (Math.random() * 2); // On tire au sort un numéro entre 0 et 1 (0:action, 1:condition)
 
         if(aleatNoeud == 0){ // On sélectionne une action
-            int aleatAct = (int) (Math.random() * listActions.size());
+            int aleatAct = (int) (Math.random() * allActions.length);
             valeur = allActions[aleatAct];
             aGauche = null;
             aDroite = null;
         }
 
         else { // On sélectionne une condition
-            int aleatCond = (int) (Math.random() * listConditions.size());
+            int aleatCond = (int) (Math.random() * allConditions.length);
             valeur = allConditions[aleatCond];
             aGauche = new ProgrammeGenetique();
             aDroite = new ProgrammeGenetique();
         }
+
+        simplifier();
+        numerotationFeuille();
+        numerotationNoeud();
     }
 
     public Noeud getNoeud(){
@@ -97,11 +85,15 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     }
 
     // Fonction permettant d'afficher l'arbre en console
-    public void afficherArbre(int hauteur, String espace){
+    public void afficherArbre(){
+        interneAfficherArbre(0,"");
+    }
+
+    private void interneAfficherArbre(int hauteur, String espace){
         System.out.println(espace + hauteur + "." + valeur.getText() + "(" + id + ")");
         if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
-            aGauche.afficherArbre(hauteur+1, espace+="  ");
-            aDroite.afficherArbre(hauteur+1, espace);
+            aGauche.interneAfficherArbre(hauteur+1, espace+="  ");
+            aDroite.interneAfficherArbre(hauteur+1, espace);
         }
     }
 
@@ -119,6 +111,13 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             aGauche.simplifier();
             aDroite.simplifier();
         }
+    }
+
+    public void simplifierComplet(int nb) throws IOException {
+        Noeud conditions[] = recupererCondTab();
+        // On récupère tous les noeuds contenant la même condition
+        // On simplifie du noeud le plus bas au noeud en plus haut en gardant que le côté par lequel on est passé au début (1er noeud contenant la condition)
+        
     }
 
     // Fonction permettant de numéroter les noeuds (ici les conditions) de 1 à nbNoeuds afin de les retrouver par la suite
@@ -167,13 +166,9 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     private void interneRemplacerCondition(int aleatCond) throws IOException {
         if(id == aleatCond){
             System.out.println("Condition à modifier : " + valeur.getText());
-            String nomFichierConditions = "Noeuds\\Conditions.txt";
-            List<String> listConditions = getLignes(nomFichierConditions);
-            Noeud allConditions[] = new Condition[listConditions.size()];
 
-            for(int i=0;i<listConditions.size();i++) {
-                allConditions[i] = new Condition(listConditions.get(i));
-            }
+            Noeud allConditions[] = recupererCondTab();
+
             int newNuCond = (int) (Math.random() * 3);
             while(allConditions[newNuCond].getText().equals(valeur.getText())){
                 newNuCond = (int) (Math.random() * 3);
@@ -203,13 +198,9 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     private void interneRemplacerAction(int aleatAct) throws IOException {
         if(id == aleatAct){
             System.out.println("Action à modifier : " + valeur.getText());
-            String nomFichierActions = "Noeuds\\Actions.txt";
-            List<String> listActions = getLignes(nomFichierActions);
-            Noeud allActions[] = new Action[listActions.size()];
 
-            for(int i=0;i<listActions.size();i++) {
-                allActions[i] = new Action(listActions.get(i));
-            }
+            Noeud allActions[] = recupererActTab();
+
             int newNuAct = (int) (Math.random() * 8);
             while(allActions[newNuAct].getText().equals(valeur.getText())){
                 newNuAct = (int) (Math.random() * 8);
@@ -271,6 +262,9 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             System.out.println("N° du noeud à muter (arbre 2) : " + aleatCond2);
             selectionNoeudAInserer(aleatCond1, aleatCond2, prog2);
         }
+        simplifier();
+        numerotationNoeud();
+        numerotationFeuille();
     }
 
     private void selectionNoeudAInserer(int aleatCond1, int aleatCond2, ProgrammeGenetique prog2) throws IOException {
@@ -358,6 +352,38 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         else{
             return 1;
         }
+    }
+
+    private Noeud[] recupererCondTab() throws IOException {
+        String nomFichierConditions = "Noeuds\\Conditions.txt";
+
+        // On récupère les conditions puis on les met dans une liste
+        List<String> listConditions = getLignes(nomFichierConditions);
+
+        // La liste est transformée en tableau contenant des conditions
+        Noeud allConditions[] = new Condition[listConditions.size()];
+
+        for(int i=0;i<listConditions.size();i++) {
+            allConditions[i] = new Condition(listConditions.get(i));
+        }
+
+        return allConditions;
+    }
+
+    private Noeud[] recupererActTab() throws IOException {
+        String nomFichierActions = "Noeuds\\Actions.txt";
+
+        // On récupère les actions puis on les met dans une liste
+        List<String> listActions = getLignes(nomFichierActions);
+
+        // La liste est transformée en tableau contenant des actions
+        Noeud allActions[] = new Action[listActions.size()];
+
+        for(int i=0;i<listActions.size();i++) {
+            allActions[i] = new Action(listActions.get(i));
+        }
+
+        return allActions;
     }
 
     // Fonction toString du programme génétique
