@@ -113,12 +113,13 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     }
 
     @Override
-    public boolean deplacer(int direction) throws InvalidDirectionException {
-
+    public boolean deplacer(char direction) throws InvalidDirectionException {
          position=ma_carte.getVoisin(position.getX(), position.getY(), direction);
+         return true;
     }
 
     @Override
+    //renvoi vrai si la nourriture est deposée sur une fourmiliere
     public boolean deposer() {
         if (porteNourriture){
             porteNourriture=false;
