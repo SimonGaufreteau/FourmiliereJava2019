@@ -6,6 +6,7 @@ import Interfaces_Global.*;
 import java.util.ArrayList;
 
 public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
+    private Carte ma_carte;
     private Case position;
     private int score; //variable qui sera incrémentée au cours du déroulement du jeu
     private boolean porteNourriture;
@@ -72,28 +73,28 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     public void rentrerFourmiliere(){
         CaseFourmiliere fourmiliere = trouverFourmilierePlusProche();
         try {
-            Case voisinHaut = position.getCarteCourante().getVoisin(position.getX(),position.getY(),0);
-            Case voisinBas = position.getCarteCourante().getVoisin(position.getX(),position.getY(),2);
+            Case voisinHaut = position.getCarteCourante().getVoisin(position.getX(),position.getY(),'H');
+            Case voisinBas = position.getCarteCourante().getVoisin(position.getX(),position.getY(),'B');
             if(position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinHaut) >
                     position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinBas)){
-                deplacer(2);
+                deplacer('B');
                 return;
             }
             if(position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinHaut)<
                     position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinBas)){
-                deplacer(0);
+                deplacer('H');
                 return;
             }
-            Case voisinGauche = position.getCarteCourante().getVoisin(position.getX(),position.getY(),3);
-            Case voisinDroite = position.getCarteCourante().getVoisin(position.getX(),position.getY(),1);
+            Case voisinGauche = position.getCarteCourante().getVoisin(position.getX(),position.getY(),'G');
+            Case voisinDroite = position.getCarteCourante().getVoisin(position.getX(),position.getY(),'D');
             if(position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinGauche) >
                     position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinDroite)){
-                deplacer(1);
+                deplacer('D');
                 return;
             }
             if(position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinGauche) <
                     position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinDroite)){
-                deplacer(3);
+                deplacer('G');
             }
         } catch (InvalidDirectionException e) {
             e.printStackTrace();
@@ -112,12 +113,18 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     }
 
     @Override
-    public boolean deplacer(int direction) {
-        return false;
+    public boolean deplacer(char direction) throws InvalidDirectionException {
+         position=ma_carte.getVoisin(position.getX(), position.getY(), direction);
+         return true;
     }
 
     @Override
+    //renvoi vrai si la nourriture est deposée sur une fourmiliere
     public boolean deposer() {
+        if (porteNourriture){
+            porteNourriture=false;
+            return detecterCaseFourmiliere();
+        }
         return false;
     }
 }
