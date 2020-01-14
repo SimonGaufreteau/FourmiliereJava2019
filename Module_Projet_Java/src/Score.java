@@ -12,7 +12,7 @@ public class Score {
         point+=aAjouter;
     }
 
-    public Score meilleur_score(Score tableau[]){
+    public Score meilleur_score(Score[] tableau){
         Score max=tableau[0];
 
         for (int i=1;i<tableau.length;i++){
@@ -21,7 +21,7 @@ public class Score {
         }
         return max;
     }
-    public Score pire_score(Score tableau[]){
+    public Score pire_score(Score[] tableau){
         Score min=tableau[0];
 
         for (int i=1;i<tableau.length;i++){
@@ -31,11 +31,11 @@ public class Score {
         return min;
     }
 
-    public Score score_moyen(Score tableau[]){
+    public Score score_moyen(Score[] tableau){
         int moyennePoint=0;
         int longueur_tab=tableau.length;
-        for (int i=0;i<longueur_tab;i++){
-            moyennePoint+=tableau[i].getPoint();
+        for (Score score : tableau) {
+            moyennePoint += score.getPoint();
         }
         moyennePoint=moyennePoint/longueur_tab;
         return new Score(moyennePoint);

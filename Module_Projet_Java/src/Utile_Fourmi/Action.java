@@ -6,7 +6,7 @@ public class Action extends Noeud {
         super(text);
     }
 
-    public String toString() {
+    /*public String toString() {
         return this.toString();
-    }
+    }*/
 }

@@ -14,5 +14,5 @@ Cet entier correspond au sens horaire des directions :
 Renvoie "true" si on peut se déplacer, renvoie "false" sinon.
  */
 public interface Deplacer {
-    boolean deplacer(int direction) throws InvalidDirectionException;
+    boolean deplacer(char direction) throws InvalidDirectionException;
 }

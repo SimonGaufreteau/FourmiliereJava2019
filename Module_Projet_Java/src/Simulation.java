@@ -1,7 +1,4 @@
-import Utile_Fourmi.*;
-import Exceptions_Monde.InvalidDirectionException;
 import Utile_Monde.*;
-import Interfaces_Global.*;
 
 
 public class Simulation {

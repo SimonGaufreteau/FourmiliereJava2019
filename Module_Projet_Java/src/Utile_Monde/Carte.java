@@ -105,7 +105,7 @@ public class Carte {
 
     //Méthode permettant de renvoyer la liste des lignes d'un fichier
     private  List<String> getLignes(String nomCarte) throws IOException {
-        List<String> lignes  = new ArrayList<String>();
+        List<String> lignes  = new ArrayList<>();
         nomCarte = System.getProperty("user.dir")+ "\\Module_Projet_Java\\"+nomCarte;
         BufferedReader reader = new BufferedReader(new FileReader(nomCarte));
         String line;
