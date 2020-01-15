@@ -1,8 +1,7 @@
 package Utile_Fourmi;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class ProgrammeGenetique implements  Serializable, Cloneable {
@@ -27,8 +26,83 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         this.aDroite = aDroite;
     }
 
+    //Constructeur qui génère un ProgrammeGénétique avec un certains nombre de noeuds (utilisé pour les tests)
+    public ProgrammeGenetique(int nbNoeuds) throws IOException {
+        Random r= new Random();
+        String nomFichierActions = "Noeuds\\Actions.txt";
+        String nomFichierConditions = "Noeuds\\Conditions.txt";
+
+        // On récupère les conditions et les actions puis on les met chacun dans une liste
+        List<String> listActions = getLignes(nomFichierActions);
+        List<String> listConditions = getLignes(nomFichierConditions);
+
+        // Les listes sont transformées en tableau contenant soit des actions, soit des conditions
+        Noeud[] allActions = new Action[listActions.size()];
+        Noeud[] allConditions = new Condition[listConditions.size()];
+
+        for(int i=0;i<listActions.size();i++) {
+            allActions[i] = new Action(listActions.get(i));
+        }
+
+        for(int i=0;i<listConditions.size();i++) {
+            allConditions[i] = new Condition(listConditions.get(i));
+        }
+        //On crée un arbre de base avec une condition et deux actions
+        int aleatCond = (int) (Math.random() * allConditions.length);
+        int aleatAct1 = (int) (Math.random() * allActions.length);
+        int aleatAct2 = (int) (Math.random() * allActions.length);
+        this.valeur= allConditions[aleatCond];
+        this.aGauche= new ProgrammeGenetique(allActions[aleatAct1]);
+        this.aDroite= new ProgrammeGenetique(allActions[aleatAct2]);
+
+        //Boucle sur le nombre de noeud pour ajouter une condition (aléatoire) à chaque itération
+        for (int i=0;i<nbNoeuds-1;i++){
+            add(allActions,allConditions);
+        }
+    }
+
+    //Méthode permmettant d'ajouter une condition à un programme (utilise la méthodé récursive ci-dessous)
+    public void add(Noeud[] allActions,Noeud[] allConditions) {
+        Random r= new Random();
+        int lr = (int)(Math.random()*2); // 0 or 1
+        if( lr==0) this.aGauche= addRecursive(this.aGauche,allActions,allConditions);
+        else this.aDroite= addRecursive(this.aDroite,allActions,allConditions);
+    }
+
+    //Méthode récursive permettant de placer une condition aléatoirement en fin d'arbre
+    private ProgrammeGenetique addRecursive(ProgrammeGenetique current,Noeud[] allActions,Noeud[] allConditions) {
+        if (current == null) {
+            int aleatAct = (int) (Math.random() * allActions.length);
+            current = new ProgrammeGenetique(allActions[aleatAct]);
+            return current;
+        }
+        Random r= new Random();
+        //Une chance sur deux d'aller à droite (resp. à gauche)
+        int lr = (int)(Math.random()*2); // 0 or 1
+
+        //Si on était sur une action, on crée une condition à la place avec deux actions comme suites.
+        if(current.valeur instanceof Action) {
+            int aleatCond = (int) (Math.random() * allConditions.length);
+            current.valeur= allConditions[aleatCond];
+            int aleatAct1 = (int) (Math.random() * allActions.length);
+            int aleatAct2 = (int) (Math.random() * allActions.length);
+
+            current.aGauche = new ProgrammeGenetique(allActions[aleatAct1]);
+            current.aDroite = new ProgrammeGenetique(allActions[aleatAct2]);
+            return current;
+        }
+        //On continue si on est toujours pas sur une feuille (i.e. une action)
+        if (lr == 0) {
+            current.aGauche = addRecursive(current.aGauche,allActions,allConditions);
+        } else if (lr==1){
+            current.aDroite = addRecursive(current.aDroite,allActions,allConditions);
+        }
+
+        return current;
+    }
+
     // Constructeur utilisé par défaut, il crée un programme génétique aléatoirement
-    public ProgrammeGenetique() throws IOException{ // A voir si on a besoin de passer le nom des fichiers en paramètre ou les mettre directement comme des variables internes
+    /*public ProgrammeGenetique() throws IOException{ // A voir si on a besoin de passer le nom des fichiers en paramètre ou les mettre directement comme des variables internes
 
         Noeud allActions[] = recupererActTab();
         Noeud allConditions[] = recupererCondTab();
@@ -48,6 +122,10 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             aGauche = new ProgrammeGenetique();
             aDroite = new ProgrammeGenetique();
         }
+    }*/
+
+    public ProgrammeGenetique() throws IOException{
+        this(new Random().nextInt(100));
     }
 
     public Noeud getNoeud(){
@@ -68,7 +146,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
 
     // Fonction interne permettant de récupérer le texte présent dans les fichiers de Noeuds (Conditions et Actions)
     private  List<String> getLignes(String nomFichier) throws IOException { // Réutilisation de getLignes, présent dans la classe Case, faut-il le généraliser dans un classe mère ?
-        List<String> lignes  = new ArrayList<String>();
+        List<String> lignes  = new ArrayList<>();
         nomFichier = System.getProperty("user.dir")+ "\\Module_Projet_Java\\"+nomFichier;
         BufferedReader reader = new BufferedReader(new FileReader(nomFichier));
         String line;
@@ -92,20 +170,49 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         }
     }
 
-    // Fonction qui permet de simplifier un arbre en supprimant les conditions qui se répètent
-    public void simplifier () {
-        if(valeur.getClass().getName() == "Utile_Fourmi.Condition") {
-            if (valeur.getText().equals(getAGauche().getValeurNoeud())) { // Si la valeur du noeud est égale à la valeur du noeud gauche, supprime le noeud et on remplace par l'arbre gauche
-                aGauche = aGauche.getAGauche();
-                this.simplifier();
+    public void simplifierProgramme(){
+        //On simplifie les deux côtés de l'arbre de départ
+        Map<String,String> m = new HashMap<>();
+        m.put(this.valeur.getText(),"Left");
+        this.aGauche= simplifierProgrammeRecursif(this.aGauche,m);
+        m.replace(this.valeur.getText(),"Right");
+        this.aDroite= simplifierProgrammeRecursif(this.aDroite,m);
+    }
+
+    private ProgrammeGenetique simplifierProgrammeRecursif(ProgrammeGenetique current, Map<String,String> map){
+        if (current==null) return null;
+        //On rechrche si on est déjà passé par
+        String value = map.get(current.valeur.getText());
+
+        //Si on est déjà passé par la condition on simplifie directement en prenant le côté correspondant
+        if (value!=null){
+            if (value.equals("Right")){
+                return simplifierProgrammeRecursif(current.aDroite,map);
             }
-            if (valeur.getText().equals(getADroite().getValeurNoeud())) {
-                aDroite = aDroite.getADroite();
-                this.simplifier();
+            else {
+                return simplifierProgrammeRecursif(current.aGauche,map);
             }
-            aGauche.simplifier();
-            aDroite.simplifier();
         }
+        //Si on est sur une condition et que les deux côtés mènent à la même action, on simplifie en une Action.
+        if (current.valeur instanceof Condition && current.aGauche.valeur instanceof Action && current.aDroite.valeur instanceof Action && current.aGauche.valeur.getText().equals(current.aDroite.valeur.getText()))
+            return current.aGauche;
+
+        //Si on est sur une condition on continue la simplification sur les conditions suivantes
+        if (current.aGauche !=null && !(current.aGauche.valeur instanceof Action)){
+            //On ajoute le passage par le noeud actuel à la map .
+            //NOTE : on a pas besoin de vérifier si la valeur était déjà présente dans la carte puisque si c'était le cas on aurait déjà simplifié dans la condition value!=null
+            map.put(current.valeur.getText(),"Right");
+            current.aGauche= simplifierProgrammeRecursif(current.aGauche,map);
+            //Une fois qu'on a simplifié à gauche on enleve la valeur de la map
+            map.remove(current.valeur.getText());
+        }
+        if (current.aDroite!= null && !(current.aDroite.valeur instanceof Action)){
+            //Meme chose qu'a gauche
+            map.put(current.valeur.getText(),"Right");
+            current.aDroite= simplifierProgrammeRecursif(current.aDroite,map);
+            map.remove(current.valeur.getText());
+        }
+        return current;
     }
 
     // Fonction permettant de numéroter les noeuds (ici les conditions) de 1 à nbNoeuds afin de les retrouver par la suite
@@ -115,7 +222,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     }
 
     private void interneNumerotationNoeud() {
-        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+        if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
             id = nbTempNoeud;
             nbTempNoeud++;
             aGauche.interneNumerotationNoeud();
@@ -130,7 +237,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     }
 
     private void interneNumerotationFeuille() {
-        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+        if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
             aGauche.interneNumerotationFeuille();
             aDroite.interneNumerotationFeuille();
         }
@@ -166,7 +273,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             //numerotationNoeud();
         }
         else{
-            if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+            if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
                 aGauche.interneRemplacerCondition(aleatCond);
                 aDroite.interneRemplacerCondition(aleatCond);
             }
@@ -197,7 +304,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             //numerotationNoeud();
         }
         else{
-            if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+            if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
                 aGauche.interneRemplacerAction(aleatAct);
                 aDroite.interneRemplacerAction(aleatAct);
             }
@@ -218,15 +325,14 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     private void interneEchangerSousArbres(int aleatCond) throws IOException {
         if(id == aleatCond){
             System.out.println("Condition où échanger ses sous arbres : " + valeur.getText());
-            ProgrammeGenetique temp = new ProgrammeGenetique(null);
-            temp = aGauche;
+            ProgrammeGenetique temp  = aGauche;
             aGauche = aDroite;
             aDroite = temp;
             //simplifier();
             //numerotationNoeud();
         }
         else{
-            if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+            if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
                 aGauche.interneEchangerSousArbres(aleatCond);
                 aDroite.interneEchangerSousArbres(aleatCond);
             }
@@ -255,7 +361,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             interneCroiserProgrammes(aleatCond1, aleatCond2, prog2);
         }
         else {
-            if(prog2.getNoeud().getClass().getName() == "Utile_Fourmi.Condition"){
+            if(prog2.getNoeud().getClass().getName().equals("Utile_Fourmi.Condition")){
                 selectionNoeudAInserer(aleatCond1, aleatCond2, prog2.getAGauche());
                 selectionNoeudAInserer(aleatCond1, aleatCond2, prog2.getADroite());
             }
@@ -314,7 +420,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
 
     // Fonction qui retourne le nombre de conditions présentes dans l'arbre
     public int nbConditions(){
-        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+        if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
             return 1 + aGauche.nbConditions() + aDroite.nbConditions();
         }
         else{
@@ -329,7 +435,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
 
     // Fonction qui retourne le nombre de noeuds (Actions + Conditions) présents dans l'arbre
     public int nbNoeudTotal(){
-        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+        if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
             return 1 + aGauche.nbNoeudTotal() + aDroite.nbNoeudTotal();
         }
         else{
@@ -373,7 +479,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     public String toString(int hauteur, String espace) {
         String S = "";
         S += espace + hauteur + "." + valeur.getText() + "\n";
-        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+        if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
             S+=aGauche.toString(hauteur+1, espace+="  ");
             S+=aDroite.toString(hauteur+1, espace);
         }
