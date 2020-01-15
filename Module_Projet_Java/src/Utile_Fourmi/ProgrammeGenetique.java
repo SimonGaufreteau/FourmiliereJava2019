@@ -29,24 +29,9 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     //Constructeur qui génère un ProgrammeGénétique avec un certains nombre de noeuds (utilisé pour les tests)
     public ProgrammeGenetique(int nbNoeuds) throws IOException {
         Random r= new Random();
-        String nomFichierActions = "Noeuds\\Actions.txt";
-        String nomFichierConditions = "Noeuds\\Conditions.txt";
+        Noeud allActions[] = recupererActTab();
+        Noeud allConditions[] = recupererCondTab();
 
-        // On récupère les conditions et les actions puis on les met chacun dans une liste
-        List<String> listActions = getLignes(nomFichierActions);
-        List<String> listConditions = getLignes(nomFichierConditions);
-
-        // Les listes sont transformées en tableau contenant soit des actions, soit des conditions
-        Noeud[] allActions = new Action[listActions.size()];
-        Noeud[] allConditions = new Condition[listConditions.size()];
-
-        for(int i=0;i<listActions.size();i++) {
-            allActions[i] = new Action(listActions.get(i));
-        }
-
-        for(int i=0;i<listConditions.size();i++) {
-            allConditions[i] = new Condition(listConditions.get(i));
-        }
         //On crée un arbre de base avec une condition et deux actions
         int aleatCond = (int) (Math.random() * allConditions.length);
         int aleatAct1 = (int) (Math.random() * allActions.length);
@@ -59,6 +44,10 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         for (int i=0;i<nbNoeuds-1;i++){
             add(allActions,allConditions);
         }
+        simplifierProgramme();
+        simplifierProgramme();
+        numerotationFeuille();
+        numerotationNoeud();
     }
 
     //Méthode permmettant d'ajouter une condition à un programme (utilise la méthodé récursive ci-dessous)
@@ -97,7 +86,6 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         } else if (lr==1){
             current.aDroite = addRecursive(current.aDroite,allActions,allConditions);
         }
-
         return current;
     }
 
@@ -175,8 +163,10 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         Map<String,String> m = new HashMap<>();
         m.put(this.valeur.getText(),"Left");
         this.aGauche= simplifierProgrammeRecursif(this.aGauche,m);
+        //this.aGauche= simplifierProgrammeRecursif(this.aGauche,m);
         m.replace(this.valeur.getText(),"Right");
         this.aDroite= simplifierProgrammeRecursif(this.aDroite,m);
+        //this.aDroite= simplifierProgrammeRecursif(this.aDroite,m);
     }
 
     private ProgrammeGenetique simplifierProgrammeRecursif(ProgrammeGenetique current, Map<String,String> map){
@@ -354,6 +344,9 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             System.out.println("N° du noeud à muter (arbre 2) : " + aleatCond2);
             selectionNoeudAInserer(aleatCond1, aleatCond2, prog2);
         }
+        simplifierProgramme();
+        numerotationNoeud();
+        numerotationFeuille();
     }
 
     private void selectionNoeudAInserer(int aleatCond1, int aleatCond2, ProgrammeGenetique prog2) throws IOException {

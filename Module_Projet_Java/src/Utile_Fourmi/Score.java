@@ -1,3 +1,5 @@
+package Utile_Fourmi;
+
 public class Score {
     int point;
     public Score(int point){

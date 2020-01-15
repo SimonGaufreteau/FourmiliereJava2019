@@ -1,10 +1,7 @@
 package Utile_Monde;
 
 import Exceptions_Monde.OutOfMapException;
-import Utile_Fourmi.Action;
-import Utile_Fourmi.Condition;
-import Utile_Fourmi.Noeud;
-import Utile_Fourmi.ProgrammeGenetique;
+import Utile_Fourmi.*;
 
 
 import java.io.*;
@@ -34,46 +31,28 @@ public class Main {
 
         String nomCarte ="Cartes\\Carte_Test.carte";*/
         try {
-            //Monde monde1 = new Monde(nomCarte, 5);
-            //System.out.println(monde1);
-            //monde1.sauvegarder("Save_Carte_Test.carte");
+            // Génétation de la fourmi parfaite
+            Noeud C1 = new Condition("cond_nourriture");
+            Noeud C2 = new Condition("cond_fourmiliere");
+            Noeud C3 = new Condition("cond_possedeNourriture");
+            Noeud A1 = new Action("act_rentrer");
+            Noeud A2 = new Action("act_deposer");
+            Noeud A3 = new Action("act_allerAleat");
+            Noeud A4 = new Action("act_ramasser");
+            ProgrammeGenetique P1 = new ProgrammeGenetique(A1);
+            ProgrammeGenetique P2 = new ProgrammeGenetique(A2);
+            ProgrammeGenetique P3 = new ProgrammeGenetique(A3);
+            ProgrammeGenetique P4 = new ProgrammeGenetique(A4);
+            ProgrammeGenetique P5 = new ProgrammeGenetique(C2,P2,P1);
+            ProgrammeGenetique P6 = new ProgrammeGenetique(C1,P4,P3);
+            ProgrammeGenetique P7 = new ProgrammeGenetique(C3,P5,P6);
+            P7.numerotationFeuille();
+            P7.numerotationNoeud();
 
-            /*prog.remplacerAction();
-            System.out.println("\n\nARBRE 1 REMPLACE ACT :");
-            prog.afficherArbre(0, "");*/
-            /*
-            System.out.println("");
 
-            prog2.afficherArbre(0, "");*/
-            /*System.out.println(prog.nbConditions());
-            System.out.println("Nombre de noeuds : " + prog.nbConditions());
-
-            int aleatCond = (int) (Math.random() * prog.nbConditions()); // On choisit un nombre entre 1 et le nombre de conditions
-            System.out.println("Noeud de condition choisi : " + aleatCond);*/
-
-            //prog.serialiser("test_arbre.ser");
-
-            /*
-            Noeud n1 = new Action("act_allerBas");
-            Noeud n2 = new Action("act_allerDroite");
-            Noeud n3 = new Action("act_allerHaut");
-            Noeud n4 = new Action("act_allerGauche");
-            Noeud n5 = new Condition("cond_nourriture");
-
-            ProgrammeGenetique gen1 = new ProgrammeGenetique(n1);
-            ProgrammeGenetique gen2 = new ProgrammeGenetique(n2);
-            ProgrammeGenetique gen3 = new ProgrammeGenetique(n3);
-            ProgrammeGenetique gen4 = new ProgrammeGenetique(n4);
-            ProgrammeGenetique gen5 = new ProgrammeGenetique(n5,gen3,gen1);
-            ProgrammeGenetique gen6 = new ProgrammeGenetique(n5,gen2,gen5);
-            ProgrammeGenetique gen7 = new ProgrammeGenetique(n5,gen4,gen6);
-
-            gen7.afficherArbre(1,"");
-            gen7.simplifier();
-            System.out.println("");
-            gen7.afficherArbre(1,"");
-            */
-
+            Fourmi f = new Fourmi(P7);
+            f.afficherIntelligence();
+            f.agir();
         }
         catch(Exception e) {
             System.out.println(e.getMessage());
