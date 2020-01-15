@@ -116,8 +116,41 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     }
 
     @Override
-    public boolean deplacer(int direction) {
+    /*public boolean deplacer(char direction) {
+        switch (direction) {
+            case 'H': {
+                y += 1;
+                break;
+            }
+            case 'B': {
+                y -= 1;
+                break;
+            }
+            case 'D': {
+                x += 1;
+                break;
+            }
+            case 'G': {
+                x -= 1;
+                break;
+            }
+        }
+        if(detecterCaseFourmiliere()) {
+            return true;
+        }
         return false;
+    }*/
+
+    public boolean deplacerAleatoirement() {
+        char direction = ' ';
+        int aleat = (int) (Math.random() * 4);
+        switch(aleat){
+            case 0 : direction = 'H';
+            case 1 : direction = 'B';
+            case 2 : direction = 'D';
+            case 3 : direction = 'G';
+        }
+        return deplacer(direction);
     }
 
     @Override
@@ -154,7 +187,32 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
                     noeudEnCours = noeudEnCours.getADroite();
             }
         }
-
+        if((noeudEnCours.getValeurNoeud()).equals("act_allerGauche")){
+            deplacer('G');
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_allerDroite")){
+            deplacer('D');
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_allerHaut")){
+            deplacer('H');
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_allerBas")){
+            deplacer('B');
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_allerAleat")){
+            deplacerAleatoirement();
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_ramasser")){
+            ramasser();
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_rentrer")){
+            rentrerFourmiliere();
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_deposer")){
+            if(deposer()){
+                score.augmenterScore();
+            }
+        }
     }
 
     public ProgrammeGenetique getIntelligence() {
