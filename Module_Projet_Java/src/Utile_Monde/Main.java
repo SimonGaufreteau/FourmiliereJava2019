@@ -1,7 +1,10 @@
 package Utile_Monde;
 
 import Exceptions_Monde.OutOfMapException;
-import Utile_Fourmi.*;
+import Utile_Fourmi.Action;
+import Utile_Fourmi.Condition;
+import Utile_Fourmi.Noeud;
+import Utile_Fourmi.ProgrammeGenetique;
 
 
 import java.io.*;
@@ -34,15 +37,6 @@ public class Main {
             //Monde monde1 = new Monde(nomCarte, 5);
             //System.out.println(monde1);
             //monde1.sauvegarder("Save_Carte_Test.carte");
-            /*ProgrammeGenetique tabProg[] = new ProgrammeGenetique[100];
-            for(int i=0;i<100;i++){
-                tabProg[i] = new ProgrammeGenetique();
-                System.out.println(tabProg[i].nbConditions());
-            }*/
-
-            Fourmi pika = new Fourmi();
-            pika.getIntelligence().afficherArbre();
-            pika.agir();
 
             /*prog.remplacerAction();
             System.out.println("\n\nARBRE 1 REMPLACE ACT :");

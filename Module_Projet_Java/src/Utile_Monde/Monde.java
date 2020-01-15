@@ -65,10 +65,10 @@ public class Monde {
     //Affichage du Monde sous forme de String.
     //Affichage de la Carte + des fourmis.
     public String toString(){
-        String s= "Affichage de la Carte :\n" +carte.toString()+"\nAffichage des Fourmis :\n";
+        StringBuilder s= new StringBuilder("Affichage de la Carte :\n" + carte.toString() + "\nAffichage des Fourmis :\n");
         for (Fourmi fourmi : fourmis) {
-            s += fourmi.toString() + "\n";
+            s.append(fourmi.toString()).append("\n");
         }
-        return s;
+        return s.toString();
     }
 }

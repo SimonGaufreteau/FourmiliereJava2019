@@ -3,7 +3,6 @@ import Exceptions_Monde.InvalidDirectionException;
 import Utile_Monde.*;
 import Interfaces_Global.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
@@ -11,21 +10,18 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     private int score; //variable qui sera incrémentée au cours du déroulement du jeu
     private boolean porteNourriture;
     private ArrayList<CaseFourmiliere> listeFourmilieres;
-    private ProgrammeGenetique intelligence;
 
     /*Pour rentrer à la fourmilière la plus proche la fourmi a besoin de connaître toutes les fourmilières
     du Monde dans lequel elle évolue
     On lui passe une case position(son X et son Y sont contenus dans la case)
     */
-    public Fourmi (Case position, ArrayList<CaseFourmiliere> listeFourmilieres) throws IOException {
+    public Fourmi (Case position, ArrayList<CaseFourmiliere> listeFourmilieres) {
         this.position = position;
         this.listeFourmilieres = listeFourmilieres;
         this.score=0; //initialisation à zéro
-        intelligence = new ProgrammeGenetique();
     }
 
-    public Fourmi() throws IOException {
-        intelligence = new ProgrammeGenetique();
+    public Fourmi() {
         //pour initialiser monde
     }
 
@@ -70,10 +66,10 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     }
 
     /*Permet à la fourmi d'effectuer le trajet d'une case de moins vers la fourmilière
-     * à effectuer autant de fois jsq à atteindre la fourmilière
-     * Chaque fourmi effectue une action à la fois, donc elle ne peut pas se déplacer en une seule fois
-     * vers la fourmilière. */
-    public void rentrerFourmiliere(){
+    * à effectuer autant de fois jsq à atteindre la fourmilière
+    * Chaque fourmi effectue une action à la fois, donc elle ne peut pas se déplacer en une seule fois
+    * vers la fourmilière. */
+    /*public void rentrerFourmiliere(){
         CaseFourmiliere fourmiliere = trouverFourmilierePlusProche();
         try {
             Case voisinHaut = position.getCarteCourante().getVoisin(position.getX(),position.getY(),0);
@@ -102,7 +98,7 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
         } catch (InvalidDirectionException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     //Permets à la fourmi de savoir si elle est sur une case nourriture(true:si oui, false:sinon)
     public boolean detecterCaseNourriture(){
@@ -116,106 +112,12 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     }
 
     @Override
-    /*public boolean deplacer(char direction) {
-        switch (direction) {
-            case 'H': {
-                y += 1;
-                break;
-            }
-            case 'B': {
-                y -= 1;
-                break;
-            }
-            case 'D': {
-                x += 1;
-                break;
-            }
-            case 'G': {
-                x -= 1;
-                break;
-            }
-        }
-        if(detecterCaseFourmiliere()) {
-            return true;
-        }
+    public boolean deposer() {
         return false;
-    }*/
-
-    public boolean deplacerAleatoirement() {
-        char direction = ' ';
-        int aleat = (int) (Math.random() * 4);
-        switch(aleat){
-            case 0 : direction = 'H';
-            case 1 : direction = 'B';
-            case 2 : direction = 'D';
-            case 3 : direction = 'G';
-        }
-        return deplacer(direction);
     }
 
     @Override
-    public boolean deposer() {
-        if (porteNourriture){
-            porteNourriture=false;
-            if(detecterCaseFourmiliere())
-                return true;
-        }
+    public boolean deplacer(char direction) throws InvalidDirectionException {
         return false;
-    }
-
-    // Cette fonction permet d'agir en fonction de son arbre de décision
-    public void agir(){
-        ProgrammeGenetique noeudEnCours = intelligence;
-        while((noeudEnCours.getNoeud().getClass().getName()).equals("Utile_Fourmi.Condition")){
-            System.out.println(noeudEnCours.getValeurNoeud());
-            if((noeudEnCours.getValeurNoeud()).equals("cond_nourriture")){
-                if(detecterCaseNourriture())
-                    noeudEnCours = noeudEnCours.getAGauche();
-                else
-                    noeudEnCours = noeudEnCours.getADroite();
-            }
-            else if ((noeudEnCours.getValeurNoeud()).equals("cond_fourmiliere")){
-                if(detecterCaseNourriture())
-                    noeudEnCours = noeudEnCours.getAGauche();
-                else
-                    noeudEnCours = noeudEnCours.getADroite();
-            }
-            else if ((noeudEnCours.getValeurNoeud()).equals("cond_possedeNourriture")){
-                if(transporteNourriture())
-                    noeudEnCours = noeudEnCours.getAGauche();
-                else
-                    noeudEnCours = noeudEnCours.getADroite();
-            }
-        }
-        if((noeudEnCours.getValeurNoeud()).equals("act_allerGauche")){
-            deplacer('G');
-        }
-        else if((noeudEnCours.getValeurNoeud()).equals("act_allerDroite")){
-            deplacer('D');
-        }
-        else if((noeudEnCours.getValeurNoeud()).equals("act_allerHaut")){
-            deplacer('H');
-        }
-        else if((noeudEnCours.getValeurNoeud()).equals("act_allerBas")){
-            deplacer('B');
-        }
-        else if((noeudEnCours.getValeurNoeud()).equals("act_allerAleat")){
-            deplacerAleatoirement();
-        }
-        else if((noeudEnCours.getValeurNoeud()).equals("act_ramasser")){
-            ramasser();
-        }
-        else if((noeudEnCours.getValeurNoeud()).equals("act_rentrer")){
-            rentrerFourmiliere();
-        }
-        else if((noeudEnCours.getValeurNoeud()).equals("act_deposer")){
-            if(deposer()){
-                score.augmenterScore();
-            }
-        }
-    }
-
-    public ProgrammeGenetique getIntelligence() {
-        return intelligence;
     }
 }

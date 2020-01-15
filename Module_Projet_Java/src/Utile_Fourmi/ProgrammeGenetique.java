@@ -28,8 +28,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     }
 
     // Constructeur utilisé par défaut, il crée un programme génétique aléatoirement
-    // A voir si on a besoin de passer le nom des fichiers en paramètre ou les mettre directement comme des variables internes
-    public ProgrammeGenetique() throws IOException {
+    public ProgrammeGenetique() throws IOException{ // A voir si on a besoin de passer le nom des fichiers en paramètre ou les mettre directement comme des variables internes
 
         Noeud allActions[] = recupererActTab();
         Noeud allConditions[] = recupererCondTab();
@@ -49,10 +48,6 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             aGauche = new ProgrammeGenetique();
             aDroite = new ProgrammeGenetique();
         }
-
-        simplifier();
-        numerotationFeuille();
-        numerotationNoeud();
     }
 
     public Noeud getNoeud(){
@@ -113,13 +108,6 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         }
     }
 
-    public void simplifierComplet(int nb) throws IOException {
-        Noeud conditions[] = recupererCondTab();
-        // On récupère tous les noeuds contenant la même condition
-        // On simplifie du noeud le plus bas au noeud en plus haut en gardant que le côté par lequel on est passé au début (1er noeud contenant la condition)
-        
-    }
-
     // Fonction permettant de numéroter les noeuds (ici les conditions) de 1 à nbNoeuds afin de les retrouver par la suite
     public void numerotationNoeud(){
         interneNumerotationNoeud();
@@ -166,7 +154,6 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     private void interneRemplacerCondition(int aleatCond) throws IOException {
         if(id == aleatCond){
             System.out.println("Condition à modifier : " + valeur.getText());
-
             Noeud allConditions[] = recupererCondTab();
 
             int newNuCond = (int) (Math.random() * 3);
@@ -198,7 +185,6 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     private void interneRemplacerAction(int aleatAct) throws IOException {
         if(id == aleatAct){
             System.out.println("Action à modifier : " + valeur.getText());
-
             Noeud allActions[] = recupererActTab();
 
             int newNuAct = (int) (Math.random() * 8);
@@ -262,9 +248,6 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             System.out.println("N° du noeud à muter (arbre 2) : " + aleatCond2);
             selectionNoeudAInserer(aleatCond1, aleatCond2, prog2);
         }
-        simplifier();
-        numerotationNoeud();
-        numerotationFeuille();
     }
 
     private void selectionNoeudAInserer(int aleatCond1, int aleatCond2, ProgrammeGenetique prog2) throws IOException {
