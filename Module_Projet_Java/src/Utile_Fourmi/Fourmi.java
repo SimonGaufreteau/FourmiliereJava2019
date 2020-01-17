@@ -72,39 +72,39 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     }
 
     /*Permet à la fourmi d'effectuer le trajet d'une case de moins vers la fourmilière
-    * à effectuer autant de fois jsq à atteindre la fourmilière
-    * Chaque fourmi effectue une action à la fois, donc elle ne peut pas se déplacer en une seule fois
-    * vers la fourmilière. */
-    /*public void rentrerFourmiliere(){
+     * à effectuer autant de fois jsq à atteindre la fourmilière
+     * Chaque fourmi effectue une action à la fois, donc elle ne peut pas se déplacer en une seule fois
+     * vers la fourmilière. */
+    public void rentrerFourmiliere(){
         CaseFourmiliere fourmiliere = trouverFourmilierePlusProche();
         try {
-            Case voisinHaut = position.getCarteCourante().getVoisin(position.getX(),position.getY(),0);
-            Case voisinBas = position.getCarteCourante().getVoisin(position.getX(),position.getY(),2);
+            Case voisinHaut = position.getCarteCourante().getVoisin(position.getX(),position.getY(),'H');
+            Case voisinBas = position.getCarteCourante().getVoisin(position.getX(),position.getY(),'B');
             if(position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinHaut) >
                     position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinBas)){
-                deplacer(2);
+                deplacer('B');
                 return;
             }
             if(position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinHaut)<
                     position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinBas)){
-                deplacer(0);
+                deplacer('H');
                 return;
             }
-            Case voisinGauche = position.getCarteCourante().getVoisin(position.getX(),position.getY(),3);
-            Case voisinDroite = position.getCarteCourante().getVoisin(position.getX(),position.getY(),1);
+            Case voisinGauche = position.getCarteCourante().getVoisin(position.getX(),position.getY(),'G');
+            Case voisinDroite = position.getCarteCourante().getVoisin(position.getX(),position.getY(),'D');
             if(position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinGauche) >
                     position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinDroite)){
-                deplacer(1);
+                deplacer('D');
                 return;
             }
             if(position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinGauche) <
                     position.getCarteCourante().distanceEntreDeuxCases(fourmiliere,voisinDroite)){
-                deplacer(3);
+                deplacer('G');
             }
         } catch (InvalidDirectionException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 
     //Permets à la fourmi de savoir si elle est sur une case nourriture(true:si oui, false:sinon)
     public boolean detecterCaseNourriture(){
@@ -193,7 +193,7 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
         }
         else if((noeudEnCours.getValeurNoeud()).equals("act_rentrer")){
             System.out.println("Action rentrer");
-            //rentrerFourmiliere();
+            rentrerFourmiliere();
         }
         else if((noeudEnCours.getValeurNoeud()).equals("act_deposer")){
             System.out.println("Action deposer");
