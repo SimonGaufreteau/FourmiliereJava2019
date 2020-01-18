@@ -3,39 +3,47 @@ import Exceptions_Monde.InvalidDirectionException;
 import Utile_Monde.*;
 import Interfaces_Global.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
-    private Carte ma_carte;
     private Case position;
-    private int score; //variable qui sera incrémentée au cours du déroulement du jeu
+    private Score score; //variable qui sera incrémentée au cours du déroulement du jeu
     private boolean porteNourriture;
     private ArrayList<CaseFourmiliere> listeFourmilieres;
+    private ProgrammeGenetique intelligence;
 
     /*Pour rentrer à la fourmilière la plus proche la fourmi a besoin de connaître toutes les fourmilières
     du Monde dans lequel elle évolue
     On lui passe une case position(son X et son Y sont contenus dans la case)
     */
-    public Fourmi (Case position, ArrayList<CaseFourmiliere> listeFourmilieres) {
+    public Fourmi (Case position, ArrayList<CaseFourmiliere> listeFourmilieres) throws IOException {
         this.position = position;
         this.listeFourmilieres = listeFourmilieres;
-        this.score=0; //initialisation à zéro
+        score = new Score(0);
+        porteNourriture = false;
+        intelligence = new ProgrammeGenetique();
     }
 
-    public Fourmi() {
-        //pour initialiser monde
+    public Fourmi() throws IOException {
+        score = new Score(0);
+        porteNourriture = false;
+        intelligence = new ProgrammeGenetique();
     }
 
-    public int getScore() {
-        //pour afficher le score on a besoin de le récupérer
+    public Fourmi(ProgrammeGenetique intelligence) throws IOException {
+        score = new Score(0);
+        porteNourriture = false;
+        this.intelligence = intelligence;
+    }
+
+    public Score getScore() {
         return score;
     }
 
-    public void setScore(int score) {
-        //pour pouvoir incrémenter le score au cours du jeu on aura besoin de son accesseur
-        this.score = score;
+    public int getPoint(){
+        return score.getPoint();
     }
-
 
     public boolean transporteNourriture() {
         return porteNourriture;
@@ -55,7 +63,7 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     public CaseFourmiliere trouverFourmilierePlusProche(){
         int min = Integer.MAX_VALUE;
         int distance;
-        CaseFourmiliere caseFourmilierePlusProche = new CaseFourmiliere(0,0,new Carte());
+        CaseFourmiliere caseFourmilierePlusProche = new CaseFourmiliere(0,0 ,new Carte());
         for (CaseFourmiliere caseFourmiliere:listeFourmilieres) {
             distance = position.getCarteCourante().distanceEntreDeuxCases(position,caseFourmiliere);
             if(distance<min){
@@ -67,9 +75,9 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     }
 
     /*Permet à la fourmi d'effectuer le trajet d'une case de moins vers la fourmilière
-    * à effectuer autant de fois jsq à atteindre la fourmilière
-    * Chaque fourmi effectue une action à la fois, donc elle ne peut pas se déplacer en une seule fois
-    * vers la fourmilière. */
+     * à effectuer autant de fois jsq à atteindre la fourmilière
+     * Chaque fourmi effectue une action à la fois, donc elle ne peut pas se déplacer en une seule fois
+     * vers la fourmilière. */
     public void rentrerFourmiliere(){
         CaseFourmiliere fourmiliere = trouverFourmilierePlusProche();
         try {
@@ -113,18 +121,88 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     }
 
     @Override
-    public boolean deplacer(char direction) throws InvalidDirectionException {
-         position=ma_carte.getVoisin(position.getX(), position.getY(), direction);
-         return true;
+    public boolean deposer() {
+        return false;
+    }
+
+    public boolean deplacerAleatoirement() throws InvalidDirectionException {
+        char direction = ' ';
+        int aleat = (int) (Math.random() * 4);
+        switch(aleat){
+            case 0 : direction = 'H';
+            case 1 : direction = 'B';
+            case 2 : direction = 'D';
+            case 3 : direction = 'G';
+        }
+        return deplacer(direction);
     }
 
     @Override
-    //renvoi vrai si la nourriture est deposée sur une fourmiliere
-    public boolean deposer() {
-        if (porteNourriture){
-            porteNourriture=false;
-            return detecterCaseFourmiliere();
-        }
-        return false;
+    public boolean deplacer(char direction) throws InvalidDirectionException {
+        position=position.getCarteCourante().getVoisin(position.getX(), position.getY(), direction);
+        return true;
     }
-}
+
+    // Cette fonction permet d'agir en fonction de son arbre de décision
+    public void agir() throws InvalidDirectionException {
+        ProgrammeGenetique noeudEnCours = intelligence;
+        while((noeudEnCours.getNoeud().getClass().getName()).equals("Utile_Fourmi.Condition")){
+            if((noeudEnCours.getValeurNoeud()).equals("cond_nourriture")){
+                System.out.println("Condition nourriture");
+                if(detecterCaseNourriture())
+                    noeudEnCours = noeudEnCours.getAGauche();
+                else
+                    noeudEnCours = noeudEnCours.getADroite();
+            }
+            else if ((noeudEnCours.getValeurNoeud()).equals("cond_fourmiliere")){
+                System.out.println("Condition fourmiliere");
+                if(detecterCaseNourriture())
+                    noeudEnCours = noeudEnCours.getAGauche();
+                else
+                    noeudEnCours = noeudEnCours.getADroite();
+            }
+            else if ((noeudEnCours.getValeurNoeud()).equals("cond_possedeNourriture")){
+                System.out.println("Condition possède nourriture");
+                if(transporteNourriture())
+                    noeudEnCours = noeudEnCours.getAGauche();
+                else
+                    noeudEnCours = noeudEnCours.getADroite();
+            }
+        }
+        if((noeudEnCours.getValeurNoeud()).equals("act_allerGauche")){
+            System.out.println("Action aller gauche");
+            deplacer('G');
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_allerDroite")){
+            System.out.println("Action aller droite");
+            deplacer('D');
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_allerHaut")){
+            System.out.println("Action aller haut");
+            deplacer('H');
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_allerBas")){
+            System.out.println("Action aller bas");
+            deplacer('B');
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_allerAleat")){
+            System.out.println("Action aller aleat");
+            deplacerAleatoirement();
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_ramasser")){
+            System.out.println("Action ramasser");
+            if(ramasser()){ // Si la fourmi a pu ramasser de la nourriture
+                score.augmenterScore(2);
+            }
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_rentrer")){
+            System.out.println("Action rentrer");
+            rentrerFourmiliere();
+        }
+        else if((noeudEnCours.getValeurNoeud()).equals("act_deposer")){
+            System.out.println("Action deposer");
+            if(deposer()){
+                score.augmenterScore(5);
+            }
+        }
+    }}

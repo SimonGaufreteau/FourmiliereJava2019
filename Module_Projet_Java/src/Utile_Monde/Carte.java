@@ -1,19 +1,13 @@
 package Utile_Monde;
 
 import Exceptions_Monde.InvalidDirectionException;
-import Exceptions_Monde.InvalidFileFormatException;
-import Exceptions_Monde.InvalidMapSizeException;
 import Exceptions_Monde.OutOfMapException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
 /*
 Classe de génération et de manipulation de la Utile_Monde.Carte (du Utile_Monde.Monde).
 Attributs : Une hauteur , une largeur et un tableau de tableaux de Cases représentant la grille.
-
 Note : On accède aux éléments de la grille de la facon suivante :
 grille[l][h] où "l" est l'index de ligne et "h" l'index de colonne
 */
@@ -26,7 +20,8 @@ public class Carte {
     /*Constructeur par défaut de Utile_Monde.Carte.
     On initialise toutes les Cases avec le constructeur de base (voir classe "Utile_Monde.Case") pour n'avoir que des cases "simples".
     */
-    public Carte(int hauteur, int largeur){
+    // création d'une carte "vide" (sans nourriture ni fourmiliere)
+    public Carte(int hauteur, int largeur) {
         this.hauteur=hauteur;
         this.largeur=largeur;
         this.grille=new Case[hauteur][largeur];
@@ -36,6 +31,30 @@ public class Carte {
             }
         }
     }
+    // initialisation d'une carte avec des fourmiliere et de la nourriture pour cela on tire au sort un position x et une position y pour les placer
+    public Carte(int hauteur, int largeur,int nbFourmiliere,int nbNourriture){
+        super();
+        int aleatX,aleatY;
+        for(int i=0;i<nbFourmiliere;i++){
+            aleatX= (int)(Math.random()*largeur);
+            aleatY= (int)(Math.random()*hauteur);
+            while(this.grille[aleatY][aleatX] instanceof CaseNourriture || this.grille[aleatY][aleatX] instanceof CaseNourriture){
+                aleatX= (int)(Math.random()*largeur);
+                aleatY= (int)(Math.random()*hauteur);
+            }
+            this.grille[aleatY][aleatX]=new CaseFourmiliere(aleatX,aleatY,this);
+        }
+        for(int i=0;i<nbNourriture;i++){
+            aleatX= (int)(Math.random()*largeur);
+            aleatY= (int)(Math.random()*hauteur);
+            while(this.grille[aleatY][aleatX] instanceof CaseNourriture || this.grille[aleatY][aleatX] instanceof CaseNourriture){
+                aleatX= (int)(Math.random()*largeur);
+                aleatY= (int)(Math.random()*hauteur);
+            }
+            this.grille[aleatY][aleatX]=new CaseNourriture(aleatX,aleatY,100, this);
+        }
+    }
+
 
     public Carte(String nomCarte) throws InvalidFileFormatException, IOException, InvalidMapSizeException {
         //Constructeur de chargement d'une carte
@@ -101,7 +120,7 @@ public class Carte {
         }
     }
 
-    public Carte() {    }
+    public Carte(){}
 
     //Méthode permettant de renvoyer la liste des lignes d'un fichier
     private  List<String> getLignes(String nomCarte) throws IOException {
@@ -136,7 +155,7 @@ public class Carte {
         return deltaX + deltaY;
     }
     /*Pour rentrer à la fourmilière la plus proche la fourmi doit savoir dans quelle direction partir, il faut donc examiner
-    * les cases voisines pour calculer leur distance à la fourmilière. */
+     * les cases voisines pour calculer leur distance à la fourmilière. */
     public Case getVoisin(int x, int y, char direction) throws InvalidDirectionException {
         switch (direction){
             //en fonction de la direction, donne la case voisine
