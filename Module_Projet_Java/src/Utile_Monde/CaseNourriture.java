@@ -3,8 +3,8 @@ package Utile_Monde;
 public class CaseNourriture extends Case{
     private int quantiteNourriture; //qté de nourriture restante sur la case
 
-    public CaseNourriture(int y, int x,int quantiteNourriture,Carte carteCourante) {
-        super(y, x,carteCourante);
+    public CaseNourriture(int x, int y, int quantiteNourriture, Carte carteCourante) {
+        super(x, y,carteCourante);
         this.quantiteNourriture= quantiteNourriture;
     }
 
