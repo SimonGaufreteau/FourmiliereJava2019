@@ -22,6 +22,7 @@ public class Simulation {
         try {
             monMonde = new Monde(largeur, hauteur, nbFourmis, nbCaseFourm, nbCaseNour);
             mesFourmis = monMonde.getFourmis();
+            scoreFourmi = new Score[mesFourmis.length];
             System.out.println(monMonde);
             System.out.println("OK");
             for (int i = 0; i < mesFourmis.length; i++) {
@@ -31,13 +32,9 @@ public class Simulation {
                     System.out.println("Y : " + mesFourmis[i].getPosition().getY());*/
                     mesFourmis[i].agir();
                 }
-
-                //scoreFourmi[i] = mesFourmis[i].getScore();
-                //System.out.println(scoreFourmi[i]);
-            }
-            for (int i=0;i<mesFourmis.length;i++){
-                if(mesFourmis[i].getScore().getPoint() != 0)
-                    System.out.println(mesFourmis[i].getScore().getPoint());
+                scoreFourmi[i] = mesFourmis[i].getScore();
+                if(scoreFourmi[i].getPoint() != 0)
+                    System.out.println(scoreFourmi[i].getPoint());
             }
         }
         /*catch (InvalidDirectionException e) {

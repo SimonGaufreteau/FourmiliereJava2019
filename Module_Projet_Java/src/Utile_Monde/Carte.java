@@ -15,7 +15,7 @@ Classe de génération et de manipulation de la Utile_Monde.Carte (du Utile_Mond
 Attributs : Une hauteur , une largeur et un tableau de tableaux de Cases représentant la grille.
 
 Note : On accède aux éléments de la grille de la facon suivante :
-grille[l][c] où "l" est l'index de ligne et "h" l'index de colonne
+grille[x][y] où "x" est l'index de colonne et "y" l'index de ligne
 */
 
 public class Carte {
