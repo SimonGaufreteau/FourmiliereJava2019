@@ -3,7 +3,6 @@ package Utile_Monde;
 import Exceptions_Monde.OutOfMapException;
 import Utile_Fourmi.*;
 
-
 import java.io.*;
 
 public class Main {
@@ -32,7 +31,7 @@ public class Main {
         String nomCarte ="Cartes\\Carte_Test.carte";*/
         try {
             // Génétation de la fourmi parfaite
-            Noeud C1 = new Condition("cond_nourriture");
+            /*Noeud C1 = new Condition("cond_nourriture");
             Noeud C2 = new Condition("cond_fourmiliere");
             Noeud C3 = new Condition("cond_possedeNourriture");
             Noeud A1 = new Action("act_rentrer");
@@ -49,10 +48,11 @@ public class Main {
             P7.numerotationFeuille();
             P7.numerotationNoeud();
 
-
             Fourmi f = new Fourmi(P7);
             f.afficherIntelligence();
-            f.agir();
+            f.agir();*/
+
+            Simulation sim = new Simulation(10,5,500,5,1);
         }
         catch(Exception e) {
             System.out.println(e.getMessage());

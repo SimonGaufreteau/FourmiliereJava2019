@@ -37,9 +37,14 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
         this.intelligence = intelligence;
     }
 
-    public int getScore() {
+    public int getPoint() {
         //pour afficher le score on a besoin de le récupérer
         return score.getPoint();
+    }
+
+    public Score getScore() {
+        //pour afficher le score on a besoin de le récupérer
+        return score;
     }
 
     public boolean transporteNourriture() {
@@ -136,6 +141,9 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
 
     @Override
     public boolean deplacer(char direction) throws InvalidDirectionException {
+        //System.out.println("X : " + position.getCarteCourante().getVoisin(0, 4, 'G').getX());
+        //System.out.println("Y : " + position.getCarteCourante().getVoisin(0, 4, 'G').getY());
+        position = position.getCarteCourante().getVoisin(position.getX(), position.getY(), direction);
         return true;
     }
 
@@ -144,21 +152,21 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
         ProgrammeGenetique noeudEnCours = intelligence;
         while((noeudEnCours.getNoeud().getClass().getName()).equals("Utile_Fourmi.Condition")){
             if((noeudEnCours.getValeurNoeud()).equals("cond_nourriture")){
-                System.out.println("Condition nourriture");
+                //System.out.println("Condition nourriture");
                 if(detecterCaseNourriture())
                     noeudEnCours = noeudEnCours.getAGauche();
                 else
                     noeudEnCours = noeudEnCours.getADroite();
             }
             else if ((noeudEnCours.getValeurNoeud()).equals("cond_fourmiliere")){
-                System.out.println("Condition fourmiliere");
-                if(detecterCaseNourriture())
+                //System.out.println("Condition fourmiliere");
+                if(detecterCaseFourmiliere())
                     noeudEnCours = noeudEnCours.getAGauche();
                 else
                     noeudEnCours = noeudEnCours.getADroite();
             }
             else if ((noeudEnCours.getValeurNoeud()).equals("cond_possedeNourriture")){
-                System.out.println("Condition possède nourriture");
+                //System.out.println("Condition possède nourriture");
                 if(transporteNourriture())
                     noeudEnCours = noeudEnCours.getAGauche();
                 else
@@ -166,37 +174,37 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
             }
         }
         if((noeudEnCours.getValeurNoeud()).equals("act_allerGauche")){
-            System.out.println("Action aller gauche");
+            //System.out.println("Action aller gauche");
             deplacer('G');
         }
         else if((noeudEnCours.getValeurNoeud()).equals("act_allerDroite")){
-            System.out.println("Action aller droite");
+            //System.out.println("Action aller droite");
             deplacer('D');
         }
         else if((noeudEnCours.getValeurNoeud()).equals("act_allerHaut")){
-            System.out.println("Action aller haut");
+            //System.out.println("Action aller haut");
             deplacer('H');
         }
         else if((noeudEnCours.getValeurNoeud()).equals("act_allerBas")){
-            System.out.println("Action aller bas");
+            //System.out.println("Action aller bas");
             deplacer('B');
         }
         else if((noeudEnCours.getValeurNoeud()).equals("act_allerAleat")){
-            System.out.println("Action aller aleat");
+            //System.out.println("Action aller aleat");
             deplacerAleatoirement();
         }
         else if((noeudEnCours.getValeurNoeud()).equals("act_ramasser")){
-            System.out.println("Action ramasser");
+            //System.out.println("Action ramasser");
             if(ramasser()){ // Si la fourmi a pu ramasser de la nourriture
                 score.augmenterScore(2);
             }
         }
         else if((noeudEnCours.getValeurNoeud()).equals("act_rentrer")){
-            System.out.println("Action rentrer");
+            //System.out.println("Action rentrer");
             rentrerFourmiliere();
         }
         else if((noeudEnCours.getValeurNoeud()).equals("act_deposer")){
-            System.out.println("Action deposer");
+            //System.out.println("Action deposer");
             if(deposer()){
                 score.augmenterScore(5);
             }
@@ -209,5 +217,17 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
 
     public void afficherIntelligence(){
         intelligence.afficherArbre();
+    }
+
+    public Case getPosition(){
+        return position;
+    }
+
+    public String toString(){
+        String S;
+        S = "Score : " + score.getPoint() + "\n";
+        S += "Position : " + position.getX() + " / " + position.getY();
+        S += "Intelligence : \n" + intelligence.toString();
+        return S;
     }
 }

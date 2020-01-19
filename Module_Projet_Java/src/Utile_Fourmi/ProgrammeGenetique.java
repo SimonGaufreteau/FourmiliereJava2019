@@ -469,12 +469,16 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     }
 
     // Fonction toString du programme génétique
-    public String toString(int hauteur, String espace) {
+    public String toString(){
+        return interneToString(0,"");
+    }
+
+    private String interneToString(int hauteur, String espace) {
         String S = "";
         S += espace + hauteur + "." + valeur.getText() + "\n";
         if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
-            S+=aGauche.toString(hauteur+1, espace+="  ");
-            S+=aDroite.toString(hauteur+1, espace);
+            S+=aGauche.interneToString(hauteur+1, espace+="  ");
+            S+=aDroite.interneToString(hauteur+1, espace);
         }
         return S;
     }
