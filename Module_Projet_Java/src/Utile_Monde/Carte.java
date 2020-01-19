@@ -1,10 +1,15 @@
 package Utile_Monde;
 
 import Exceptions_Monde.InvalidDirectionException;
+import Exceptions_Monde.InvalidFileFormatException;
+import Exceptions_Monde.InvalidMapSizeException;
 import Exceptions_Monde.OutOfMapException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 /*
 Classe de génération et de manipulation de la Utile_Monde.Carte (du Utile_Monde.Monde).
 Attributs : Une hauteur , une largeur et un tableau de tableaux de Cases représentant la grille.
@@ -33,7 +38,7 @@ public class Carte {
     }
     // initialisation d'une carte avec des fourmiliere et de la nourriture pour cela on tire au sort un position x et une position y pour les placer
     public Carte(int hauteur, int largeur,int nbFourmiliere,int nbNourriture){
-        super();
+        this(hauteur, largeur);
         int aleatX,aleatY;
         for(int i=0;i<nbFourmiliere;i++){
             aleatX= (int)(Math.random()*largeur);

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Monde {
     private Carte carte;
     private Fourmi[] fourmis;
-    private static int nbFourmisDefaut=20;
+    private static int nbFourmisDefaut=0; /*20 avant*/
 
     /*
     Constructeur avec Carte à charger. On prend en argument le nom du fichier contenant la carte
@@ -49,7 +49,7 @@ public class Monde {
             }
         }
     }
-    // constructeur du monde qui prend en parametre la hauteur et la largeur de la carte ainsi que le nombre de fourmi de fourmiliere et de nourriture
+    // constructeur du monde qui prend en parametre la hauteur + la largeur de la carte ainsi que le nombre de fourmi de fourmiliere et de nourriture
 
     public Monde(int hauteur,int largeur, int nbFourmi, int nbCaseFourm, int nbCaseNour){
         int y, x; // variables pour la position des fourmis

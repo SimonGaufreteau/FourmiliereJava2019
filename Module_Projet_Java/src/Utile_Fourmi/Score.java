@@ -2,6 +2,9 @@ package Utile_Fourmi;
 
 public class Score {
     int point;
+
+
+    public Score(){}
     public Score(int point){
         this.point=point;
     }
