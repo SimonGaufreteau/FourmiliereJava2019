@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Monde {
     private Carte carte;
     private Fourmi[] fourmis;
-    private static int nbFourmisDefaut=0; /*20 avant*/
+    private static int nbFourmisDefaut=20;
 
     /*
     Constructeur avec Carte à charger. On prend en argument le nom du fichier contenant la carte
@@ -73,8 +73,8 @@ public class Monde {
     /*Constructeur par défaut :
         On utilise deux entiers pour établir la taille de la grille du monde (i.e.la carte)
     */
-    public Monde(int hauteur, int largeur){
-       this(hauteur,largeur,nbFourmisDefaut);
+    public Monde(int hauteur, int largeur) throws IOException {
+       this(largeur, hauteur, nbFourmisDefaut);
     }
 
     //Sauvegarder l'état de la carte du monde
@@ -98,21 +98,24 @@ public class Monde {
     public ArrayList<CaseFourmiliere> lesFourmilieres() {
         ArrayList fourmilieres = new ArrayList();
         Case[][] grille = carte.getGrille();
-        for (int ligne = 0; ligne < carte.getHauteur(); ligne++) {
-            for (int colonne = 0; colonne < carte.getLargeur(); colonne++) {
-                if (grille[ligne][colonne] instanceof CaseFourmiliere) {
-                    fourmilieres.add(grille[ligne][colonne]);
+        for (int x = 0; x < carte.getLargeur(); x++) {
+            for (int y = 0; y < carte.getHauteur(); y++) {
+                if (grille[x][y] instanceof CaseFourmiliere) {
+                    fourmilieres.add(grille[x][y]);
                 }
             }
         }
         return fourmilieres;
     }
+
     //Affichage du Monde sous forme de String.
     //Affichage de la Carte + des fourmis.
     public String toString(){
         StringBuilder s= new StringBuilder("Affichage de la Carte :\n" + carte.toString() + "\nAffichage des Fourmis :\n");
+        int i=1;
         for (Fourmi fourmi : fourmis) {
-            s.append(fourmi.toString()).append("\n");
+            s.append("Fourmi " + i + " : " + fourmi.toString()).append("\n\n");
+            i++;
         }
         return s.toString();
     }

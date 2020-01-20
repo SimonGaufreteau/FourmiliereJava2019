@@ -13,6 +13,7 @@ import java.util.ListIterator;
 /*
 Classe de génération et de manipulation de la Utile_Monde.Carte (du Utile_Monde.Monde).
 Attributs : Une hauteur , une largeur et un tableau de tableaux de Cases représentant la grille.
+
 Note : On accède aux éléments de la grille de la facon suivante :
 grille[l][h] où "l" est l'index de ligne et "h" l'index de colonne
 */
@@ -29,37 +30,38 @@ public class Carte {
     public Carte(int hauteur, int largeur) {
         this.hauteur=hauteur;
         this.largeur=largeur;
-        this.grille=new Case[hauteur][largeur];
-        for (int ligne=0;ligne<hauteur;ligne++){
-            for (int colonne=0;colonne<largeur;colonne++){
-                this.grille[ligne][colonne]=new Case(colonne,ligne,this);
+        this.grille=new Case[largeur][hauteur];
+        for (int x=0; x<largeur; x++){
+            for (int y=0; y<hauteur; y++) {
+                this.grille[x][y]=new Case(x,y,this);
             }
         }
     }
+
     // initialisation d'une carte avec des fourmiliere et de la nourriture pour cela on tire au sort un position x et une position y pour les placer
-    public Carte(int hauteur, int largeur,int nbFourmiliere,int nbNourriture){
-        this(hauteur, largeur);
-        int aleatX,aleatY;
+    // RETIRER DE LA LISTE DES POSSIBLES CELLES DEJA TIREES
+    public Carte(int largeur, int hauteur, int nbFourmiliere, int nbNourriture){
+        this(largeur, hauteur);
+        int aleatX, aleatY;
         for(int i=0;i<nbFourmiliere;i++){
             aleatX= (int)(Math.random()*largeur);
             aleatY= (int)(Math.random()*hauteur);
-            while(this.grille[aleatY][aleatX] instanceof CaseNourriture || this.grille[aleatY][aleatX] instanceof CaseNourriture){
+            while(this.grille[aleatX][aleatY] instanceof CaseNourriture || this.grille[aleatX][aleatY] instanceof CaseNourriture){
                 aleatX= (int)(Math.random()*largeur);
                 aleatY= (int)(Math.random()*hauteur);
             }
-            this.grille[aleatY][aleatX]=new CaseFourmiliere(aleatX,aleatY,this);
+            this.grille[aleatX][aleatY]=new CaseFourmiliere(aleatX,aleatY,this);
         }
         for(int i=0;i<nbNourriture;i++){
             aleatX= (int)(Math.random()*largeur);
             aleatY= (int)(Math.random()*hauteur);
-            while(this.grille[aleatY][aleatX] instanceof CaseNourriture || this.grille[aleatY][aleatX] instanceof CaseNourriture){
+            while(this.grille[aleatX][aleatY] instanceof CaseNourriture || this.grille[aleatX][aleatY] instanceof CaseNourriture){
                 aleatX= (int)(Math.random()*largeur);
                 aleatY= (int)(Math.random()*hauteur);
             }
-            this.grille[aleatY][aleatX]=new CaseNourriture(aleatX,aleatY,100, this);
+            this.grille[aleatX][aleatY]=new CaseNourriture(aleatX,aleatY,100, this);
         }
     }
-
 
     public Carte(String nomCarte) throws InvalidFileFormatException, IOException, InvalidMapSizeException {
         //Constructeur de chargement d'une carte
@@ -104,15 +106,15 @@ public class Carte {
                 switch (car) {
                     case 'C':
                         //A chaque fois qu'on a un caractere reconnu, on incremente la largeur "reelle" de la ligne
-                        this.grille[hauteur][largeur_reelle] = new Case(hauteur, largeur_reelle,this);
+                        this.grille[largeur_reelle][hauteur] = new Case(largeur_reelle, hauteur,this);
                         largeur_reelle++;
                         break;
                     case 'F':
-                        this.grille[hauteur][largeur_reelle] = new CaseFourmiliere(hauteur, largeur_reelle,this);
+                        this.grille[largeur_reelle][hauteur] = new CaseFourmiliere(largeur_reelle, hauteur,this);
                         largeur_reelle++;
                         break;
                     case 'N':
-                        this.grille[hauteur][largeur_reelle] = new CaseNourriture(hauteur, largeur_reelle,7,this);
+                        this.grille[largeur_reelle][hauteur] = new CaseNourriture(largeur_reelle,hauteur,7,this);
                         largeur_reelle++;
                         break;
                 }
@@ -166,23 +168,23 @@ public class Carte {
             //en fonction de la direction, donne la case voisine
             case 'H':
                 if(y==0) {
-                    return grille[hauteur-1][x];
+                    return grille[x][hauteur-1];
                 }
-                return grille[y-1][x];
+                return grille[x][y-1];
             case 'D':
                 if(x==largeur-1){
-                    return grille[y][0];
+                    return grille[0][y];
                 }
-                return grille[y][x+1];
+                return grille[x+1][y];
             case 'B':
                 if(y==hauteur-1){
-                    return grille[0][x];
+                    return grille[x][0];
                 }
-                return grille[y+1][x];
+                return grille[x][y+1];
             case 'G':
                 if(x==0){
-                    return grille[y][largeur-1]; }
-                return grille[y][x-1];
+                    return grille[largeur-1][y]; }
+                return grille[x-1][y];
             default:
                 throw new InvalidDirectionException(direction);
         }
@@ -199,7 +201,7 @@ public class Carte {
             if (c.getX() >= largeur || c.getY() >= hauteur || c.getX() < 0 || c.getY() < 0) {
                 throw new OutOfMapException(c.getX(), c.getY());
             }
-            this.grille[c.getY()][c.getX()] = c;
+            this.grille[c.getX()][c.getY()] = c;
         }
     }
 
@@ -236,9 +238,9 @@ public class Carte {
     * */
     public String toString(){
         StringBuilder s = new StringBuilder();
-        for (int h=0;h<hauteur;h++){            //Affichage une par une des lignes
-            for (int l=0;l<largeur;l++){        //Affichage d'une ligne
-                s.append(grille[h][l].toString()).append(" ");
+        for (int y=0;y<hauteur;y++){            //Affichage une par une des lignes
+            for (int x=0;x<largeur;x++){        //Affichage d'une ligne
+                s.append(grille[x][y].toString()).append(" ");
             }
             s.append("\n");
         }
