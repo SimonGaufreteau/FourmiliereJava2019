@@ -1,9 +1,6 @@
 package Utile_Monde;
 
-import Exceptions_Monde.InvalidDirectionException;
-import Exceptions_Monde.InvalidFileFormatException;
-import Exceptions_Monde.InvalidMapSizeException;
-import Exceptions_Monde.OutOfMapException;
+import Exceptions_Monde.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -40,26 +37,40 @@ public class Carte {
 
     // initialisation d'une carte avec des fourmiliere et de la nourriture pour cela on tire au sort un position x et une position y pour les placer
     // RETIRER DE LA LISTE DES POSSIBLES CELLES DEJA TIREES
-    public Carte(int largeur, int hauteur, int nbFourmiliere, int nbNourriture){
+    public Carte(int largeur, int hauteur, int nbFourmiliere, int nbNourriture) throws InvalidNbCaseDiffException {
         this(largeur, hauteur);
-        int aleatX, aleatY;
-        for(int i=0;i<nbFourmiliere;i++){
-            aleatX= (int)(Math.random()*largeur);
-            aleatY= (int)(Math.random()*hauteur);
-            while(this.grille[aleatX][aleatY] instanceof CaseNourriture || this.grille[aleatX][aleatY] instanceof CaseNourriture){
-                aleatX= (int)(Math.random()*largeur);
-                aleatY= (int)(Math.random()*hauteur);
-            }
-            this.grille[aleatX][aleatY]=new CaseFourmiliere(aleatX,aleatY,this);
+        if(nbFourmiliere+nbNourriture>(largeur*hauteur)){
+            throw new InvalidNbCaseDiffException();
         }
-        for(int i=0;i<nbNourriture;i++){
-            aleatX= (int)(Math.random()*largeur);
-            aleatY= (int)(Math.random()*hauteur);
-            while(this.grille[aleatX][aleatY] instanceof CaseNourriture || this.grille[aleatX][aleatY] instanceof CaseNourriture){
-                aleatX= (int)(Math.random()*largeur);
-                aleatY= (int)(Math.random()*hauteur);
+        //creation d'une liste avec toutes les possibilites de cases
+        ArrayList<Coordonnee> possibilites= new ArrayList<Coordonnee>();
+        for (int x=0; x<largeur; x++) {
+            for (int y = 0; y < hauteur; y++) {
+                possibilites.add(new Coordonnee(x,y));
             }
-            this.grille[aleatX][aleatY]=new CaseNourriture(aleatX,aleatY,100, this);
+        }
+        int aleat,x,y;
+        Coordonnee C;
+        /*tant qu'il n'y a pas le bon nombre de case fourmiliere on tire un couple au sort
+         on crée une fourmiliere avec ces coordonnées
+        on retire ce couple de la liste des possibilités
+         */
+        for(int i=0;i<nbFourmiliere;i++){
+            aleat= (int)(Math.random()*possibilites.size());
+            C=possibilites.get(aleat);
+            x=C.getX();
+            y=C.getY();
+            this.grille[x][y]=new CaseFourmiliere(x,y,this);
+            possibilites.remove(C);
+        }
+        // même chose avec les cases nourritures
+        for(int i=0;i<nbNourriture;i++){
+            aleat= (int)(Math.random()*possibilites.size());
+            C=possibilites.get(aleat);
+            x=C.getX();
+            y=C.getY();
+            this.grille[x][y]=new CaseNourriture(x,y,100,this);
+            possibilites.remove(C);
         }
     }
 
@@ -245,5 +256,23 @@ public class Carte {
             s.append("\n");
         }
         return s.toString();
+    }
+
+    class Coordonnee{
+        private int x;
+        private int y;
+
+        Coordonnee(int x,int y){
+            this.x=x;
+            this.y=y;
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public int getY() {
+            return y;
+        }
     }
 }

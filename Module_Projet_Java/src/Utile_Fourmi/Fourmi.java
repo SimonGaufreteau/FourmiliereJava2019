@@ -129,7 +129,7 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
             porteNourriture=false;
             return detecterCaseFourmiliere();
         }
-        return false
+        return false;
     }
 
     public boolean deplacerAleatoirement() throws InvalidDirectionException {

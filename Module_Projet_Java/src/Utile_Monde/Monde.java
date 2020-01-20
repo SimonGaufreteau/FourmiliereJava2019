@@ -5,6 +5,7 @@ Attributs : Une Utile_Monde.Carte, un tableau de fourmis
 
 import Exceptions_Monde.InvalidFileFormatException;
 import Exceptions_Monde.InvalidMapSizeException;
+import Exceptions_Monde.InvalidNbCaseDiffException;
 import Exceptions_Monde.OutOfMapException;
 import Utile_Fourmi.Fourmi;
 
@@ -51,7 +52,7 @@ public class Monde {
     }
     // constructeur du monde qui prend en parametre la hauteur + la largeur de la carte ainsi que le nombre de fourmi de fourmiliere et de nourriture
 
-    public Monde(int hauteur,int largeur, int nbFourmi, int nbCaseFourm, int nbCaseNour){
+    public Monde(int hauteur,int largeur, int nbFourmi, int nbCaseFourm, int nbCaseNour) throws InvalidNbCaseDiffException {
         int y, x; // variables pour la position des fourmis
         this.carte= new Carte(hauteur,largeur,nbCaseFourm,nbCaseNour);
         this.fourmis=new Fourmi[nbFourmi];
@@ -96,7 +97,7 @@ public class Monde {
 
     //fonction qui renvoi une liste de caseForurmilieres
     public ArrayList<CaseFourmiliere> lesFourmilieres() {
-        ArrayList fourmilieres = new ArrayList();
+        ArrayList fourmilieres = new ArrayList<CaseFourmiliere>();
         Case[][] grille = carte.getGrille();
         for (int x = 0; x < carte.getLargeur(); x++) {
             for (int y = 0; y < carte.getHauteur(); y++) {
