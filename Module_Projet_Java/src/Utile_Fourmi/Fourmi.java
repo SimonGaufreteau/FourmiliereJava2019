@@ -123,8 +123,13 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     }
 
     @Override
+    //renvoi vrai si la fourmi a de la nourriture et la depose sur une fourmiliere
     public boolean deposer() {
-        return false;
+        if (porteNourriture){
+            porteNourriture=false;
+            return detecterCaseFourmiliere();
+        }
+        return false
     }
 
     public boolean deplacerAleatoirement() throws InvalidDirectionException {
