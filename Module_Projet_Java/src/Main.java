@@ -1,8 +1,11 @@
 public class Main {
 
     public static void main (String[] args){
-        Simulation S= new Simulation();
-        S.jeu();
-
+        try {
+            Simulation S = new Simulation();
+            S.jeu();
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
 }
