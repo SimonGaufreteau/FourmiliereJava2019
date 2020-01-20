@@ -18,23 +18,26 @@ public class Simulation {
     recuêration du score
      */
     public Simulation(int largeur, int hauteur, int nbFourmis, int nbCaseFourm, int nbCaseNour) {
-        int nbCoups = 50;
+        int nbCoups = 20;
         try {
             monMonde = new Monde(largeur, hauteur, nbFourmis, nbCaseFourm, nbCaseNour);
             mesFourmis = monMonde.getFourmis();
             scoreFourmi = new Score[mesFourmis.length];
             System.out.println(monMonde);
-            System.out.println("OK");
             for (int i = 0; i < mesFourmis.length; i++) {
                 for(int j = 0; j < nbCoups; j++) {
-                    /*System.out.println("Coup " + j + " : ");
+                    System.out.println("\nCoup " + (j+1) + " : ");
                     System.out.println("X : " + mesFourmis[i].getPosition().getX());
-                    System.out.println("Y : " + mesFourmis[i].getPosition().getY());*/
+                    System.out.println("Y : " + mesFourmis[i].getPosition().getY());
+                    System.out.println("Type : " + mesFourmis[i].getPosition().toString());
                     mesFourmis[i].agir();
                 }
                 scoreFourmi[i] = mesFourmis[i].getScore();
-                if(scoreFourmi[i].getPoint() != 0)
-                    System.out.println(scoreFourmi[i].getPoint());
+                if(scoreFourmi[i].getPoint() != 0) {
+                    //System.out.println("Fourmi " + i + " : ");
+                    //System.out.println(mesFourmis[i].getIntelligence());
+                    System.out.println("Score : " + scoreFourmi[i].getPoint());
+                }
             }
         }
         /*catch (InvalidDirectionException e) {
