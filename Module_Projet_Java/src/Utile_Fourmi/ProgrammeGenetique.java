@@ -340,8 +340,8 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         if(nbCond1 != 0 && nbCond2 != 0){ // Ce cas ne devrait jamais arriver ensuite puisque la fonction sera appliquée sur les meilleurs arbres génétiques
             int aleatCond1 = (int) (Math.random() * nbCond1)+1;
             int aleatCond2 = (int) (Math.random() * nbCond2)+1;
-            System.out.println("\nN° du noeud à modifier (arbre 1) : " + aleatCond1);
-            System.out.println("N° du noeud à muter (arbre 2) : " + aleatCond2);
+            //System.out.println("\nN° du noeud à modifier (arbre 1) : " + aleatCond1);
+            //System.out.println("N° du noeud à muter (arbre 2) : " + aleatCond2);
             selectionNoeudAInserer(aleatCond1, aleatCond2, prog2);
         }
         simplifierProgramme();
