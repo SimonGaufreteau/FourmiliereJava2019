@@ -2,7 +2,7 @@ package Utile_Fourmi;
 
 import java.io.Serializable;
 
-public class Noeud implements Serializable {
+public class Noeud implements Serializable, Cloneable {
     protected String text;
 
     public Noeud(String text) {
@@ -15,5 +15,10 @@ public class Noeud implements Serializable {
 
     public String toString() {
         return text;
+    }
+
+    public Noeud clone() throws CloneNotSupportedException {
+        Noeud n = (Noeud) super.clone();
+        return n;
     }
 }

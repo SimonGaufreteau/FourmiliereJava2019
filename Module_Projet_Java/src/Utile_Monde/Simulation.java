@@ -62,10 +62,9 @@ public class Simulation {
             Fourmi[] fourmisApresMut = new Fourmi[nbFourmisMuter];
             fourmisApresMut = muterFourmis(meilleuresFourmis,nbFourmis,nbFourmisMuter,nbFourmisMuter2);
 
-            for(int i=0;i<nbFourmisMuter;i++){
-                System.out.println("Fourmi 1 : ");
+            /*for(int i=0;i<nbFourmisMuter;i++){
                 System.out.println(fourmisApresMut[i].getIntelligence());
-            }
+            }*/
 
 
 
@@ -77,23 +76,23 @@ public class Simulation {
 
 
 
-            for (int i=0;i<mesFourmis.length;i++){
+            /*for (int i=0;i<mesFourmis.length;i++){
                 if(mesFourmis[i].getScore().getPoint() != 0){
-                    /*System.out.println("Arbre : ");
+                    System.out.println("Arbre : ");
                     System.out.println(mesFourmis[i].getIntelligence());
                     System.out.println("Position init : ");
                     System.out.println("X : " + posInit[i].getX());
                     System.out.println("Y : " + posInit[i].getY());
-                    System.out.println("Type : " + posInit[i]);*/
+                    System.out.println("Type : " + posInit[i]);
                     System.out.println("Score fourmi : " + mesFourmis[i].getScore().getPoint());
                 }
             }
             for (int i=0;i<mesFourmis.length;i++){
-                /*if(scoreFourmi[i].getPoint() != 0) {
+                if(scoreFourmi[i].getPoint() != 0) {
                     System.out.println("Score : " + scoreFourmi[i].getPoint());
                     //System.out.println("Fourmi : " + mesFourmis[i]);
-                }*/
-            }
+                }
+            }*/
         }
         /*catch (InvalidDirectionException e) {
             System.out.println(e);
@@ -103,19 +102,19 @@ public class Simulation {
         }
     }
 
-    private Fourmi[] muterFourmis(Fourmi[] meilleuresFourmis, int nbFourmis, int nbFourmisMuter, int nbFourmisMuter2) throws IOException {
+    private Fourmi[] muterFourmis(Fourmi[] meilleuresFourmis, int nbFourmis, int nbFourmisMuter, int nbFourmisMuter2) throws IOException, CloneNotSupportedException {
         ProgrammeGenetique[] progMuter = new ProgrammeGenetique[nbFourmisMuter];
         Fourmi[] fourmisMuter = new Fourmi[nbFourmisMuter];
         for(int i=0;i<nbFourmisMuter;i++){
             int fourmi1 = (int) (Math.random() * meilleuresFourmis.length);
-            int fourmi2=0;
+            int fourmi2;
             do {
                 fourmi2 = (int) (Math.random() * meilleuresFourmis.length);
             }
             while(fourmi1 == fourmi2);
-            System.out.println("Fourmi 1 : " + fourmi1 + " et fourmi 2 : " + fourmi2);
-            progMuter[i] = meilleuresFourmis[fourmi1].getIntelligence();
-            progMuter[i].croiserProgrammes(meilleuresFourmis[fourmi2].getIntelligence());
+            //System.out.println(i + " : Fourmi 1 : " + fourmi1 + " et fourmi 2 : " + fourmi2);
+            progMuter[i] = meilleuresFourmis[fourmi1].getIntelligence().clone();
+            progMuter[i].croiserProgrammes(meilleuresFourmis[fourmi2].getIntelligence().clone());
             fourmisMuter[i] = new Fourmi(progMuter[i],monMonde.lesFourmilieres(),monMonde.getCarte());
         }
         return fourmisMuter;

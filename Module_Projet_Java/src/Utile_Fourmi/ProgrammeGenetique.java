@@ -392,15 +392,21 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     }
 
     // Fonction permettant de cloner l'arbre et d'en créer un nouveau ayant les mêmes valeurs
-    public ProgrammeGenetique clone() {
-        ProgrammeGenetique o = null;
-        try {
-            o = (ProgrammeGenetique) super.clone();
+    public ProgrammeGenetique clone() throws CloneNotSupportedException {
+        ProgrammeGenetique p = (ProgrammeGenetique) super.clone();
+        if(aGauche!=null){
+            p.aGauche = (ProgrammeGenetique) this.aGauche.clone();
+            p.aDroite = (ProgrammeGenetique) this.aDroite.clone();
         }
-        catch(CloneNotSupportedException cnse){
-            cnse.printStackTrace(System.err);
-        }
-        return o;
+
+        p.valeur = (Noeud) this.valeur.clone();
+
+
+        /*private int id;
+        private static int nbTempNoeud = 1;
+        private static int nbTempFeuille = 1;*/
+
+        return p;
     }
 
     // Fonction qui retourne la hauteur de l'arbre
@@ -469,7 +475,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     }
 
     // Fonction toString du programme génétique
-    public String toString(){
+    /*public String toString(){
         return interneToString(0,"");
     }
 
@@ -481,5 +487,5 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             S+=aDroite.interneToString(hauteur+1, espace);
         }
         return S;
-    }
+    }*/
 }
