@@ -15,7 +15,7 @@ Note : On accède aux éléments de la grille de la facon suivante :
 grille[l][h] où "l" est l'index de ligne et "h" l'index de colonne
 */
 
-public class Carte {
+public class Carte implements Cloneable {
     private int hauteur;
     private int largeur;
     private Case[][] grille;
