@@ -239,6 +239,13 @@ public class Carte {
         return largeur;
     }
 
+    public Carte clone() throws CloneNotSupportedException {
+        Carte c = (Carte) super.clone();
+        c.grille = (Case[][]) this.grille.clone();
+        return c;
+    }
+
+
     /*Affichage d'une Carte sous le format suivant :
     C N C C C
     C C C C N
