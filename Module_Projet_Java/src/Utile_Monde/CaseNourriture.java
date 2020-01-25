@@ -11,11 +11,16 @@ public class CaseNourriture extends Case{
     /*True,lorsque de la nourriture est ramassée sur une case
     * alors on décrémente la quantité de nourriture disponible sur cette case.*/
     public boolean enleverNourriture() {
+        System.out.println("Quantite : " + quantiteNourriture);
         if(quantiteNourriture > 0) {
             quantiteNourriture = quantiteNourriture - 1;
             return true;
         }
         return false;
+    }
+
+    public int getQuantiteNourriture(){
+        return quantiteNourriture;
     }
 
     //Pourra être utile si on fait un remplissage des case nourriture tous les x intervalles de temps au cours de la partie

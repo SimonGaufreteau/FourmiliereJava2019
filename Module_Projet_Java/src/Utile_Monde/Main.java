@@ -52,7 +52,8 @@ public class Main {
             f.afficherIntelligence();
             f.agir();*/
 
-            Simulation sim = new Simulation(5,5,100,2,8);
+            Simulation sim = new Simulation();
+            sim.lancerSimulation(5,5,50,3,8);
         }
         catch(Exception e) {
             System.out.println(e.getMessage());

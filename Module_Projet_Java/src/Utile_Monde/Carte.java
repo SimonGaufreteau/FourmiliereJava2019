@@ -4,6 +4,7 @@ import Exceptions_Monde.InvalidDirectionException;
 import Exceptions_Monde.InvalidFileFormatException;
 import Exceptions_Monde.InvalidMapSizeException;
 import Exceptions_Monde.OutOfMapException;
+import Utile_Fourmi.Noeud;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -18,7 +19,7 @@ Note : On accède aux éléments de la grille de la facon suivante :
 grille[x][y] où "x" est l'index de colonne et "y" l'index de ligne
 */
 
-public class Carte {
+public class Carte implements Cloneable {
     private int hauteur;
     private int largeur;
     private Case[][] grille;
@@ -227,6 +228,12 @@ public class Carte {
         return largeur;
     }
 
+    public Carte clone() throws CloneNotSupportedException {
+        Carte c = (Carte) super.clone();
+        c.grille = (Case[][]) this.grille.clone();
+        return c;
+    }
+
     /*Affichage d'une Carte sous le format suivant :
     C N C C C
     C C C C N
@@ -240,6 +247,13 @@ public class Carte {
         for (int y=0;y<hauteur;y++){            //Affichage une par une des lignes
             for (int x=0;x<largeur;x++){        //Affichage d'une ligne
                 s.append(grille[x][y].toString()).append(" ");
+            }
+            s.append("\n");
+        }
+        for (int y=0;y<hauteur;y++){            //Affichage une par une des lignes
+            for (int x=0;x<largeur;x++){        //Affichage d'une ligne
+                if(grille[x][y].toString() == "N")
+                    s.append(((CaseNourriture)grille[x][y]).getQuantiteNourriture());
             }
             s.append("\n");
         }

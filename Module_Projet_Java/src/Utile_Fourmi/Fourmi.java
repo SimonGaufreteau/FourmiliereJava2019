@@ -48,6 +48,10 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
         return score;
     }
 
+    public void setPosition(Case position){
+        this.position = position;
+    }
+
     public boolean transporteNourriture() {
         return porteNourriture;
     }
@@ -156,48 +160,56 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     // Pour les conditions, si elle est validée, on passe par l'arbre gauche, sinon par l'arbre droit
     public void agir() throws InvalidDirectionException {
         ProgrammeGenetique noeudEnCours = intelligence;
+        if(rentreFourmiliere == true){
+            if(detecterCaseFourmiliere()){
+                rentreFourmiliere = false;
+            }
+            else {
+                rentrerFourmiliere();
+            }
+        }
         if(rentreFourmiliere == false){ // Si l'on n'est pas en train de rentrer à la fourmilière
             while((noeudEnCours.getNoeud().getClass().getName()).equals("Utile_Fourmi.Condition")){
                 if((noeudEnCours.getValeurNoeud()).equals("cond_nourriture")){
-                    //System.out.println("Nourriture ?");
+                    System.out.println("Nourriture ?");
                     if(detecterCaseNourriture()){
-                        //System.out.println("  La fourmi est sur une case nourriture");
+                        System.out.println("  La fourmi est sur une case nourriture");
                         noeudEnCours = noeudEnCours.getAGauche();
                     }
 
                     else{
-                        //System.out.println("  La fourmi n'est pas sur une case nourriture");
+                        System.out.println("  La fourmi n'est pas sur une case nourriture");
                         noeudEnCours = noeudEnCours.getADroite();
                     }
 
                 }
                 else if ((noeudEnCours.getValeurNoeud()).equals("cond_fourmiliere")){
-                    //System.out.println("Condition fourmiliere");
+                    System.out.println("Condition fourmiliere");
                     if(detecterCaseFourmiliere()){
                         rentreFourmiliere = false;
-                        //System.out.println("  La fourmi est sur une case fourmilière");
+                        System.out.println("  La fourmi est sur une case fourmilière");
                         noeudEnCours = noeudEnCours.getAGauche();
                     }
                     else{
-                        //System.out.println("  La fourmi n'est pas sur une case fourmilière");
+                        System.out.println("  La fourmi n'est pas sur une case fourmilière");
                         noeudEnCours = noeudEnCours.getADroite();
                     }
 
                 }
                 else if ((noeudEnCours.getValeurNoeud()).equals("cond_possedeNourriture")){
-                    //System.out.println("Condition possède nourriture");
+                    System.out.println("Condition possède nourriture");
                     if(transporteNourriture()) {
-                        //System.out.println("  La fourmi possède de la nourriture sur elle");
+                        System.out.println("  La fourmi possède de la nourriture sur elle");
                         noeudEnCours = noeudEnCours.getAGauche();
                     }
                     else{
-                        //System.out.println("  La fourmi ne possède pas de la nourriture sur elle");
+                        System.out.println("  La fourmi ne possède pas de la nourriture sur elle");
                         noeudEnCours = noeudEnCours.getADroite();
                     }
 
                 }
             }
-            //System.out.println(noeudEnCours.getValeurNoeud());
+            System.out.println(noeudEnCours.getValeurNoeud());
             if((noeudEnCours.getValeurNoeud()).equals("act_allerGauche")){
                 deplacer('G');
             }
@@ -227,15 +239,6 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
                     score.augmenterScore(5);
                 }
             }
-        }
-        else{
-            if(detecterCaseFourmiliere()){
-                rentreFourmiliere = false;
-            }
-            else {
-                rentrerFourmiliere();
-            }
-
         }
     }
 

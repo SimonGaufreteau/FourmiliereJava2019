@@ -7,11 +7,13 @@ import Exceptions_Monde.InvalidFileFormatException;
 import Exceptions_Monde.InvalidMapSizeException;
 import Exceptions_Monde.OutOfMapException;
 import Utile_Fourmi.Fourmi;
+import Utile_Fourmi.Noeud;
+import Utile_Fourmi.ProgrammeGenetique;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Monde {
+public class Monde implements Cloneable {
     private Carte carte;
     private Fourmi[] fourmis;
     private static int nbFourmisDefaut=20;
@@ -26,6 +28,11 @@ public class Monde {
             this.fourmis[i]=new Fourmi();
             //Pour l'instant aucun constructeur de définit. A voir dans la classe "Utile_Fourmi.Fourmi".
         }
+    }
+
+    public Monde(Carte carte, Fourmi[] fourmis){
+        this.carte = carte;
+        this.fourmis = fourmis;
     }
 
     /*Constructeur par défaut avec un nombre de fourmis à créer :
@@ -95,6 +102,13 @@ public class Monde {
             }
         }
         return fourmilieres;
+    }
+
+    public Monde clone() throws CloneNotSupportedException {
+        Monde m = (Monde) super.clone();
+        m.carte = (Carte) this.carte.clone();
+        m.fourmis = (Fourmi[]) this.fourmis.clone();
+        return m;
     }
 
     //Affichage du Monde sous forme de String.
