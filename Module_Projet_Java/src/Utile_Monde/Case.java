@@ -5,7 +5,8 @@ public class Case {
     private int x;
     private int y;
 
-    public Case(int y, int x, Carte carteCourante){
+    // y : position
+    public Case(int x, int y, Carte carteCourante){
         this.x=x;
         this.y=y;
         this.carteCourante=carteCourante;
