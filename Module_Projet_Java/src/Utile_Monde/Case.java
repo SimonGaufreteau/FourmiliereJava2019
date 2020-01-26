@@ -11,6 +11,11 @@ public class Case {
         this.y=y;
         this.carteCourante=carteCourante;
     }
+    public Case(Carte carteCourante){
+        this.carteCourante = carteCourante;
+        y = (int) (Math.random() * (carteCourante.getHauteur())); // on prend un nombre au hasard en tre0 et la hauteur -1)
+        x =(int) (Math.random() * (carteCourante.getLargeur())); // meme chose avec la largeur
+    }
 
     /*La case a besoin de connaitre la carte sur
     laquelle elle se trouve pour calculer la distance utile à la fourmi*/

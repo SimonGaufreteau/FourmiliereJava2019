@@ -2,6 +2,9 @@ package Utile_Fourmi;
 
 public class Score {
     int point;
+
+
+    public Score(){}
     public Score(int point){
         this.point=point;
     }
@@ -14,7 +17,7 @@ public class Score {
         point+=aAjouter;
     }
 
-    public Score meilleur_score(Score[] tableau){
+    public Score meilleurScore(Score[] tableau){
         Score max=tableau[0];
 
         for (int i=1;i<tableau.length;i++){
@@ -23,7 +26,7 @@ public class Score {
         }
         return max;
     }
-    public Score pire_score(Score[] tableau){
+    public Score pireScore(Score[] tableau){
         Score min=tableau[0];
 
         for (int i=1;i<tableau.length;i++){
@@ -33,7 +36,7 @@ public class Score {
         return min;
     }
 
-    public Score score_moyen(Score[] tableau){
+    public Score scoreMoyen(Score[] tableau){
         int moyennePoint=0;
         int longueur_tab=tableau.length;
         for (Score score : tableau) {
@@ -41,5 +44,10 @@ public class Score {
         }
         moyennePoint=moyennePoint/longueur_tab;
         return new Score(moyennePoint);
+    }
+
+    @Override
+    public String toString() {
+        return "point=" + point;
     }
 }
