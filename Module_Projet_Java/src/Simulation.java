@@ -2,6 +2,7 @@ import Exceptions_Monde.InvalidDirectionException;
 
 import Utile_Monde.Case;
 import Utile_Monde.Monde;
+
 import Utile_Fourmi.*;
 
 import java.io.*;
@@ -35,6 +36,7 @@ public class Simulation {
         Fourmi[] mesFourmis;
         int nbTransform = 0;
 
+        //copie de l'arbre genetique
         Noeud C1 = new Condition("cond_nourriture");
         Noeud C2 = new Condition("cond_fourmiliere");
         Noeud C3 = new Condition("cond_possedeNourriture");
@@ -53,12 +55,14 @@ public class Simulation {
         P7.numerotationNoeud();
 
         try {
+
             monMonde = new Monde(largeur, hauteur, nbFourmis, nbCaseFourm, nbCaseNour);
             Monde temp = monMonde.clone();
             mesFourmis = monMonde.getFourmis();
             scoreFourmi = new Score[mesFourmis.length];
             Case[] posInit = new Case[mesFourmis.length];
             for (int nbMut = 0; nbMut < NB_EVOLUTIONS; nbMut++) {
+
                 monMonde = temp.clone();
                 System.out.println("---------- Evolution " + nbMut + " ----------");
                 System.out.println(monMonde);
@@ -84,6 +88,7 @@ public class Simulation {
                     //System.out.println(i + " : " + mesFourmis[i].getIntelligence());
                     System.out.println(i + " : " + mesFourmis[i].getScore().getPoint());
                 }
+                //System.out.println(scoreFourmi[0].meilleurScore(scoreFourmi ));
                 int nbFourmisMeilleures = (int) (POURCENTAGE_FOURMIS_MEILLEURES * mesFourmis.length);
                 int nbFourmisMuter = nbFourmis - nbFourmisMeilleures;
                 int nbFourmisMuter2 = (int) (POURCENTAGE_FOURMIS_MUTATION_2 * nbFourmisMuter);
@@ -147,143 +152,95 @@ public class Simulation {
 
 
     //lancement d'une simulation avec chargement d'une carte en parametre
+    //le nombre de case nourriture et fourmiliere est defini aleatoirement  respectivement entre 1 et la largeur et 1 et la  hauteur
     public void lancerSimulation(String nomFichier, int nbFourmis) {
         Fourmi[] mesFourmis;
         try {
             monMonde = new Monde(nomFichier, nbFourmis);
-            mesFourmis = monMonde.getFourmis();
-            System.out.println(monMonde);
-            for (int i = 0; i < mesFourmis.length; i++) {
-                mesFourmis[i].agir();
-                scoreFourmi[i] = mesFourmis[i].getScore();
-                System.out.println(scoreFourmi[i]);
-            }
-
-        } catch (InvalidDirectionException e) {
-            System.out.println(e);
+            int largeur=monMonde.getCarte().getLargeur();
+            int hauteur=monMonde.getCarte().getHauteur();
+            lancerSimulation(largeur,hauteur,nbFourmis,largeur-(int)(Math.random()*largeur),hauteur-(int)(Math.random()*hauteur));
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
 
-    //lancement d'une simulation avec la creation d'un monde avec choix des parametres
-    /* deroulement :
-    creation et initialisation d'un monde
-    recuperation des fourmis
-    action des fourmis
-    recuêration du score
-     */
-
-  /*  public Simulation(int largeur, int hauteur, int nbFourmis, int nbCaseFourm, int nbCaseNour) {
-        int nbCoups = 100;
-        try {
-            monMonde = new Monde(largeur, hauteur, nbFourmis, nbCaseFourm, nbCaseNour);
-            scoreFourmi = new Score[nbFourmis];
-            System.out.println(monMonde.AfficheFourmiCarte());
-            System.out.println(monMonde);
-            for (int i = 0; i < nbFourmis; i++) {
-                for(int j = 0; j < nbCoups; j++) {
-                    System.out.println("\nCoup " + (j+1) + " : ");
-                    System.out.println("X : " +  monMonde.getFourmis()[i].getPosition().getX());
-                    System.out.println("Y : " +  monMonde.getFourmis()[i].getPosition().getY());
-                    System.out.println("Type : " +  monMonde.getFourmis()[i].getPosition().toString());
-                    monMonde.getFourmis()[i].agir();
-                }
-                scoreFourmi[i] =  monMonde.getFourmis()[i].getScore();
-                if(scoreFourmi[i].getPoint() != 0) {
-                    System.out.println("Fourmi " + i + " : ");
-                    //System.out.println(mesFourmis[i].getIntelligence());
-                    System.out.println("Score : " + scoreFourmi[i].getPoint());
-                }
-            }
-        }
-        catch (InvalidDirectionException e) {
-            System.out.println(e);
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-    }*/
-
-
-    //lancement d'une simulation avec chargement d'une carte en parametre
-    public Simulation(String nomFichier, int nbFourmis) {
-        try {
-            monMonde = new Monde(nomFichier, nbFourmis);
-            scoreFourmi = new Score[nbFourmis];
-            System.out.println(monMonde);
-            for (int i = 0; i < nbFourmis; i++) {
-                monMonde.getFourmis()[i].agir();
-                scoreFourmi[i] = monMonde.getFourmis()[i].getScore();
-                System.out.println(scoreFourmi[i]);
-            }
-
-        } catch (InvalidDirectionException e) {
-            System.out.println(e);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-}
- /*   //methode qui demande à l'utilisateur de son mode de jeu et un nom de fichier s'il veut rentrer une carte
+    //methode qui demande à l'utilisateur de son mode de jeu et un nom de fichier s'il veut rentrer une carte
     //propose aussi la sauvegarde de la carte
-  public void jeu() throws IOException {
+    public void jeu() throws IOException {
         Scanner sc = new Scanner(System.in);
         System.out.println("Bienvenue, veuillez choisir votre mode de jeu : \n 1) tout aléatoire\n 2)charger une carte ");
         int nb = sc.nextInt();
-        switch (nb){
+        switch (nb) {
             case 1:
-                Simulation S = new Simulation(10, 10, 3, 10, 15);
+                int largeur=(int)(Math.random()*14)+1;
+                int hauteur=(int)(Math.random()*14)+1;
+                int nbfourmis=(int)(Math.random()*100);
+                int nbCasefour=largeur-(int)(Math.random()*largeur/2);
+                int nbCasenour=hauteur-(int)(Math.random()*hauteur/2);
+
+                lancerSimulation(largeur,hauteur,nbfourmis,nbCasefour,nbCasenour);
                 System.out.println("Voulez-vous sauvegarder la carte du monde ? Si oui taper le nom du fichier dans lequel vous voulez la sauvegarder\n si non n");
                 sc.nextLine(); // on  vide la ligne
                 String nomfichier = sc.nextLine();
                 if (nomfichier.length() != 1)
-                    S.monMonde.sauvegarder(nomfichier);
+                    monMonde.sauvegarder(nomfichier);
                 else {
                     if (nomfichier.charAt(0) != 'n') {
-                        S.monMonde.sauvegarder(nomfichier);
+                        monMonde.sauvegarder(nomfichier);
                     }
                 }
 
-            break;
-            case 2 :
+                break;
+            case 2:
                 System.out.println("Veuillez saisir un nom de fichier: \n");
                 sc.nextLine(); // on  vide la ligne
-                String nomfichierfourmi = sc.nextLine();
-                Simulation S = new Simulation("Cartes/" + nomfichier, 2);
-            break;
+                String nomfichiercarte = sc.nextLine();
+                lancerSimulation("Cartes/" + nomfichiercarte, 2);
+                break;
         }
 
 
-        system.out.println("Voulez vous sauvegarder les paramètres de la partie ? Si oui rentrer un nom de fichier");
-        if (nomfichier.length() != 1)
-            S.monMonde.sauvegarder(nomfichier);
+        System.out.println("Voulez vous sauvegarder les paramètres de la partie ? Si oui rentrer un nom de fichier");
+        sc.nextLine(); // on  vide la ligne
+        String nomfichierpar = sc.nextLine();
+        if (nomfichierpar.length() != 1)
+            sauvegarderParametre(nomfichierpar);
         else {
-            if (nomfichier.charAt(0) != 'n') {
-                S.monMonde.sauvegarder(nomfichiersauv);
-             }
+            if (nomfichierpar.charAt(0) != 'n') {
+                sauvegarderParametre(nomfichierpar);
+            }
         }
-
-      
-*/
-
-
-        //System.out.println("Voulez-vous sauvegarder le comportement d'une fourmi ? Si oui,veuillez indiquer le numero de la fourmi");}}
-        //sc.nextInt();// on  vide la ligne
-        /*int n=sc.nextInt();
+        /*System.out.println("Voulez-vous sauvegarder le comportement d'une fourmi ? Si oui,veuillez indiquer le numero de la fourmi");
+        sc.nextInt();// on  vide la ligne
+        int n = sc.nextInt();
         System.out.println("Rentrer un nom de fichier");
         sc.nextLine();
-        String nomfichier=sc.nextLine();
-        if (nomfichier.length()==1){
-          System.out.println("erreur non valide");
-        }else{
-            if( nomfichier.charAt(0)!='n'){
-                S.monMonde.getFourmis()[n].getIntelligence().serialiser(nomfichier);
+        String nomfichier = sc.nextLine();
+        if (nomfichier.length() == 1) {
+            System.out.println("erreur non valide");
+        } else {
+            if (nomfichier.charAt(0) != 'n') {
+                monMonde.getFourmis()[n].getIntelligence().serialiser(nomfichier);
             }
 
+        }*/
     }
-}*/
+
+
+    //probleme manque le nb de case nourriture
+    private void sauvegarderParametre(String nomFichier) throws IOException {
+        nomFichier = System.getProperty("user.dir")+ "\\Module_Projet_Java\\Sauvegardes\\"+nomFichier;
+
+        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), StandardCharsets.UTF_8));
+        //on ecrit la carte du monde
+        writer.write(monMonde.getCarte().getHauteur() + " "+monMonde.getCarte().getLargeur() + "\n"+monMonde.getCarte().getGrille().toString()+ "\n");
+        //Puis le nombre de fourmis et de fourmiliere
+        //manque le nombre de case nourriture.
+        writer.write(monMonde.getFourmis().length + " \n"+monMonde.lesFourmilieres().size() + "\n");
+        writer.close();
+    }
+}
 
 
