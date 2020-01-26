@@ -21,9 +21,8 @@ public class Monde {
     public Monde(String nomCarte,int nbFourmi) throws InvalidMapSizeException, InvalidFileFormatException, IOException {
         this.carte= new Carte(nomCarte);            //throws les exception ci-dessus en cas de mauvais fichier, mauvais format, etc...
         this.fourmis=new Fourmi[nbFourmi];
-        for (int i=0;i<nbFourmi;i++){
-            this.fourmis[i]=new Fourmi();
-            //Pour l'instant aucun constructeur de définit. A voir dans la classe "Utile_Fourmi.Fourmi".
+        for (int i=0;i<nbFourmi;i++) {
+            this.fourmis[i] = new Fourmi();
         }
     }
 
@@ -35,7 +34,6 @@ public class Monde {
         this.fourmis=new Fourmi[nbFourmi];
         for (int i=0;i<nbFourmi;i++){
             this.fourmis[i]=new Fourmi();
-            //Pour l'instant aucun constructeur de définit. A voir dans la classe "Utile_Fourmi.Fourmi".
         }
     }
 
