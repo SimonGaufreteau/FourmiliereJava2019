@@ -53,7 +53,16 @@ public class Main {
             f.agir();*/
 
             Simulation sim = new Simulation();
-            sim.lancerSimulation(5,5,50,3,8);
+            sim.lancerSimulation(5,5,100,2,8);
+
+            /*Carte c = new Carte(5,5,2,3);
+            System.out.println(c);
+            System.out.println(c.getGrille()[0][0].getCarteCourante());
+            Carte c2 = c.clone();*/
+            /*System.out.println(System.identityHashCode(c.getGrille()));
+            System.out.println(System.identityHashCode(c.getGrille()[0][0]));
+            System.out.println(System.identityHashCode(c2.getGrille()));
+            System.out.println(System.identityHashCode(c2.getGrille()[0][0]));*/
         }
         catch(Exception e) {
             System.out.println(e.getMessage());

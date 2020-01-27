@@ -240,24 +240,27 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     // Fonction permettant de remplacer une condition par une autre afin de muter
     public void remplacerCondition() throws IOException {
         int nbCond = nbConditions();
-        System.out.println("\nNombre de conditions : " + nbCond);
+        //System.out.println("\nNombre de conditions : " + nbCond);
         if(nbCond != 0){
             int aleatCond = (int) (Math.random() * nbCond)+1;
-            System.out.println("N° du noeud à modifier : " + aleatCond);
+            //System.out.println("N° du noeud à modifier : " + aleatCond);
             interneRemplacerCondition(aleatCond);
         }
+        simplifierProgramme();
+        numerotationNoeud();
+        numerotationFeuille();
     }
 
     private void interneRemplacerCondition(int aleatCond) throws IOException {
         if(id == aleatCond){
-            System.out.println("Condition à modifier : " + valeur.getText());
+            //System.out.println("Condition à modifier : " + valeur.getText());
             Noeud allConditions[] = recupererCondTab();
 
             int newNuCond = (int) (Math.random() * 3);
             while(allConditions[newNuCond].getText().equals(valeur.getText())){
                 newNuCond = (int) (Math.random() * 3);
             }
-            System.out.println("Nouvelle valeur : " + allConditions[newNuCond].getText());
+            //System.out.println("Nouvelle valeur : " + allConditions[newNuCond].getText());
             valeur = allConditions[newNuCond];
             //simplifier();
             //numerotationNoeud();
@@ -273,22 +276,25 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     // Fonction permettant de remplacer une action par une autre afin de muter
     public void remplacerAction() throws IOException {
         int nbAct = nbActions();
-        System.out.println("\nNombre d'actions : " + nbAct);
+        //System.out.println("\nNombre d'actions : " + nbAct);
         int aleatAct = (int) (Math.random() * nbAct)+101; // A modifier ensuite selon nos choix de numérotation
-        System.out.println("N° de la feuille à modifier : " + aleatAct);
+        //System.out.println("N° de la feuille à modifier : " + aleatAct);
         interneRemplacerAction(aleatAct);
+        simplifierProgramme();
+        numerotationNoeud();
+        numerotationFeuille();
     }
 
     private void interneRemplacerAction(int aleatAct) throws IOException {
         if(id == aleatAct){
-            System.out.println("Action à modifier : " + valeur.getText());
+            //System.out.println("Action à modifier : " + valeur.getText());
             Noeud allActions[] = recupererActTab();
 
             int newNuAct = (int) (Math.random() * 8);
             while(allActions[newNuAct].getText().equals(valeur.getText())){
                 newNuAct = (int) (Math.random() * 8);
             }
-            System.out.println("Nouvelle valeur : " + allActions[newNuAct].getText());
+            //System.out.println("Nouvelle valeur : " + allActions[newNuAct].getText());
             valeur = allActions[newNuAct];
             //simplifier();
             //numerotationNoeud();
@@ -304,17 +310,20 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     // Fonction permettant d'échanger deux sous arbres d'une condition afin de muter
     public void echangerSousArbres() throws IOException {
         int nbCond = nbConditions();
-        System.out.println("\nNombre de conditions : " + nbCond);
+        //System.out.println("\nNombre de conditions : " + nbCond);
         if(nbCond != 0){
             int aleatCond = (int) (Math.random() * nbCond)+1;
-            System.out.println("N° du noeud où échanger ses sous arbres : " + aleatCond);
+            //System.out.println("N° du noeud où échanger ses sous arbres : " + aleatCond);
             interneEchangerSousArbres(aleatCond);
         }
+        simplifierProgramme();
+        numerotationNoeud();
+        numerotationFeuille();
     }
 
     private void interneEchangerSousArbres(int aleatCond) throws IOException {
         if(id == aleatCond){
-            System.out.println("Condition où échanger ses sous arbres : " + valeur.getText());
+            //System.out.println("Condition où échanger ses sous arbres : " + valeur.getText());
             ProgrammeGenetique temp  = aGauche;
             aGauche = aDroite;
             aDroite = temp;

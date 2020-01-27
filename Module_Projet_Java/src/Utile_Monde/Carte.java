@@ -228,10 +228,13 @@ public class Carte implements Cloneable {
         return largeur;
     }
 
-    public Carte clone() throws CloneNotSupportedException {
-        Carte c = (Carte) super.clone();
-        c.grille = (Case[][]) this.grille.clone();
-        return c;
+    public void razCaseNourriture(){
+        for (int y=0;y<hauteur;y++){            //Affichage une par une des lignes
+            for (int x=0;x<largeur;x++){        //Affichage d'une ligne
+                if(this.grille[x][y] instanceof CaseNourriture)
+                    ((CaseNourriture) grille[x][y]).setQuantiteNourriture(100);
+            }
+        }
     }
 
     /*Affichage d'une Carte sous le format suivant :
@@ -247,13 +250,6 @@ public class Carte implements Cloneable {
         for (int y=0;y<hauteur;y++){            //Affichage une par une des lignes
             for (int x=0;x<largeur;x++){        //Affichage d'une ligne
                 s.append(grille[x][y].toString()).append(" ");
-            }
-            s.append("\n");
-        }
-        for (int y=0;y<hauteur;y++){            //Affichage une par une des lignes
-            for (int x=0;x<largeur;x++){        //Affichage d'une ligne
-                if(grille[x][y].toString() == "N")
-                    s.append(((CaseNourriture)grille[x][y]).getQuantiteNourriture());
             }
             s.append("\n");
         }

@@ -104,13 +104,6 @@ public class Monde implements Cloneable {
         return fourmilieres;
     }
 
-    public Monde clone() throws CloneNotSupportedException {
-        Monde m = (Monde) super.clone();
-        m.carte = (Carte) this.carte.clone();
-        m.fourmis = (Fourmi[]) this.fourmis.clone();
-        return m;
-    }
-
     //Affichage du Monde sous forme de String.
     //Affichage de la Carte + des fourmis.
     public String toString(){
