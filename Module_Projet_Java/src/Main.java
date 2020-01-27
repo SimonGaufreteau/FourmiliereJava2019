@@ -1,13 +1,18 @@
+import exceptions_monde.InvalidDirectionException;
+import exceptions_monde.InvalidFileFormatException;
+import exceptions_monde.InvalidMapSizeException;
+import exceptions_monde.InvalidNbCaseDiffException;
+import util_monde.Simulation;
+import util_monde.SimulationBis;
+import vue.Jeu;
+
+import java.io.IOException;
+
 public class Main {
 
-    public static void main (String[] args){
-        try {
-            //Simulation S = new Simulation();
-            //S.jeu();
-            Simulation sim = new Simulation();
-            sim.lancerSimulation(14,2,50,3,8);
-        }catch (Exception e){
-            System.out.println(e);
-        }
+    public static void main(String[] args) throws IOException, InvalidFileFormatException, InvalidDirectionException, InvalidNbCaseDiffException, InvalidMapSizeException, CloneNotSupportedException {
+        Jeu jeu = new Jeu();
+        jeu.jeu();
+
     }
 }

@@ -1,11 +1,9 @@
-package Utile_Monde;
+package util_monde;
 
-import Exceptions_Monde.InvalidDirectionException;
-import Utile_Fourmi.*;
-import Utile_Monde.Monde;
-import Interfaces_Global.*;
+import exceptions_monde.InvalidDirectionException;
+import util_fourmi.*;
 
-public class Simulation {
+public class SimulationBis {
     private Monde monMonde;
     private Fourmi[] mesFourmis;
     private Score[] scoreFourmi;
@@ -17,7 +15,7 @@ public class Simulation {
     action des fourmis
     recuêration du score
      */
-    public Simulation(int largeur, int hauteur, int nbFourmis, int nbCaseFourm, int nbCaseNour) {
+    public SimulationBis(int largeur, int hauteur, int nbFourmis, int nbCaseFourm, int nbCaseNour) {
         int nbCoups = 50;
         try {
             monMonde = new Monde(largeur, hauteur, nbFourmis, nbCaseFourm, nbCaseNour);
@@ -47,7 +45,7 @@ public class Simulation {
 
 
     //lancement d'une simulation avec chargement d'une carte en parametre
-    public Simulation(String nomFichier,int nbFourmis){
+    public SimulationBis(String nomFichier, int nbFourmis){
         try {
             monMonde = new Monde(nomFichier, nbFourmis);
             mesFourmis = monMonde.getFourmis();

@@ -1,9 +1,4 @@
-package Utile_Monde;
-
-import Exceptions_Monde.OutOfMapException;
-import Utile_Fourmi.*;
-
-import java.io.*;
+package util_monde;
 
 public class Main {
 
@@ -52,7 +47,7 @@ public class Main {
             f.afficherIntelligence();
             f.agir();*/
 
-            Simulation sim = new Simulation(10,5,500,5,1);
+            SimulationBis sim = new SimulationBis(10,5,500,5,1);
         }
         catch(Exception e) {
             System.out.println(e.getMessage());
