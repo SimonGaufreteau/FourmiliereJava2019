@@ -1,7 +1,7 @@
-package Utile_Fourmi;
-import Exceptions_Monde.InvalidDirectionException;
-import Utile_Monde.*;
-import Interfaces_Global.*;
+package util_fourmi;
+import exceptions_monde.InvalidDirectionException;
+import util_monde.*;
+import interfaces_global.*;
 
 import java.io.IOException;
 import java.util.ArrayList;

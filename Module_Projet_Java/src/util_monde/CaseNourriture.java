@@ -1,4 +1,4 @@
-package Utile_Monde;
+package util_monde;
 
 public class CaseNourriture extends Case{
     private int quantiteNourriture; //qté de nourriture restante sur la case

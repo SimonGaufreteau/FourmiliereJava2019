@@ -1,6 +1,6 @@
-package Utile_Monde;
+package util_monde;
 
-import Exceptions_Monde.*;
+import exceptions_monde.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -35,7 +35,7 @@ public class Carte implements Cloneable {
         }
     }
 
-    // initialisation d'une carte avec des fourmiliere et de la nourriture pour cela on tire au sort un position x et une position y pour les placer
+    // initialisation d'une carte avec des fourmilieres et de la nourriture pour cela on tire au sort une position x et une position y pour les placer
     // RETIRER DE LA LISTE DES POSSIBLES CELLES DEJA TIREES
     public Carte(int largeur, int hauteur, int nbFourmiliere, int nbNourriture) throws InvalidNbCaseDiffException {
         this(largeur, hauteur);
@@ -49,27 +49,27 @@ public class Carte implements Cloneable {
                 possibilites.add(new Coordonnee(x,y));
             }
         }
-        int aleat,x,y;
+        int aleatoire,x,y;
         Coordonnee C;
         /*tant qu'il n'y a pas le bon nombre de case fourmiliere on tire un couple au sort
-         on crée une fourmiliere avec ces coordonnées
+         on crée une fourmiliere avec ses coordonnées
         on retire ce couple de la liste des possibilités
          */
         for(int i=0;i<nbFourmiliere;i++){
-            aleat= (int)(Math.random()*possibilites.size());
-            C=possibilites.get(aleat);
+            aleatoire= (int)(Math.random()*possibilites.size());
+            C=possibilites.get(aleatoire);
             x=C.getX();
             y=C.getY();
-            this.grille[x][y]=new CaseFourmiliere(x,y,this);
+            this.grille[y][x]=new CaseFourmiliere(x,y,this);
             possibilites.remove(C);
         }
         // même chose avec les cases nourritures
         for(int i=0;i<nbNourriture;i++){
-            aleat= (int)(Math.random()*possibilites.size());
-            C=possibilites.get(aleat);
+            aleatoire= (int)(Math.random()*possibilites.size());
+            C=possibilites.get(aleatoire);
             x=C.getX();
             y=C.getY();
-            this.grille[x][y]=new CaseNourriture(x,y,100,this);
+            this.grille[y][x]=new CaseNourriture(x,y,100,this);
             possibilites.remove(C);
         }
     }

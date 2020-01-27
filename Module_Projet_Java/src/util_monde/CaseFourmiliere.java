@@ -1,4 +1,4 @@
-package Utile_Monde;
+package util_monde;
 
 public class CaseFourmiliere extends Case{
 

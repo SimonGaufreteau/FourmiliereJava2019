@@ -1,4 +1,4 @@
-package Interfaces_Global;
+package interfaces_global;
 
 public interface Detecter {
     boolean detecterCaseNourriture();

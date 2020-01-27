@@ -1,4 +1,4 @@
-package Exceptions_Monde;
+package exceptions_monde;
 
 public class InvalidNbCaseDiffException extends Exception {
     public InvalidNbCaseDiffException(){
