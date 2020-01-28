@@ -1,10 +1,17 @@
 package util_fourmi;
+
 import exceptions_monde.InvalidDirectionException;
+import interfaces_global.Deplacer;
+import interfaces_global.Deposer;
+import interfaces_global.Detecter;
+import interfaces_global.Ramasser;
 import util_monde.*;
-import interfaces_global.*;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+
 
 public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     private Case position;
@@ -18,7 +25,7 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     du Monde dans lequel elle évolue
     On lui passe une case position(son X et son Y sont contenus dans la case)
     */
-    public Fourmi (Case position, ArrayList<CaseFourmiliere> listeFourmilieres) throws IOException {
+    public Fourmi (util_monde.Case position, ArrayList<CaseFourmiliere> listeFourmilieres) throws IOException {
         this.position = position;
         this.listeFourmilieres = listeFourmilieres;
         score = new Score(0);
@@ -171,45 +178,45 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
         if(rentreFourmiliere == false){ // Si l'on n'est pas en train de rentrer à la fourmilière
             while((noeudEnCours.getNoeud().getClass().getName()).equals("Utile_Fourmi.Condition")){
                 if((noeudEnCours.getValeurNoeud()).equals("cond_nourriture")){
-                    System.out.println("Nourriture ?");
+                    //System.out.println("Nourriture ?");
                     if(detecterCaseNourriture()){
-                        System.out.println("  La fourmi est sur une case nourriture");
+                        //System.out.println("  La fourmi est sur une case nourriture");
                         noeudEnCours = noeudEnCours.getAGauche();
                     }
 
                     else{
-                        System.out.println("  La fourmi n'est pas sur une case nourriture");
+                        //System.out.println("  La fourmi n'est pas sur une case nourriture");
                         noeudEnCours = noeudEnCours.getADroite();
                     }
 
                 }
                 else if ((noeudEnCours.getValeurNoeud()).equals("cond_fourmiliere")){
-                    System.out.println("Condition fourmiliere");
+                    //System.out.println("Condition fourmiliere");
                     if(detecterCaseFourmiliere()){
                         rentreFourmiliere = false;
-                        System.out.println("  La fourmi est sur une case fourmilière");
+                        //System.out.println("  La fourmi est sur une case fourmilière");
                         noeudEnCours = noeudEnCours.getAGauche();
                     }
                     else{
-                        System.out.println("  La fourmi n'est pas sur une case fourmilière");
+                        //System.out.println("  La fourmi n'est pas sur une case fourmilière");
                         noeudEnCours = noeudEnCours.getADroite();
                     }
 
                 }
                 else if ((noeudEnCours.getValeurNoeud()).equals("cond_possedeNourriture")){
-                    System.out.println("Condition possède nourriture");
+                    //System.out.println("Condition possède nourriture");
                     if(transporteNourriture()) {
-                        System.out.println("  La fourmi possède de la nourriture sur elle");
+                        //System.out.println("  La fourmi possède de la nourriture sur elle");
                         noeudEnCours = noeudEnCours.getAGauche();
                     }
                     else{
-                        System.out.println("  La fourmi ne possède pas de la nourriture sur elle");
+                        //System.out.println("  La fourmi ne possède pas de la nourriture sur elle");
                         noeudEnCours = noeudEnCours.getADroite();
                     }
 
                 }
             }
-            System.out.println(noeudEnCours.getValeurNoeud());
+            //System.out.println(noeudEnCours.getValeurNoeud());
             if((noeudEnCours.getValeurNoeud()).equals("act_allerGauche")){
                 deplacer('G');
             }

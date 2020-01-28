@@ -1,7 +1,7 @@
 package util_monde;
 
 import exceptions_monde.*;
-
+import util_fourmi.Noeud;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ Classe de génération et de manipulation de la Utile_Monde.Carte (du Utile_Mond
 Attributs : Une hauteur , une largeur et un tableau de tableaux de Cases représentant la grille.
 
 Note : On accède aux éléments de la grille de la facon suivante :
-grille[l][h] où "l" est l'index de ligne et "h" l'index de colonne
+grille[x][y] où "x" est l'index de colonne et "y" l'index de ligne
 */
 
 public class Carte implements Cloneable {
@@ -239,10 +239,13 @@ public class Carte implements Cloneable {
         return largeur;
     }
 
-    public Carte clone() throws CloneNotSupportedException {
-        Carte c = (Carte) super.clone();
-        c.grille = (Case[][]) this.grille.clone();
-        return c;
+    public void razCaseNourriture(){
+        for (int y=0;y<hauteur;y++){            //Affichage une par une des lignes
+            for (int x=0;x<largeur;x++){        //Affichage d'une ligne
+                if(this.grille[x][y] instanceof CaseNourriture)
+                    ((CaseNourriture) grille[x][y]).setQuantiteNourriture(100);
+            }
+        }
     }
 
 

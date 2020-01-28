@@ -1,14 +1,13 @@
 package vue;
 
-import java.io.IOException;
-import java.util.Scanner;
-
 import exceptions_monde.InvalidDirectionException;
 import exceptions_monde.InvalidFileFormatException;
 import exceptions_monde.InvalidMapSizeException;
 import exceptions_monde.InvalidNbCaseDiffException;
 import util_monde.Simulation;
-import util_fourmi.Fourmi;
+
+import java.io.IOException;
+import java.util.Scanner;
 
 
 public class Jeu {
@@ -28,8 +27,8 @@ public class Jeu {
                 int nbfourmis = (int) (Math.random() * 100);
                 int nbCaseFourmiliere = largeur - (int) (Math.random() * largeur / 2);
                 int nbCaseNourriture = hauteur - (int) (Math.random() * hauteur / 2);
-
-                simulation.lancerSimulation(largeur, hauteur, nbfourmis, nbCaseFourmiliere, nbCaseNourriture);
+                simulation.lancerSimulation(4,4,100,4,4);
+                //simulation.lancerSimulation(largeur, hauteur, nbfourmis, nbCaseFourmiliere, nbCaseNourriture);
                 System.out.println("Voulez-vous sauvegarder la carte du monde ? Si oui taper le nom du fichier dans lequel vous voulez la sauvegarder\n si non n");
                 sc.nextLine(); // on  vide la ligne
                 String nomfichier = sc.nextLine();

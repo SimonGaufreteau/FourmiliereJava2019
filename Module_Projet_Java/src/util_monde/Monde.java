@@ -11,7 +11,7 @@ import util_fourmi.Fourmi;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Monde implements Cloneable {
+public class Monde  {
     private Carte carte;
     private Fourmi[] fourmis;
     private static int nbFourmisDefaut = 20;
@@ -101,12 +101,7 @@ public class Monde implements Cloneable {
         return fourmilieres;
     }
 
-    public Monde clone() throws CloneNotSupportedException {
-        Monde m = (Monde) super.clone();
-        m.carte = (Carte) this.carte.clone();
-        m.fourmis = (Fourmi[]) this.fourmis.clone();
-        return m;
-    }
+
 
     //Affichage du Monde sous forme de String.
     //Affichage de la Carte + des fourmis.
