@@ -227,7 +227,7 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
             }
             else if((noeudEnCours.getValeurNoeud()).equals("act_ramasser")){
                 if(ramasser()){ // Si la fourmi a pu ramasser de la nourriture
-                    score.augmenterScore(2);
+                    score.augmenterScore(1);
                 }
             }
             else if((noeudEnCours.getValeurNoeud()).equals("act_rentrer")){

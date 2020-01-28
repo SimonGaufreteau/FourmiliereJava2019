@@ -53,7 +53,7 @@ public class Main {
             f.agir();*/
 
             Simulation sim = new Simulation();
-            sim.lancerSimulation(5,5,100,2,8);
+            sim.lancerSimulation(10,10,100,3,10);
 
             /*Carte c = new Carte(5,5,2,3);
             System.out.println(c);
