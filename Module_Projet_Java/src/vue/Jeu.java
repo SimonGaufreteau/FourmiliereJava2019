@@ -22,12 +22,12 @@ public class Jeu {
 
         switch (nb) {
             case 1:
-                int largeur = Math.max((int) (Math.random() * 14),3);
-                int hauteur = Math.max((int)(Math.random() * 14),3);
-                //int nbfourmis = (int) (Math.random() * 100) +20;
+                int largeur = Math.max((int) (Math.random() * 14),2);
+                int hauteur = Math.max((int)(Math.random() * 14),2);
+                int nbfourmis = (int) (Math.random() * 100)+6;
                 int nbCaseFourmiliere = Math.max((int) (Math.random() * largeur / 2),2);
                 int nbCaseNourriture = Math.max((int) (Math.random() * hauteur / 2),2);
-                simulation.lancerSimulation(largeur, hauteur, 6,nbCaseFourmiliere  ,nbCaseNourriture);
+                simulation.lancerSimulation(largeur, hauteur, nbfourmis,nbCaseFourmiliere  ,nbCaseNourriture);
                 System.out.println("Voulez-vous sauvegarder la carte du monde ? Si oui taper le nom du fichier dans lequel vous voulez la sauvegarder\n si non n");
                 sc.nextLine(); // on  vide la ligne
                 String nomfichier = sc.nextLine();
