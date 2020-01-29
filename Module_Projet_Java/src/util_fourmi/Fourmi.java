@@ -25,7 +25,7 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
     du Monde dans lequel elle évolue
     On lui passe une case position(son X et son Y sont contenus dans la case)
     */
-    public Fourmi (util_monde.Case position, ArrayList<CaseFourmiliere> listeFourmilieres) throws IOException {
+    public Fourmi (Case position, ArrayList<CaseFourmiliere> listeFourmilieres) throws IOException {
         this.position = position;
         this.listeFourmilieres = listeFourmilieres;
         score = new Score(0);
@@ -176,7 +176,7 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
             }
         }
         if(rentreFourmiliere == false){ // Si l'on n'est pas en train de rentrer à la fourmilière
-            while((noeudEnCours.getNoeud().getClass().getName()).equals("Utile_Fourmi.Condition")){
+            while((noeudEnCours.getNoeud().getClass().getName()).equals("util_fourmi.Condition")){
                 if((noeudEnCours.getValeurNoeud()).equals("cond_nourriture")){
                     //System.out.println("Nourriture ?");
                     if(detecterCaseNourriture()){

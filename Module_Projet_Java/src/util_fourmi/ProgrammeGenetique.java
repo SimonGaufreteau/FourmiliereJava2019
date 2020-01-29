@@ -480,7 +480,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     }
 
     // Fonction toString du programme génétique
-    public String toString(){
+   /* public String toString(){
         return interneToString(0,"");
     }
     private String interneToString(int hauteur, String espace) {
@@ -491,5 +491,5 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             S+=aDroite.interneToString(hauteur+1, espace);
         }
         return S;
-    }
+    }*/
 }

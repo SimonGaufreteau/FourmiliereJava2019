@@ -27,8 +27,8 @@ public class Jeu {
                 int nbfourmis = (int) (Math.random() * 100);
                 int nbCaseFourmiliere = largeur - (int) (Math.random() * largeur / 2);
                 int nbCaseNourriture = hauteur - (int) (Math.random() * hauteur / 2);
-                simulation.lancerSimulation(4,4,100,4,4);
-                //simulation.lancerSimulation(largeur, hauteur, nbfourmis, nbCaseFourmiliere, nbCaseNourriture);
+                //simulation.lancerSimulation(4,4,100,4,4);
+                simulation.lancerSimulation(largeur, hauteur, nbfourmis, nbCaseFourmiliere, nbCaseNourriture);
                 System.out.println("Voulez-vous sauvegarder la carte du monde ? Si oui taper le nom du fichier dans lequel vous voulez la sauvegarder\n si non n");
                 sc.nextLine(); // on  vide la ligne
                 String nomfichier = sc.nextLine();
@@ -58,8 +58,7 @@ public class Jeu {
                 simulation.sauvegarderParametre(nomfichierpar);
             }
         }
-        System.out.println("Voulez-vous sauvegarder le comportement d'une fourmi ? Si oui,veuillez indiquer le numero de la fourmi");
-        sc.nextInt();// on  vide la ligne
+        /*System.out.println("Voulez-vous sauvegarder le comportement d'une fourmi ? Si oui,veuillez indiquer le numero de la fourmi");
         int n = sc.nextInt();
         System.out.println("Rentrer un nom de fichier");
         sc.nextLine();
@@ -71,6 +70,6 @@ public class Jeu {
                 simulation.getMonMonde().getFourmis()[n].getIntelligence().serialiser(nomfichier);
             }
 
-        }
+        }*/
     }
 }

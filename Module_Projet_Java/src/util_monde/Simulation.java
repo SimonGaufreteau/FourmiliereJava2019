@@ -1,13 +1,16 @@
 package util_monde;
 
-        import exceptions_monde.InvalidDirectionException;
-        import exceptions_monde.InvalidFileFormatException;
-        import exceptions_monde.InvalidMapSizeException;
-        import exceptions_monde.InvalidNbCaseDiffException;
-        import util_fourmi.*;
+import exceptions_monde.InvalidDirectionException;
+import exceptions_monde.InvalidFileFormatException;
+import exceptions_monde.InvalidMapSizeException;
+import exceptions_monde.InvalidNbCaseDiffException;
+import util_fourmi.Fourmi;
+import util_fourmi.ProgrammeGenetique;
+import util_fourmi.Score;
 
-        import java.io.*;
-        import java.nio.charset.StandardCharsets;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 public class Simulation {
 
@@ -25,46 +28,54 @@ public class Simulation {
     }
 
     public void lancerSimulation(int largeur, int hauteur, int nbFourmis, int nbCaseFourm, int nbCaseNour) throws IOException {
-        final int NB_COUPS = 10;
+        int nbCoups; // Nombre de coups par évolution
         double POURCENTAGE_FOURMIS_MEILLEURES = 0.05; // On pourra fait augmenter ce pourcentage au fur et à mesure des évolutions
-        final int NB_EVOLUTIONS = 100;
-        final double POURCENTAGE_FOURMIS_MUTATION_2 = 0.5;
+        int nbEvolutions; // Nombre d'évolutions que vont subir les fourmis
+        double POURCENTAGE_FOURMIS_MUTATION_2 = 0.5; // Pourcentage des fourmis qui vont muter la 2eme fois (échange de noeuds)
         Fourmi[] mesFourmis;
         int nbTransform=0;
 
         try {
+            //création du monde et des fourmis
             monMonde = new Monde(largeur, hauteur, nbFourmis, nbCaseFourm, nbCaseNour);
             mesFourmis = monMonde.getFourmis();
+            //initialisation des positions initiales et du tableaux des scores
             scoreFourmi = new Score[mesFourmis.length];
             Case[] posInit = new Case[mesFourmis.length];
-            for(int nbMut = 0; nbMut < NB_EVOLUTIONS; nbMut++) {
+            //demande de saisi à l'utilisateur du nb de coup et d'evolution
+            Scanner Sc = new Scanner(System.in);
+            System.out.print("Nombre d'évolution : ");
+            nbEvolutions = Sc.nextInt();
+            System.out.print("Nombre de coups par évolution : ");
+            nbCoups = Sc.nextInt();
+
+            for(int nbMut = 0; nbMut < nbEvolutions; nbMut++) {
                 System.out.println("---------- Evolution " + nbMut + " ----------");
                 System.out.println(monMonde);
                 POURCENTAGE_FOURMIS_MEILLEURES = Math.min(0.05*(nbMut+1),0.7);
                 for (int i = 0; i < mesFourmis.length; i++) {
-                    mesFourmis[i].setPosition(monMonde.getCarte().getGrille()[0][0]);
+                    //on met en position iitiale la position de la fourmi ( change a chaque evolution)
+                    //mesFourmis[i].setPosition(monMonde.getCarte().getGrille()[0][0]);
                     posInit[i] = mesFourmis[i].getPosition();
-                    //System.out.println("Fourmi " + i + " :");
-                    for (int j = 0; j < NB_COUPS; j++) {
-                        //System.out.println("Coup " + j + " : " + mesFourmis[i].getPosition().getX() + " " + mesFourmis[i].getPosition().getY() + " " + mesFourmis[i].getPosition());
+                    for (int j = 0; j < nbCoups; j++) {
                         mesFourmis[i].agir();
                     }
                 }
                 triFourmis(mesFourmis);
                 for (int i = 0; i < nbFourmis; i++) {
-                    System.out.println(i + " : " + mesFourmis[i].getIntelligence());
                     System.out.println(i + " : " + mesFourmis[i].getScore().getPoint());
                 }
+
+                // MUTATION
                 int nbFourmisMeilleures = (int) (POURCENTAGE_FOURMIS_MEILLEURES * mesFourmis.length);
                 int nbFourmisMuter = nbFourmis - nbFourmisMeilleures;
                 int nbFourmisMuter2 = (int) (POURCENTAGE_FOURMIS_MUTATION_2 * nbFourmisMuter);
                 Fourmi[] meilleuresFourmis = new Fourmi[nbFourmisMeilleures];
                 System.out.println("Meilleures fourmis : " + nbFourmisMeilleures + " (" + POURCENTAGE_FOURMIS_MEILLEURES*100 + "%)");
                 System.out.println("Fourmis à muter : " + nbFourmisMuter);
-                //System.out.println("Meilleures fourmis de la simulation : ");
+                //on recupere nos meilleures fourmmies
                 for (int i = 0; i < nbFourmisMeilleures; i++) {
                     meilleuresFourmis[i] = mesFourmis[i];
-                    //meilleuresFourmis[i].afficherIntelligence();
                     mesFourmis[i] = new Fourmi(mesFourmis[i].getIntelligence().clone(), monMonde.lesFourmilieres(), monMonde.getCarte());
                 }
                 Fourmi[] fourmisApresMut = new Fourmi[nbFourmisMuter];
@@ -76,9 +87,6 @@ public class Simulation {
                 monMonde.getCarte().razCaseNourriture(); // On remet les cases nourritures à leur quantité initiale pour la simulation suivante
             }
         }
-        /*catch (InvalidDirectionException e) {
-            System.out.println(e);
-        }*/
         catch (Exception e) {
             System.out.println(e);
         }
