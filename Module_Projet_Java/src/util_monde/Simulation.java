@@ -48,7 +48,6 @@ public class Simulation {
             nbEvolutions = Sc.nextInt();
             System.out.print("Nombre de coups par évolution : ");
             nbCoups = Sc.nextInt();
-
             for(int nbMut = 0; nbMut < nbEvolutions; nbMut++) {
                 System.out.println("---------- Evolution " + nbMut + " ----------");
                 System.out.println(monMonde);
@@ -67,9 +66,9 @@ public class Simulation {
                 }
 
                 // MUTATION
-                int nbFourmisMeilleures = (int) (POURCENTAGE_FOURMIS_MEILLEURES * mesFourmis.length);
+                int nbFourmisMeilleures =Math.max((int) (POURCENTAGE_FOURMIS_MEILLEURES * mesFourmis.length),2);
                 int nbFourmisMuter = nbFourmis - nbFourmisMeilleures;
-                int nbFourmisMuter2 = (int) (POURCENTAGE_FOURMIS_MUTATION_2 * nbFourmisMuter);
+                int nbFourmisMuter2 = Math.max((int) (POURCENTAGE_FOURMIS_MUTATION_2 * nbFourmisMuter),2);
                 Fourmi[] meilleuresFourmis = new Fourmi[nbFourmisMeilleures];
                 System.out.println("Meilleures fourmis : " + nbFourmisMeilleures + " (" + POURCENTAGE_FOURMIS_MEILLEURES*100 + "%)");
                 System.out.println("Fourmis à muter : " + nbFourmisMuter);

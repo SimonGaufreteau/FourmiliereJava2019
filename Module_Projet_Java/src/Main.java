@@ -2,8 +2,6 @@ import exceptions_monde.InvalidDirectionException;
 import exceptions_monde.InvalidFileFormatException;
 import exceptions_monde.InvalidMapSizeException;
 import exceptions_monde.InvalidNbCaseDiffException;
-import util_monde.Simulation;
-import util_monde.SimulationBis;
 import vue.Jeu;
 
 import java.io.IOException;

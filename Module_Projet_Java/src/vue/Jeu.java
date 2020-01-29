@@ -22,13 +22,12 @@ public class Jeu {
 
         switch (nb) {
             case 1:
-                int largeur = (int) (Math.random() * 14) + 1;
-                int hauteur = (int) (Math.random() * 14) + 1;
-                int nbfourmis = (int) (Math.random() * 100);
-                int nbCaseFourmiliere = largeur - (int) (Math.random() * largeur / 2);
-                int nbCaseNourriture = hauteur - (int) (Math.random() * hauteur / 2);
-                //simulation.lancerSimulation(4,4,100,4,4);
-                simulation.lancerSimulation(largeur, hauteur, nbfourmis, nbCaseFourmiliere, nbCaseNourriture);
+                int largeur = Math.max((int) (Math.random() * 14),3);
+                int hauteur = Math.max((int)(Math.random() * 14),3);
+                //int nbfourmis = (int) (Math.random() * 100) +20;
+                int nbCaseFourmiliere = Math.max((int) (Math.random() * largeur / 2),2);
+                int nbCaseNourriture = Math.max((int) (Math.random() * hauteur / 2),2);
+                simulation.lancerSimulation(largeur, hauteur, 6,nbCaseFourmiliere  ,nbCaseNourriture);
                 System.out.println("Voulez-vous sauvegarder la carte du monde ? Si oui taper le nom du fichier dans lequel vous voulez la sauvegarder\n si non n");
                 sc.nextLine(); // on  vide la ligne
                 String nomfichier = sc.nextLine();
@@ -49,7 +48,6 @@ public class Jeu {
         }
 
         System.out.println("Voulez vous sauvegarder les paramètres de la partie ? Si oui rentrer un nom de fichier");
-        sc.nextLine(); // on  vide la ligne
         String nomfichierpar = sc.nextLine();
         if (nomfichierpar.length() != 1) {
             simulation.sauvegarderParametre(nomfichierpar);

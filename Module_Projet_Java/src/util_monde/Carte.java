@@ -1,7 +1,7 @@
 package util_monde;
 
 import exceptions_monde.*;
-import util_fourmi.Noeud;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class Carte implements Cloneable {
     On initialise toutes les Cases avec le constructeur de base (voir classe "Utile_Monde.Case") pour n'avoir que des cases "simples".
     */
     // création d'une carte "vide" (sans nourriture ni fourmiliere)
-    public Carte(int hauteur, int largeur) {
+    public Carte( int largeur,int hauteur) {
         this.hauteur=hauteur;
         this.largeur=largeur;
         this.grille=new Case[largeur][hauteur];
@@ -60,7 +60,7 @@ public class Carte implements Cloneable {
             C=possibilites.get(aleatoire);
             x=C.getX();
             y=C.getY();
-            this.grille[y][x]=new CaseFourmiliere(x,y,this);
+            this.grille[x][y]=new CaseFourmiliere(x,y,this);
             possibilites.remove(C);
         }
         // même chose avec les cases nourritures
@@ -69,7 +69,7 @@ public class Carte implements Cloneable {
             C=possibilites.get(aleatoire);
             x=C.getX();
             y=C.getY();
-            this.grille[y][x]=new CaseNourriture(x,y,100,this);
+            this.grille[x][y]=new CaseNourriture(x,y,100,this);
             possibilites.remove(C);
         }
     }
@@ -169,7 +169,7 @@ public class Carte implements Cloneable {
         }
         //calcul de la distance dans un monde torique
         int deltaX = Math.min(xMax-xMin,(largeur-xMax)+xMin);
-        int deltaY = Math.min(yMax-yMin,(largeur-yMax)+yMin);
+        int deltaY = Math.min(yMax-yMin,(hauteur-yMax)+yMin);
         return deltaX + deltaY;
     }
     /*Pour rentrer à la fourmilière la plus proche la fourmi doit savoir dans quelle direction partir, il faut donc examiner
