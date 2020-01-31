@@ -4,9 +4,6 @@ import exceptions_monde.InvalidDirectionException;
 import exceptions_monde.InvalidFileFormatException;
 import exceptions_monde.InvalidMapSizeException;
 import exceptions_monde.InvalidNbCaseDiffException;
-import util_monde.Case;
-import util_monde.Monde;
-
 import util_fourmi.*;
 
 import java.io.*;
@@ -159,16 +156,15 @@ public class Simulation {
     }
 
 
-    //probleme manque le nb de case nourriture
     public void sauvegarderParametre(String nomFichier) throws IOException {
         nomFichier = System.getProperty("user.dir") + "\\Module_Projet_Java\\Sauvegardes\\" + nomFichier;
 
         Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), StandardCharsets.UTF_8));
         //on ecrit la carte du monde
-        writer.write(monMonde.getCarte().getHauteur() + " " + monMonde.getCarte().getLargeur() + "\n" + monMonde.getCarte().getGrille().toString() + "\n");
-        //Puis le nombre de fourmis et de fourmiliere
-        //manque le nombre de case nourriture.
-        writer.write(monMonde.getFourmis().length + " \n" + monMonde.lesFourmilieres().size() + "\n");
+        //PrintWriter writer = new PrintWriter(nomFichier, StandardCharsets.UTF_8);
+        writer.write("Hauteur de la carte : " + monMonde.getCarte().getHauteur() + " " + "Largeur de la carte :" + monMonde.getCarte().getLargeur() + "\n" + monMonde.getCarte().toString() + "\n");
+        writer.write("Nombre total de fourmis :" + monMonde.getFourmis().length + " \n" + "Nombre de fourmilières :" + monMonde.lesFourmilieres().size() + "\n");
+        writer.write("Nombre de nourriture:" + monMonde.laNourriture().size() + "\n");
         writer.close();
     }
 }

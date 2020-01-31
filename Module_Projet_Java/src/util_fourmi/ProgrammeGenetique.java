@@ -1,11 +1,10 @@
-
 package util_fourmi;
 
 import java.io.*;
 import java.util.*;
 
 
-public class ProgrammeGenetique implements Serializable, Cloneable {
+public class ProgrammeGenetique implements Serializable, Cloneable, Externalizable {
     private int id;
     private static int nbTempNoeud = 1;
     private static int nbTempFeuille = 1;
@@ -372,17 +371,13 @@ public class ProgrammeGenetique implements Serializable, Cloneable {
     }
 
     // Fonction permettant de sérialiser un programme génétique dans un fichier passé en paramètre
-    public void serialiser(String nomFichier) {
+    /*public void serialiser(String nomFichier) throws IOException {
         nomFichier = System.getProperty("user.dir") + "\\Module_Projet_Java\\Sauvegardes\\" + nomFichier;
-        try {
-            FileOutputStream fs = new FileOutputStream(nomFichier);
-            ObjectOutputStream os = new ObjectOutputStream(fs);
-            os.writeObject(this);
-            os.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+        FileOutputStream fs = new FileOutputStream(nomFichier);
+        ObjectOutputStream os = new ObjectOutputStream(fs);
+        os.writeObject(this.valeur.getText());
+        os.close();
+    }*/
 
     // Fonction permettant de cloner l'arbre et d'en créer un nouveau ayant les mêmes valeurs
     public ProgrammeGenetique clone() throws CloneNotSupportedException {
@@ -478,6 +473,16 @@ public class ProgrammeGenetique implements Serializable, Cloneable {
             S += aDroite.interneToString(hauteur + 1, espace);
         }
         return S;
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput objectOutput) throws IOException {
+
+    }
+
+    @Override
+    public void readExternal(ObjectInput objectInput) throws IOException, ClassNotFoundException {
+
     }
 }
 
