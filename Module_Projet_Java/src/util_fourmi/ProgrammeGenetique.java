@@ -1,4 +1,4 @@
-package Utile_Fourmi;
+package util_fourmi;
 
 import java.io.*;
 import java.util.*;
@@ -91,19 +91,15 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
 
     // Constructeur utilisé par défaut, il crée un programme génétique aléatoirement
     /*public ProgrammeGenetique() throws IOException{ // A voir si on a besoin de passer le nom des fichiers en paramètre ou les mettre directement comme des variables internes
-
         Noeud allActions[] = recupererActTab();
         Noeud allConditions[] = recupererCondTab();
-
         int aleatNoeud = (int) (Math.random() * 2); // On tire au sort un numéro entre 0 et 1 (0:action, 1:condition)
-
         if(aleatNoeud == 0){ // On sélectionne une action
             int aleatAct = (int) (Math.random() * allActions.length);
             valeur = allActions[aleatAct];
             aGauche = null;
             aDroite = null;
         }
-
         else { // On sélectionne une condition
             int aleatCond = (int) (Math.random() * allConditions.length);
             valeur = allConditions[aleatCond];
@@ -152,7 +148,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
 
     private void interneAfficherArbre(int hauteur, String espace){
         System.out.println(espace + hauteur + "." + valeur.getText() + "(" + id + ")");
-        if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+        if(valeur.getClass().getName() == "util_fourmi.Condition"){
             aGauche.interneAfficherArbre(hauteur+1, espace+="  ");
             aDroite.interneAfficherArbre(hauteur+1, espace);
         }
@@ -212,7 +208,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     }
 
     private void interneNumerotationNoeud() {
-        if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
+        if(valeur.getClass().getName().equals("util_fourmi.Condition")){
             id = nbTempNoeud;
             nbTempNoeud++;
             aGauche.interneNumerotationNoeud();
@@ -227,7 +223,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     }
 
     private void interneNumerotationFeuille() {
-        if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
+        if(valeur.getClass().getName().equals("util_fourmi.Condition")){
             aGauche.interneNumerotationFeuille();
             aDroite.interneNumerotationFeuille();
         }
@@ -240,30 +236,33 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     // Fonction permettant de remplacer une condition par une autre afin de muter
     public void remplacerCondition() throws IOException {
         int nbCond = nbConditions();
-        System.out.println("\nNombre de conditions : " + nbCond);
+        //System.out.println("\nNombre de conditions : " + nbCond);
         if(nbCond != 0){
             int aleatCond = (int) (Math.random() * nbCond)+1;
-            System.out.println("N° du noeud à modifier : " + aleatCond);
+            //System.out.println("N° du noeud à modifier : " + aleatCond);
             interneRemplacerCondition(aleatCond);
         }
+        simplifierProgramme();
+        numerotationNoeud();
+        numerotationFeuille();
     }
 
     private void interneRemplacerCondition(int aleatCond) throws IOException {
         if(id == aleatCond){
-            System.out.println("Condition à modifier : " + valeur.getText());
+            //System.out.println("Condition à modifier : " + valeur.getText());
             Noeud allConditions[] = recupererCondTab();
 
             int newNuCond = (int) (Math.random() * 3);
             while(allConditions[newNuCond].getText().equals(valeur.getText())){
                 newNuCond = (int) (Math.random() * 3);
             }
-            System.out.println("Nouvelle valeur : " + allConditions[newNuCond].getText());
+            //System.out.println("Nouvelle valeur : " + allConditions[newNuCond].getText());
             valeur = allConditions[newNuCond];
             //simplifier();
             //numerotationNoeud();
         }
         else{
-            if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
+            if(valeur.getClass().getName().equals("util_fourmi.Condition")){
                 aGauche.interneRemplacerCondition(aleatCond);
                 aDroite.interneRemplacerCondition(aleatCond);
             }
@@ -273,28 +272,31 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     // Fonction permettant de remplacer une action par une autre afin de muter
     public void remplacerAction() throws IOException {
         int nbAct = nbActions();
-        System.out.println("\nNombre d'actions : " + nbAct);
+        //System.out.println("\nNombre d'actions : " + nbAct);
         int aleatAct = (int) (Math.random() * nbAct)+101; // A modifier ensuite selon nos choix de numérotation
-        System.out.println("N° de la feuille à modifier : " + aleatAct);
+        //System.out.println("N° de la feuille à modifier : " + aleatAct);
         interneRemplacerAction(aleatAct);
+        simplifierProgramme();
+        numerotationNoeud();
+        numerotationFeuille();
     }
 
     private void interneRemplacerAction(int aleatAct) throws IOException {
         if(id == aleatAct){
-            System.out.println("Action à modifier : " + valeur.getText());
+            //System.out.println("Action à modifier : " + valeur.getText());
             Noeud allActions[] = recupererActTab();
 
             int newNuAct = (int) (Math.random() * 8);
             while(allActions[newNuAct].getText().equals(valeur.getText())){
                 newNuAct = (int) (Math.random() * 8);
             }
-            System.out.println("Nouvelle valeur : " + allActions[newNuAct].getText());
+            //System.out.println("Nouvelle valeur : " + allActions[newNuAct].getText());
             valeur = allActions[newNuAct];
             //simplifier();
             //numerotationNoeud();
         }
         else{
-            if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
+            if(valeur.getClass().getName().equals("util_fourmi.Condition")){
                 aGauche.interneRemplacerAction(aleatAct);
                 aDroite.interneRemplacerAction(aleatAct);
             }
@@ -304,17 +306,20 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     // Fonction permettant d'échanger deux sous arbres d'une condition afin de muter
     public void echangerSousArbres() throws IOException {
         int nbCond = nbConditions();
-        System.out.println("\nNombre de conditions : " + nbCond);
+        //System.out.println("\nNombre de conditions : " + nbCond);
         if(nbCond != 0){
             int aleatCond = (int) (Math.random() * nbCond)+1;
-            System.out.println("N° du noeud où échanger ses sous arbres : " + aleatCond);
+            //System.out.println("N° du noeud où échanger ses sous arbres : " + aleatCond);
             interneEchangerSousArbres(aleatCond);
         }
+        simplifierProgramme();
+        numerotationNoeud();
+        numerotationFeuille();
     }
 
     private void interneEchangerSousArbres(int aleatCond) throws IOException {
         if(id == aleatCond){
-            System.out.println("Condition où échanger ses sous arbres : " + valeur.getText());
+            //System.out.println("Condition où échanger ses sous arbres : " + valeur.getText());
             ProgrammeGenetique temp  = aGauche;
             aGauche = aDroite;
             aDroite = temp;
@@ -322,7 +327,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             //numerotationNoeud();
         }
         else{
-            if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
+            if(valeur.getClass().getName().equals("util_fourmi.Condition")){
                 aGauche.interneEchangerSousArbres(aleatCond);
                 aDroite.interneEchangerSousArbres(aleatCond);
             }
@@ -340,8 +345,8 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
         if(nbCond1 != 0 && nbCond2 != 0){ // Ce cas ne devrait jamais arriver ensuite puisque la fonction sera appliquée sur les meilleurs arbres génétiques
             int aleatCond1 = (int) (Math.random() * nbCond1)+1;
             int aleatCond2 = (int) (Math.random() * nbCond2)+1;
-            System.out.println("\nN° du noeud à modifier (arbre 1) : " + aleatCond1);
-            System.out.println("N° du noeud à muter (arbre 2) : " + aleatCond2);
+            //System.out.println("\nN° du noeud à modifier (arbre 1) : " + aleatCond1);
+            //System.out.println("N° du noeud à muter (arbre 2) : " + aleatCond2);
             selectionNoeudAInserer(aleatCond1, aleatCond2, prog2);
         }
         simplifierProgramme();
@@ -354,7 +359,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             interneCroiserProgrammes(aleatCond1, aleatCond2, prog2);
         }
         else {
-            if(prog2.getNoeud().getClass().getName().equals("Utile_Fourmi.Condition")){
+            if(prog2.getNoeud().getClass().getName().equals("util_fourmi.Condition")){
                 selectionNoeudAInserer(aleatCond1, aleatCond2, prog2.getAGauche());
                 selectionNoeudAInserer(aleatCond1, aleatCond2, prog2.getADroite());
             }
@@ -370,7 +375,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
             aDroite = prog2.getADroite();
         }
         else{
-            if(valeur.getClass().getName() == "Utile_Fourmi.Condition"){
+            if(valeur.getClass().getName() == "util_fourmi.Condition"){
                 aGauche.interneCroiserProgrammes(aleatCond1, aleatCond2, prog2);
                 aDroite.interneCroiserProgrammes(aleatCond1, aleatCond2, prog2);
             }
@@ -392,15 +397,21 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     }
 
     // Fonction permettant de cloner l'arbre et d'en créer un nouveau ayant les mêmes valeurs
-    public ProgrammeGenetique clone() {
-        ProgrammeGenetique o = null;
-        try {
-            o = (ProgrammeGenetique) super.clone();
+    public ProgrammeGenetique clone() throws CloneNotSupportedException {
+        ProgrammeGenetique p = (ProgrammeGenetique) super.clone();
+        if(aGauche!=null){
+            p.aGauche = (ProgrammeGenetique) this.aGauche.clone();
+            p.aDroite = (ProgrammeGenetique) this.aDroite.clone();
         }
-        catch(CloneNotSupportedException cnse){
-            cnse.printStackTrace(System.err);
-        }
-        return o;
+
+        p.valeur = (Noeud) this.valeur.clone();
+
+
+        /*private int id;
+        private static int nbTempNoeud = 1;
+        private static int nbTempFeuille = 1;*/
+
+        return p;
     }
 
     // Fonction qui retourne la hauteur de l'arbre
@@ -413,7 +424,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
 
     // Fonction qui retourne le nombre de conditions présentes dans l'arbre
     public int nbConditions(){
-        if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
+        if(valeur.getClass().getName().equals("util_fourmi.Condition")){
             return 1 + aGauche.nbConditions() + aDroite.nbConditions();
         }
         else{
@@ -428,7 +439,7 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
 
     // Fonction qui retourne le nombre de noeuds (Actions + Conditions) présents dans l'arbre
     public int nbNoeudTotal(){
-        if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
+        if(valeur.getClass().getName().equals("util_fourmi.Condition")){
             return 1 + aGauche.nbNoeudTotal() + aDroite.nbNoeudTotal();
         }
         else{
@@ -472,11 +483,10 @@ public class ProgrammeGenetique implements  Serializable, Cloneable {
     public String toString(){
         return interneToString(0,"");
     }
-
     private String interneToString(int hauteur, String espace) {
         String S = "";
         S += espace + hauteur + "." + valeur.getText() + "\n";
-        if(valeur.getClass().getName().equals("Utile_Fourmi.Condition")){
+        if(valeur.getClass().getName().equals("util_fourmi.Condition")){
             S+=aGauche.interneToString(hauteur+1, espace+="  ");
             S+=aDroite.interneToString(hauteur+1, espace);
         }
