@@ -17,17 +17,26 @@ public class Jeu {
     //propose aussi la sauvegarde de la carte
     public void jeu() throws IOException, CloneNotSupportedException, InvalidDirectionException, InvalidNbCaseDiffException, InvalidMapSizeException, InvalidFileFormatException {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Bienvenue, veuillez choisir votre mode de jeu : \n 1)Aléatoire\n 2)Charger une carte ");
+        System.out.println("Bienvenue, veuillez choisir votre mode de jeu : \n 1)Création d'un monde et de fourmis aléatoire \n 2)Charger une carte ");
         int nb = sc.nextInt();
+        int nbCoups; // Nombre de coups par évolution
+        int nbEvolutions; // Nombre d'évolutions que vont subir les fourmis
+        //demande de saisi à l'utilisateur du nb de coup et d'evolution
+        Scanner Sc = new Scanner(System.in);
+        System.out.print("Nombre d'évolution : ");
+        nbEvolutions = Sc.nextInt();
+        System.out.print("Nombre de coups par évolution : ");
+        nbCoups = Sc.nextInt();
 
         switch (nb) {
             case 1:
                 int largeur = Math.max((int) (Math.random() * 14),2);
                 int hauteur = Math.max((int)(Math.random() * 14),2);
-                int nbfourmis = (int) (Math.random() * 100)+6;
+                int nbfourmis = (int) (Math.random() * 1000)+6;
                 int nbCaseFourmiliere = Math.max((int) (Math.random() * largeur / 2),2);
                 int nbCaseNourriture = Math.max((int) (Math.random() * hauteur / 2),2);
-                simulation.lancerSimulation(largeur, hauteur, nbfourmis,nbCaseFourmiliere  ,nbCaseNourriture);
+                simulation.lancerSimulation(largeur, hauteur, nbfourmis,nbCaseFourmiliere  ,nbCaseNourriture,nbEvolutions,nbCoups);
+
                 System.out.println("Voulez-vous sauvegarder la carte du monde ? Si oui taper le nom du fichier dans lequel vous voulez la sauvegarder\n si non n");
                 sc.nextLine(); // on  vide la ligne
                 String nomfichier = sc.nextLine();
@@ -40,14 +49,19 @@ public class Jeu {
                 }
                 break;
             case 2:
-                System.out.println("Veuillez saisir un nom de fichier: \n");
+                System.out.println("Veuillez saisir un nom de fichier: ");
                 sc.nextLine(); // on  vide la ligne
                 String nomfichiercarte = sc.nextLine();
-                simulation.lancerSimulation("Cartes/" + nomfichiercarte, 2);
+                System.out.println("Combien de fourmmis voulez vous ? (0 pour un nombre aléatoire) ");
+                int nbfourm=sc.nextInt();
+                if(nbfourm==0)
+                    nbfourm = (int) (Math.random() * 1000)+6;
+                simulation.lancerSimulation("Cartes/" + nomfichiercarte, nbfourm,nbEvolutions,nbCoups);
                 break;
         }
 
-        System.out.println("Voulez vous sauvegarder les paramètres de la partie ? Si oui rentrer un nom de fichier");
+        /*System.out.println("Voulez vous sauvegarder les paramètres de la partie ? Si oui rentrer un nom de fichier");
+        sc.nextLine();
         String nomfichierpar = sc.nextLine();
         if (nomfichierpar.length() != 1) {
             simulation.sauvegarderParametre(nomfichierpar);
@@ -55,19 +69,7 @@ public class Jeu {
             if (nomfichierpar.charAt(0) != 'n') {
                 simulation.sauvegarderParametre(nomfichierpar);
             }
-        }
-        /*System.out.println("Voulez-vous sauvegarder le comportement d'une fourmi ? Si oui,veuillez indiquer le numero de la fourmi");
-        int n = sc.nextInt();
-        System.out.println("Rentrer un nom de fichier");
-        sc.nextLine();
-        String nomfichier = sc.nextLine();
-        if (nomfichier.length() == 1) {
-            System.out.println("erreur non valide");
-        } else {
-            if (nomfichier.charAt(0) != 'n') {
-                simulation.getMonMonde().getFourmis()[n].getIntelligence().serialiser(nomfichier);
-            }
-
         }*/
+
     }
 }

@@ -20,11 +20,15 @@ public class Monde  {
     Constructeur avec Carte à charger. On prend en argument le nom du fichier contenant la carte
      */
     public Monde(String nomCarte, int nbFourmi) throws InvalidMapSizeException, InvalidFileFormatException, IOException {
+        int x,y;
         this.carte = new Carte(nomCarte);            //throws les exception ci-dessus en cas de mauvais fichier, mauvais format, etc...
         this.fourmis = new Fourmi[nbFourmi];
         for (int i = 0; i < nbFourmi; i++) {
-            this.fourmis[i] = new Fourmi();
-            //Pour l'instant aucun constructeur de définit. A voir dans la classe "Utile_Fourmi.Fourmi".
+            y = (int) (Math.random() * (getCarte().getHauteur())); // on prend un nombre au hasard entre 0 et la hauteur -1)
+            x = (int) (Math.random() * (getCarte().getLargeur())); // meme chose avec la largeur
+            Case posF = new Case(x, y, this.carte);
+            this.fourmis[i] = new Fourmi(posF, lesFourmilieres());
+
         }
     }
 
@@ -41,7 +45,6 @@ public class Monde  {
         this.fourmis = new Fourmi[nbFourmi];
         for (int i = 0; i < nbFourmi; i++) {
             this.fourmis[i] = new Fourmi();
-            //Pour l'instant aucun constructeur de définit. A voir dans la classe "Utile_Fourmi.Fourmi".
         }
     }
 

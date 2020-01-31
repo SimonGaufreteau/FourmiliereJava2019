@@ -8,15 +8,13 @@ import util_fourmi.Fourmi;
 import util_fourmi.ProgrammeGenetique;
 import util_fourmi.Score;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Simulation {
 
     private Monde monMonde;
     private Score[] scoreFourmi;
-    private Score[] scoreFourmi2;
 
     public Monde getMonMonde() {
         return monMonde;
@@ -27,27 +25,25 @@ public class Simulation {
 
     }
 
-    public void lancerSimulation(int largeur, int hauteur, int nbFourmis, int nbCaseFourm, int nbCaseNour) throws IOException {
-        int nbCoups; // Nombre de coups par évolution
+    public void lancerSimulation(int largeur, int hauteur, int nbFourmis, int nbCaseFourm, int nbCaseNour,int nbEvolutions,int nbCoups) throws IOException {
         double POURCENTAGE_FOURMIS_MEILLEURES = 0.05; // On pourra fait augmenter ce pourcentage au fur et à mesure des évolutions
-        int nbEvolutions; // Nombre d'évolutions que vont subir les fourmis
         double POURCENTAGE_FOURMIS_MUTATION_2 = 0.5; // Pourcentage des fourmis qui vont muter la 2eme fois (échange de noeuds)
         Fourmi[] mesFourmis;
-        int nbTransform=0;
 
         try {
             //création du monde et des fourmis
             monMonde = new Monde(largeur, hauteur, nbFourmis, nbCaseFourm, nbCaseNour);
             mesFourmis = monMonde.getFourmis();
-            //initialisation des positions initiales et du tableaux des scores
+            //initialisation varibales pour mutations
+            int nbFourmisMeilleures =Math.max((int) (POURCENTAGE_FOURMIS_MEILLEURES * mesFourmis.length),2);
+            int nbFourmisMuter = nbFourmis - nbFourmisMeilleures;
+            int nbFourmisMuter2 = Math.max((int) (POURCENTAGE_FOURMIS_MUTATION_2 * nbFourmisMuter),2);
+
+            //initialisation du tableaux des scores
             scoreFourmi = new Score[mesFourmis.length];
-            Case[] posInit = new Case[mesFourmis.length];
-            //demande de saisi à l'utilisateur du nb de coup et d'evolution
-            Scanner Sc = new Scanner(System.in);
-            System.out.print("Nombre d'évolution : ");
-            nbEvolutions = Sc.nextInt();
-            System.out.print("Nombre de coups par évolution : ");
-            nbCoups = Sc.nextInt();
+            //Case[] posInit = new Case[mesFourmis.length];
+
+
             for(int nbMut = 0; nbMut < nbEvolutions; nbMut++) {
                 System.out.println("---------- Evolution " + nbMut + " ----------");
                 System.out.println(monMonde);
@@ -55,23 +51,21 @@ public class Simulation {
                 for (int i = 0; i < mesFourmis.length; i++) {
                     //on met en position iitiale la position de la fourmi ( change a chaque evolution)
                     //mesFourmis[i].setPosition(monMonde.getCarte().getGrille()[0][0]);
-                    posInit[i] = mesFourmis[i].getPosition();
+                    //posInit[i] = mesFourmis[i].getPosition();
                     for (int j = 0; j < nbCoups; j++) {
                         mesFourmis[i].agir();
                     }
                 }
                 triFourmis(mesFourmis);
                 for (int i = 0; i < nbFourmis; i++) {
-                    System.out.println(i + " : " + mesFourmis[i].getScore().getPoint());
+                    scoreFourmi[i]=mesFourmis[i].getScore();
+                    System.out.println(i + " : " + scoreFourmi[i].getPoint());
                 }
 
                 // MUTATION
-                int nbFourmisMeilleures =Math.max((int) (POURCENTAGE_FOURMIS_MEILLEURES * mesFourmis.length),2);
-                int nbFourmisMuter = nbFourmis - nbFourmisMeilleures;
-                int nbFourmisMuter2 = Math.max((int) (POURCENTAGE_FOURMIS_MUTATION_2 * nbFourmisMuter),2);
                 Fourmi[] meilleuresFourmis = new Fourmi[nbFourmisMeilleures];
-                System.out.println("Meilleures fourmis : " + nbFourmisMeilleures + " (" + POURCENTAGE_FOURMIS_MEILLEURES*100 + "%)");
-                System.out.println("Fourmis à muter : " + nbFourmisMuter);
+                //System.out.println("Meilleures fourmis : " + nbFourmisMeilleures + " (" + POURCENTAGE_FOURMIS_MEILLEURES*100 + "%)");
+                //System.out.println("Fourmis à muter : " + nbFourmisMuter);
                 //on recupere nos meilleures fourmmies
                 for (int i = 0; i < nbFourmisMeilleures; i++) {
                     meilleuresFourmis[i] = mesFourmis[i];
@@ -85,6 +79,67 @@ public class Simulation {
                 }
                 monMonde.getCarte().razCaseNourriture(); // On remet les cases nourritures à leur quantité initiale pour la simulation suivante
             }
+
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    //lancement d'une simulation avec chargement d'une carte en parametre
+    //le nombre de case nourriture et fourmiliere est defini aleatoirement  respectivement entre 1 et la largeur et 1 et la  hauteur
+    public void lancerSimulation(String nomFichier, int nbFourmis, int nbEvolutions, int nbCoups) throws InvalidMapSizeException, InvalidFileFormatException, IOException, CloneNotSupportedException, InvalidDirectionException, InvalidNbCaseDiffException {
+        monMonde = new Monde(nomFichier, nbFourmis);
+        double POURCENTAGE_FOURMIS_MEILLEURES = 0.05; // On pourra fait augmenter ce pourcentage au fur et à mesure des évolutions
+        double POURCENTAGE_FOURMIS_MUTATION_2 = 0.5; // Pourcentage des fourmis qui vont muter la 2eme fois (échange de noeuds)
+        Fourmi[] mesFourmis;
+
+        try {
+            mesFourmis = monMonde.getFourmis();
+            //initialisation varibales pour mutations
+            int nbFourmisMeilleures =Math.max((int) (POURCENTAGE_FOURMIS_MEILLEURES * mesFourmis.length),2);
+            int nbFourmisMuter = nbFourmis - nbFourmisMeilleures;
+            int nbFourmisMuter2 = Math.max((int) (POURCENTAGE_FOURMIS_MUTATION_2 * nbFourmisMuter),2);
+            //initialisation du tableaux des scores
+            scoreFourmi = new Score[mesFourmis.length];
+            //Case[] posInit = new Case[mesFourmis.length];
+
+            for(int nbMut = 0; nbMut < nbEvolutions; nbMut++) {
+                System.out.println("---------- Evolution " + nbMut + " ----------");
+                System.out.println(monMonde);
+                POURCENTAGE_FOURMIS_MEILLEURES = Math.min(0.05*(nbMut+1),0.7);
+                for (int i = 0; i < mesFourmis.length; i++) {
+                    //on met en position iitiale la position de la fourmi ( change a chaque evolution)
+                    //mesFourmis[i].setPosition(monMonde.getCarte().getGrille()[0][0]);
+                    //posInit[i] = mesFourmis[i].getPosition();
+                    for (int j = 0; j < nbCoups; j++) {
+                        mesFourmis[i].agir();
+                    }
+                }
+                triFourmis(mesFourmis);
+                for (int i = 0; i < nbFourmis; i++) {
+                    scoreFourmi[i]= mesFourmis[i].getScore();
+                    System.out.println(i + " : " +scoreFourmi[i].getPoint());
+                }
+
+                // MUTATION
+                Fourmi[] meilleuresFourmis = new Fourmi[nbFourmisMeilleures];
+                //System.out.println("Meilleures fourmis : " + nbFourmisMeilleures + " (" + POURCENTAGE_FOURMIS_MEILLEURES*100 + "%)");
+                //System.out.println("Fourmis à muter : " + nbFourmisMuter);
+
+                //on recupere nos meilleures fourmmis
+                for (int i = 0; i < nbFourmisMeilleures; i++) {
+                    meilleuresFourmis[i] = mesFourmis[i];
+                    mesFourmis[i] = new Fourmi(mesFourmis[i].getIntelligence().clone(), monMonde.lesFourmilieres(), monMonde.getCarte());
+                }
+                Fourmi[] fourmisApresMut = new Fourmi[nbFourmisMuter];
+                fourmisApresMut = muterFourmisCroisement(meilleuresFourmis, nbFourmisMuter, nbFourmisMuter2);
+
+                for (int i = nbFourmisMeilleures; i < mesFourmis.length; i++) {
+                    mesFourmis[i] = fourmisApresMut[i - nbFourmisMeilleures];
+                }
+                monMonde.getCarte().razCaseNourriture(); // On remet les cases nourritures à leur quantité initiale pour la simulation suivante
+            }
+            affichagefindepartie(mesFourmis,nbFourmisMeilleures);
         }
         catch (Exception e) {
             System.out.println(e);
@@ -150,20 +205,25 @@ public class Simulation {
             tabFourmis[j] = temp;
         }
     }
-
-
-    //lancement d'une simulation avec chargement d'une carte en parametre
-    //le nombre de case nourriture et fourmiliere est defini aleatoirement  respectivement entre 1 et la largeur et 1 et la  hauteur
-    public void lancerSimulation(String nomFichier, int nbFourmis) throws InvalidMapSizeException, InvalidFileFormatException, IOException, CloneNotSupportedException, InvalidDirectionException, InvalidNbCaseDiffException {
-        monMonde = new Monde(nomFichier, nbFourmis);
-        int largeur = monMonde.getCarte().getLargeur();
-        int hauteur = monMonde.getCarte().getHauteur();
-        lancerSimulation(largeur, hauteur, nbFourmis, largeur - (int) (Math.random() * largeur), hauteur - (int) (Math.random() * hauteur));
+    private void affichagefindepartie(Fourmi[] mesFourmis,int nbFourmisMeilleures){
+        Scanner Sc= new Scanner(System.in);
+        System.out.println("Le meilleur score est : "+ mesFourmis[0].getScore().meilleurScore(scoreFourmi));
+        System.out.println("Le pire score est : "+ mesFourmis[0].getScore().pireScore(scoreFourmi));
+        System.out.println("Le score moyen est : "+ mesFourmis[0].getScore().scoreMoyen(scoreFourmi)+"\n");
+        System.out.println("Voulez-vous afficher les meilleures fourmis (arbres génétiques) ? \n o : oui \n  n : non ");
+        Sc.nextLine(); // on vide la ligne
+        String choix=Sc.nextLine();
+        if(choix.equals("o")){
+            triFourmis(mesFourmis);
+            for(int i=0; i< nbFourmisMeilleures ;i++){
+                System.out.println("Fourmi "+ i+":\n"+mesFourmis[i].getIntelligence());
+            }
+        }
     }
 
 
     //probleme manque le nb de case nourriture
-    public void sauvegarderParametre(String nomFichier) throws IOException {
+    /*public void sauvegarderParametre(String nomFichier) throws IOException {
         nomFichier = System.getProperty("user.dir") + "\\Module_Projet_Java\\Sauvegardes\\" + nomFichier;
 
         Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), StandardCharsets.UTF_8));
@@ -173,7 +233,7 @@ public class Simulation {
         //manque le nombre de case nourriture.
         writer.write(monMonde.getFourmis().length + " \n" + monMonde.lesFourmilieres().size() + "\n");
         writer.close();
-    }
+    }*/
 }
 
 
