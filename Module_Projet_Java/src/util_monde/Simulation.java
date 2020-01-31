@@ -79,7 +79,7 @@ public class Simulation {
                 }
                 monMonde.getCarte().razCaseNourriture(); // On remet les cases nourritures à leur quantité initiale pour la simulation suivante
             }
-
+            affichagefindepartie(mesFourmis,nbFourmisMeilleures);
         }
         catch (Exception e) {
             System.out.println(e);
@@ -211,9 +211,8 @@ public class Simulation {
         System.out.println("Le pire score est : "+ mesFourmis[0].getScore().pireScore(scoreFourmi));
         System.out.println("Le score moyen est : "+ mesFourmis[0].getScore().scoreMoyen(scoreFourmi)+"\n");
         System.out.println("Voulez-vous afficher les meilleures fourmis (arbres génétiques) ? \n o : oui \n  n : non ");
-        Sc.nextLine(); // on vide la ligne
         String choix=Sc.nextLine();
-        if(choix.equals("o")){
+        if(choix.length()==1 && choix.equals("o")){
             triFourmis(mesFourmis);
             for(int i=0; i< nbFourmisMeilleures ;i++){
                 System.out.println("Fourmi "+ i+":\n"+mesFourmis[i].getIntelligence());
