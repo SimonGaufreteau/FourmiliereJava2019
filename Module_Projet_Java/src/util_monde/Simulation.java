@@ -34,12 +34,13 @@ public class Simulation {
             monMonde = new Monde(largeur, hauteur, nbFourmis, nbCaseFourm, nbCaseNour);
             mesFourmis = monMonde.getFourmis();
             scoreFourmi = new Score[mesFourmis.length];
-            int nbFourmisMeilleures =Math.max((int) (POURCENTAGE_FOURMIS_MEILLEURES * mesFourmis.length),2);
-            int nbFourmisMuter = nbFourmis - nbFourmisMeilleures;
-            int nbFourmisMuter2 = Math.max((int) (POURCENTAGE_FOURMIS_MUTATION_2 * nbFourmisMuter),2);
+            int nbFourmisMeilleures=2;
 
             //Case[] posInit = new Case[mesFourmis.length];
             for (int nbMut = 0; nbMut < nbEvolutions; nbMut++) {
+                nbFourmisMeilleures =Math.max((int) (POURCENTAGE_FOURMIS_MEILLEURES * mesFourmis.length),2);
+                int nbFourmisMuter = nbFourmis - nbFourmisMeilleures;
+                int nbFourmisMuter2 = Math.max((int) (POURCENTAGE_FOURMIS_MUTATION_2 * nbFourmisMuter),2);
                 System.out.println("---------- Evolution " + nbMut + " ----------");
                 System.out.println(monMonde);
                 actionEtMutation(mesFourmis, nbCoups,nbMut,nbFourmisMeilleures, nbFourmisMuter,nbFourmisMuter2);
@@ -84,7 +85,7 @@ public class Simulation {
     private void actionEtMutation( Fourmi[] mesFourmis, int nbMut, int nbCoups,int nbFourmisMeilleures,int nbFourmisMuter, int  nbFourmisMuter2) throws InvalidDirectionException, IOException, CloneNotSupportedException {
         for (int i = 0; i < mesFourmis.length; i++) {
             //on met en position iitiale la position de la fourmi ( change a chaque evolution)
-            //mesFourmis[i].setPosition(monMonde.getCarte().getGrille()[0][0]);
+            mesFourmis[i].setPosition(monMonde.getCarte().getGrille()[0][0]);
             //posInit[i] = mesFourmis[i].getPosition();
             for (int j = 0; j < nbCoups; j++) {
                 mesFourmis[i].agir();

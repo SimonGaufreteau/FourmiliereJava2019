@@ -17,7 +17,7 @@ public class Jeu {
     //propose aussi la sauvegarde de la carte
     public void jeu() throws IOException, CloneNotSupportedException, InvalidDirectionException, InvalidNbCaseDiffException, InvalidMapSizeException, InvalidFileFormatException {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Bienvenue, veuillez choisir votre mode de jeu : \n 1)Création d'un monde et de fourmis aléatoire \n 2)Charger une carte ");
+        System.out.println("Bienvenue, veuillez choisir votre mode de jeu : \n 1)Création d'un monde et de fourmis aléatoire \n 2)Charger une carte \n 3) tester isolement le comportement d'une fourmi ");
         int nb = sc.nextInt();
         int nbCoups; // Nombre de coups par évolution
         int nbEvolutions; // Nombre d'évolutions que vont subir les fourmis
@@ -33,8 +33,8 @@ public class Jeu {
                 int largeur = Math.max((int) (Math.random() * 14),2);
                 int hauteur = Math.max((int)(Math.random() * 14),2);
                 int nbfourmis = (int) (Math.random() * 1000)+6;
-                int nbCaseFourmiliere = Math.max((int) (Math.random() * largeur / 2),2);
-                int nbCaseNourriture = Math.max((int) (Math.random() * hauteur / 2),2);
+                int nbCaseFourmiliere = Math.max((int) (Math.random() * largeur / 2),largeur);
+                int nbCaseNourriture = Math.max((int) (Math.random() * hauteur / 2),hauteur);
                 simulation.lancerSimulation(largeur, hauteur, nbfourmis,nbCaseFourmiliere  ,nbCaseNourriture,nbEvolutions,nbCoups);
 
                 System.out.println("Voulez-vous sauvegarder la carte du monde ? Si oui taper le nom du fichier dans lequel vous voulez la sauvegarder\n si non n");
@@ -57,6 +57,15 @@ public class Jeu {
                 if(nbfourm==0)
                     nbfourm = (int) (Math.random() * 1000)+6;
                 simulation.lancerSimulation("Cartes/" + nomfichiercarte, nbfourm,nbEvolutions,nbCoups);
+                break;
+            case 3:
+                //tester le comportement d'une fourmi isolement
+                System.out.println("Veuillez saisir un nom de fichier pour la carte: ");
+                sc.nextLine(); // on  vide la ligne
+                nomfichiercarte = sc.nextLine();
+                System.out.println("Veuillez saisir un nom de fichier: ");
+                sc.nextLine(); // on  vide la ligne
+                nomfichiercarte = sc.nextLine();
                 break;
         }
 
