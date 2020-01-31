@@ -60,13 +60,15 @@ public class Jeu {
                 break;
             case 3:
                 //tester le comportement d'une fourmi isolement
-                System.out.println("Veuillez saisir un nom de fichier pour la carte: ");
+                /*System.out.println("Veuillez saisir un nom de fichier pour la carte: ");
                 sc.nextLine(); // on  vide la ligne
                 nomfichiercarte = sc.nextLine();
-                System.out.println("Veuillez saisir un nom de fichier: ");
+
+                System.out.println("Veuillez saisir un nom de fichier pour la fourmi: ");
                 sc.nextLine(); // on  vide la ligne
                 nomfichiercarte = sc.nextLine();
-                break;
+
+                break;*/
         }
 
         /*System.out.println("Voulez vous sauvegarder les paramètres de la partie ? Si oui rentrer un nom de fichier");
