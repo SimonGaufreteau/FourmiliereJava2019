@@ -184,7 +184,7 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter {
             }
         }
         if (rentreFourmiliere == false) { // Si l'on n'est pas en train de rentrer à la fourmilière
-            while ((noeudEnCours.getNoeud().getClass().getName()).equals("Utile_Fourmi.Condition")) {
+            while ((noeudEnCours.getNoeud().getClass().getName()).equals("util_fourmi.Condition")) {
                 if ((noeudEnCours.getValeurNoeud()).equals("cond_nourriture")) {
                     System.out.println("Nourriture ?");
                     if (detecterCaseNourriture()) {
