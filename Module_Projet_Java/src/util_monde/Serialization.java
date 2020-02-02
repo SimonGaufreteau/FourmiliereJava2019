@@ -10,24 +10,24 @@ public class Serialization {
     }
 
     /**
-     * Serialisation d'un programme genetique dans un fichier afin de pouvoir le réutiliser
+     * Serialisation d'un programme genetique dans un fichier afin de pouvoir le rï¿½utiliser
      *
      * @param programmeGenetique c'est le programme qu'on veut enregistrer
-     * @param nomFichier         nom du fichier, idéal mettre sous la forme nomFichier.txt
+     * @param nomFichier         nom du fichier, idï¿½al mettre sous la forme nomFichier.txt
      */
 
 
     public static void serialiseProgrammeGenetique(ProgrammeGenetique programmeGenetique, String nomFichier) throws IOException {
-        // ouverture d'un flux de sortie vers le fichier et création de ce fichier
+        // ouverture d'un flux de sortie vers le fichier et crï¿½ation de ce fichier
         FileOutputStream fos = new FileOutputStream(new File("Module_Projet_Java\\Sauvegardes\\" + nomFichier));
 
-        // création d'un "flux objet" avec le flux fichier
+        // crï¿½ation d'un "flux objet" avec le flux fichier
         ObjectOutputStream oos = new ObjectOutputStream(fos);
 
         try {
-            // sérialisation : écriture de l'objet dans le flux de sortie
-            oos.writeObject("L'arbre de la fourmi est le suivant : ");
-            oos.writeObject(programmeGenetique.toString());
+            // sï¿½rialisation : ï¿½criture de l'objet dans le flux de sortie
+            //oos.writeObject("L'arbre de la fourmi est le suivant : ");
+            oos.writeObject(programmeGenetique);
             // on vide le tampon
             oos.flush();
         } finally {
@@ -40,16 +40,17 @@ public class Serialization {
         }
     }
 
-    public static void deserialiseProgrammeGenetique(String nomFichier) throws IOException, ClassNotFoundException {
-        ProgrammeGenetique programmeGenetique = null;
-        // ouverture d'un flux d'entrée depuis le fichier indiqué
-        FileInputStream fis = new FileInputStream(String.valueOf(new StringReader("Module_Projet_Java\\Sauvegardes\\" + nomFichier)));
+    public static ProgrammeGenetique deserialiseProgrammeGenetique(String nomFichier) throws IOException, ClassNotFoundException {
+        ProgrammeGenetique programmeGenetique;
+        // ouverture d'un flux d'entrï¿½e depuis le fichier indiquï¿½
+        FileInputStream fis = new FileInputStream("Module_Projet_Java\\Sauvegardes\\" + nomFichier);
 
-        // création d'un "flux objet" avec le flux fichier
+        // crï¿½ation d'un "flux objet" avec le flux fichier
         ObjectInputStream ois = new ObjectInputStream(fis);
         try {
-            // désérialisation : lecture de l'objet depuis le flux d'entrée
+            // dï¿½sï¿½rialisation : lecture de l'objet depuis le flux d'entrï¿½e
             programmeGenetique = (ProgrammeGenetique) ois.readObject();
+            return programmeGenetique;
         } finally {
             // on ferme les flux
             try {
@@ -60,24 +61,5 @@ public class Serialization {
         }
     }
 
-    public static void deserialiseCarte(String nomFichier) throws IOException, ClassNotFoundException {
-        Carte carte = null;
-        // ouverture d'un flux d'entrée depuis le fichier indiqué
-        FileInputStream fis = new FileInputStream(String.valueOf(new StringReader("Module_Projet_Java\\Sauvegardes\\" + nomFichier)));
-
-        // création d'un "flux objet" avec le flux fichier
-        ObjectInputStream ois = new ObjectInputStream(fis);
-
-        try {
-            // désérialisation : lecture de l'objet depuis le flux d'entrée
-            carte = (Carte) ois.readObject();
-        } finally {
-            // on ferme les flux
-            try {
-                ois.close();
-            } finally {
-                fis.close();
-            }
-        }
-    }
+    //La serialisation de Carte se fait dans la classe correspondante.
 }
