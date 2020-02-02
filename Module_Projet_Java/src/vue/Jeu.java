@@ -73,6 +73,7 @@ public class Jeu {
                 break;
         }
         System.out.println("Voulez vous sauvegarder les paramètres de la partie ? Si oui rentrer un nom de fichier");
+        sc.nextLine();
         String nomFichierParametre = sc.nextLine();
         if (nomFichierParametre.length() != 1) {
             simulation.sauvegarderParametre(nomFichierParametre,nbEvolutions,nbCoups);
