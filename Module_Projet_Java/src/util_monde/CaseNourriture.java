@@ -1,24 +1,25 @@
 package util_monde;
 
-public class CaseNourriture extends Case{
+public class CaseNourriture extends Case {
     private int quantiteNourriture; //qté de nourriture restante sur la case
 
     public CaseNourriture(int x, int y, int quantiteNourriture, Carte carteCourante) {
-        super(x, y,carteCourante);
-        this.quantiteNourriture= quantiteNourriture;
+        super(x, y, carteCourante);
+        this.quantiteNourriture = quantiteNourriture;
     }
 
     /*True,lorsque de la nourriture est ramassée sur une case
      * alors on décrémente la quantité de nourriture disponible sur cette case.*/
     public boolean enleverNourriture() {
-        if(quantiteNourriture > 0) {
+        System.out.println("Quantite : " + quantiteNourriture);
+        if (quantiteNourriture > 0) {
             quantiteNourriture = quantiteNourriture - 1;
             return true;
         }
         return false;
     }
 
-    public int getQuantiteNourriture(){
+    public int getQuantiteNourriture() {
         return quantiteNourriture;
     }
 
@@ -27,7 +28,7 @@ public class CaseNourriture extends Case{
         this.quantiteNourriture = quantiteNourriture;
     }
 
-    public String toString(){
+    public String toString() {
         return "N";
     }
 }

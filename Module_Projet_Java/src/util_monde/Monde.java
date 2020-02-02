@@ -1,4 +1,3 @@
-
 package util_monde;
 
 
@@ -7,28 +6,34 @@ import exceptions_monde.InvalidMapSizeException;
 import exceptions_monde.InvalidNbCaseDiffException;
 import exceptions_monde.OutOfMapException;
 import util_fourmi.Fourmi;
+import util_fourmi.ProgrammeGenetique;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Monde  {
+public class Monde implements Cloneable {
     private Carte carte;
     private Fourmi[] fourmis;
+    private ProgrammeGenetique programmeGenetique;
     private static int nbFourmisDefaut = 20;
 
     /*
     Constructeur avec Carte à charger. On prend en argument le nom du fichier contenant la carte
      */
     public Monde(String nomCarte, int nbFourmi) throws InvalidMapSizeException, InvalidFileFormatException, IOException {
-        //int x,y;
         this.carte = new Carte(nomCarte);            //throws les exception ci-dessus en cas de mauvais fichier, mauvais format, etc...
         this.fourmis = new Fourmi[nbFourmi];
         for (int i = 0; i < nbFourmi; i++) {
-           // y = (int) (Math.random() * (getCarte().getHauteur())); // on prend un nombre au hasard entre 0 et la hauteur -1)
-            //x = (int) (Math.random() * (getCarte().getLargeur())); // meme chose avec la largeur
-            Case posF = new Case(0, 0, this.carte);
-            this.fourmis[i] = new Fourmi(posF, lesFourmilieres());
+            this.fourmis[i] = new Fourmi();
+        }
+    }
 
+    public Monde(String nomCarte, int nbFourmi, ProgrammeGenetique programmeGenetique) throws InvalidMapSizeException, InvalidFileFormatException, IOException {
+        this.carte = new Carte(nomCarte);
+        this.fourmis = new Fourmi[nbFourmi];
+        this.programmeGenetique = programmeGenetique ;
+        for (int i = 0; i<nbFourmi; i++){
+            this.fourmis[i] = new Fourmi();
         }
     }
 
@@ -45,6 +50,7 @@ public class Monde  {
         this.fourmis = new Fourmi[nbFourmi];
         for (int i = 0; i < nbFourmi; i++) {
             this.fourmis[i] = new Fourmi();
+            //Pour l'instant aucun constructeur de définit. A voir dans la classe "Utile_Fourmi.Fourmi".
         }
     }
 
@@ -86,11 +92,12 @@ public class Monde  {
         return fourmis;
     }
 
+
     public void setCases(Case[] cases) throws OutOfMapException {
         this.carte.setCases(cases);
     }
 
-    //fonction qui renvoi une liste de caseForurmilieres
+    //fonction qui renvoie une liste de caseFourmilieres
     public ArrayList<CaseFourmiliere> lesFourmilieres() {
         ArrayList fourmilieres = new ArrayList();
         Case[][] grille = carte.getGrille();
@@ -104,17 +111,31 @@ public class Monde  {
         return fourmilieres;
     }
 
+    public ArrayList<CaseNourriture> laNourriture() {
+        ArrayList nourriture = new ArrayList();
+        Case[][] grille = carte.getGrille();
+        for (int x = 0; x < carte.getLargeur(); x++) {
+            for (int y = 0; y < carte.getHauteur(); y++) {
+                if (grille[x][y] instanceof CaseNourriture) {
+                    nourriture.add(grille[x][y]);
+                }
+            }
+        }
+        return nourriture;
+    }
 
+
+    public Monde clone() throws CloneNotSupportedException {
+        Monde m = (Monde) super.clone();
+        m.carte = (Carte) this.carte.clone();
+        m.fourmis = (Fourmi[]) this.fourmis.clone();
+        return m;
+    }
 
     //Affichage du Monde sous forme de String.
     //Affichage de la Carte + des fourmis.
     public String toString() {
-        StringBuilder s = new StringBuilder("Affichage de la Carte :\n" + carte.toString()); /* + "\nAffichage des Fourmis :\n");
-        int i=1;
-        for (Fourmi fourmi : fourmis) {
-            s.append("Fourmi " + i + " : " + fourmi.toString()).append("\n\n");
-            i++;
-        }*/
+        StringBuilder s = new StringBuilder("Affichage de la Carte :\n" + carte.toString());
         return s.toString();
     }
 }

@@ -6,17 +6,18 @@ public class Case implements Cloneable{
     private int y;
 
     // y : position
-    public Case(int x, int y, Carte carteCourante){
-        this.x=x;
-        this.y=y;
-        this.carteCourante=carteCourante;
+    public Case(int x, int y, Carte carteCourante) {
+        this.x = x;
+        this.y = y;
+        this.carteCourante = carteCourante;
     }
 
-    public Case(Carte carteCourante){
+    public Case(Carte carteCourante) {
         this.carteCourante = carteCourante;
         y = (int) (Math.random() * (carteCourante.getHauteur())); // on prend un nombre au hasard en tre0 et la hauteur -1)
-        x =(int) (Math.random() * (carteCourante.getLargeur())); // meme chose avec la largeur
+        x = (int) (Math.random() * (carteCourante.getLargeur())); // meme chose avec la largeur
     }
+
 
     public Case(){
         this.x = 1;
@@ -29,7 +30,7 @@ public class Case implements Cloneable{
         return carteCourante;
     }
 
-    public int getX(){
+    public int getX() {
         return x;
     }
 
@@ -37,7 +38,7 @@ public class Case implements Cloneable{
         return y;
     }
 
-    public String toString(){
+    public String toString() {
         return "C";
     }
 }
