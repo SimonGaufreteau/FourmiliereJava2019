@@ -1,4 +1,4 @@
-package Utile_Fourmi;
+package util_fourmi;
 
 public class Condition extends Noeud {
 
