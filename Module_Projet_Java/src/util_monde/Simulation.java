@@ -53,6 +53,47 @@ public class Simulation {
         }
     }
 
+    /**
+     * Lancement d'une simulation avec le chargement d'une carte et d'un programme génétique
+     *
+     * @param nomFichier
+     * @param nbFourmis
+     * @param nbEvolutions
+     * @param nbCoups
+     * @param programmeGenetique
+     * @throws InvalidMapSizeException
+     * @throws InvalidFileFormatException
+     * @throws IOException
+     * @throws CloneNotSupportedException
+     * @throws InvalidDirectionException
+     * @throws InvalidNbCaseDiffException
+     */
+    public void lancerSimulation(String nomFichier, int nbFourmis, int nbEvolutions, int nbCoups, ProgrammeGenetique programmeGenetique) throws InvalidMapSizeException, InvalidFileFormatException, IOException {
+        monMonde = new Monde(nomFichier, nbFourmis,programmeGenetique);
+        double POURCENTAGE_FOURMIS_MEILLEURES = 0.05; // On pourra fait augmenter ce pourcentage au fur et à mesure des évolutions
+        double POURCENTAGE_FOURMIS_MUTATION_2 = 0.5; // Pourcentage des fourmis qui vont muter la 2eme fois (échange de noeuds)
+        Fourmi[] mesFourmis;
+
+        try {
+            mesFourmis = monMonde.getFourmis();
+            //initialisation variables pour mutations
+            int nbFourmisMeilleures = Math.max((int) (POURCENTAGE_FOURMIS_MEILLEURES * mesFourmis.length), 2);
+            int nbFourmisMuter = nbFourmis - nbFourmisMeilleures;
+            int nbFourmisMuter2 = Math.max((int) (POURCENTAGE_FOURMIS_MUTATION_2 * nbFourmisMuter), 2);
+
+
+            for (int nbMut = 0; nbMut < nbEvolutions; nbMut++) {
+                System.out.println("---------- Evolution " + nbMut + " ----------");
+                System.out.println(monMonde);
+                actionEtMutation(mesFourmis, nbCoups, nbMut, nbFourmisMeilleures, nbFourmisMuter, nbFourmisMuter2);
+                POURCENTAGE_FOURMIS_MEILLEURES = Math.min(0.05 * (nbMut + 1), 0.7);
+            }
+            affichagefindepartie(mesFourmis, nbFourmisMeilleures);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     //lancement d'une simulation avec chargement d'une carte en parametre
     //le nombre de case nourriture et fourmiliere est defini aleatoirement  respectivement entre 1 et la largeur et 1 et la  hauteur
     public void lancerSimulation(String nomFichier, int nbFourmis, int nbEvolutions, int nbCoups) throws InvalidMapSizeException, InvalidFileFormatException, IOException, CloneNotSupportedException, InvalidDirectionException, InvalidNbCaseDiffException {

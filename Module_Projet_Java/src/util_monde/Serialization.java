@@ -10,22 +10,21 @@ public class Serialization {
     }
 
     /**
-     * Serialisation d'un programme genetique dans un fichier afin de pouvoir le r�utiliser
-     *
+     * Serialisation d'un programme genetique dans un fichier afin de pouvoir le reutiliser
      * @param programmeGenetique c'est le programme qu'on veut enregistrer
-     * @param nomFichier         nom du fichier, id�al mettre sous la forme nomFichier.txt
+     * @param nomFichier         nom du fichier, ideal mettre sous la forme nomFichier.txt
      */
 
 
     public static void serialiseProgrammeGenetique(ProgrammeGenetique programmeGenetique, String nomFichier) throws IOException {
-        // ouverture d'un flux de sortie vers le fichier et cr�ation de ce fichier
+        // ouverture d'un flux de sortie vers le fichier et creation de ce fichier
         FileOutputStream fos = new FileOutputStream(new File("Module_Projet_Java\\Sauvegardes\\" + nomFichier));
 
-        // cr�ation d'un "flux objet" avec le flux fichier
+        // creation d'un "flux objet" avec le flux fichier
         ObjectOutputStream oos = new ObjectOutputStream(fos);
 
         try {
-            // s�rialisation : �criture de l'objet dans le flux de sortie
+            // serialisation : ecriture de l'objet dans le flux de sortie
             //oos.writeObject("L'arbre de la fourmi est le suivant : ");
             oos.writeObject(programmeGenetique);
             // on vide le tampon
@@ -42,13 +41,13 @@ public class Serialization {
 
     public static ProgrammeGenetique deserialiseProgrammeGenetique(String nomFichier) throws IOException, ClassNotFoundException {
         ProgrammeGenetique programmeGenetique;
-        // ouverture d'un flux d'entr�e depuis le fichier indiqu�
+        // ouverture d'un flux d'entree depuis le fichier indique
         FileInputStream fis = new FileInputStream("Module_Projet_Java\\Sauvegardes\\" + nomFichier);
 
-        // cr�ation d'un "flux objet" avec le flux fichier
+        // creation d'un "flux objet" avec le flux fichier
         ObjectInputStream ois = new ObjectInputStream(fis);
         try {
-            // d�s�rialisation : lecture de l'objet depuis le flux d'entr�e
+            // deserialisation : lecture de l'objet depuis le flux d'entree
             programmeGenetique = (ProgrammeGenetique) ois.readObject();
             return programmeGenetique;
         } finally {

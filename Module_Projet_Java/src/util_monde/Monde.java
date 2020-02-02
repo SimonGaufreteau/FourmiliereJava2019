@@ -6,6 +6,7 @@ import exceptions_monde.InvalidMapSizeException;
 import exceptions_monde.InvalidNbCaseDiffException;
 import exceptions_monde.OutOfMapException;
 import util_fourmi.Fourmi;
+import util_fourmi.ProgrammeGenetique;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 public class Monde implements Cloneable {
     private Carte carte;
     private Fourmi[] fourmis;
+    private ProgrammeGenetique programmeGenetique;
     private static int nbFourmisDefaut = 20;
 
     /*
@@ -23,7 +25,15 @@ public class Monde implements Cloneable {
         this.fourmis = new Fourmi[nbFourmi];
         for (int i = 0; i < nbFourmi; i++) {
             this.fourmis[i] = new Fourmi();
-            //Pour l'instant aucun constructeur de définit. A voir dans la classe "Utile_Fourmi.Fourmi".
+        }
+    }
+
+    public Monde(String nomCarte, int nbFourmi, ProgrammeGenetique programmeGenetique) throws InvalidMapSizeException, InvalidFileFormatException, IOException {
+        this.carte = new Carte(nomCarte);
+        this.fourmis = new Fourmi[nbFourmi];
+        this.programmeGenetique = programmeGenetique ;
+        for (int i = 0; i<nbFourmi; i++){
+            this.fourmis[i] = new Fourmi();
         }
     }
 
