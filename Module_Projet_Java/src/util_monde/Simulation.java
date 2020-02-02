@@ -228,7 +228,7 @@ public class Simulation {
         if (nbFourmisMeilleures>mesFourmis.length) nbFourmisMeilleures=mesFourmis.length;
         if (choix.length() == 1 && choix.equals("o")) {
             triFourmis(mesFourmis);
-            for (int i = 0; i < nbFourmisMeilleures; i++) {
+            for (int i = 0; i < Math.min(nbFourmisMeilleures,10); i++) {
                 System.out.println("Fourmi " + i + ":\n" + mesFourmis[i].getIntelligence());
             }
         }
