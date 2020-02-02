@@ -21,12 +21,7 @@ public class Jeu {
         int nb = sc.nextInt();
         int nbCoups; // Nombre de coups par évolution
         int nbEvolutions; // Nombre d'évolutions que vont subir les fourmis
-        //demande de saisi à l'utilisateur du nb de coup et d'evolution
-        Scanner Sc = new Scanner(System.in);
-        System.out.print("Nombre d'évolution : ");
-        nbEvolutions = Sc.nextInt();
-        System.out.print("Nombre de coups par évolution : ");
-        nbCoups = Sc.nextInt();
+
 
         switch (nb) {
             case 1:
@@ -35,6 +30,12 @@ public class Jeu {
                 int nbfourmis = (int) (Math.random() * 1000)+6;
                 int nbCaseFourmiliere = Math.max((int) (Math.random() * largeur / 2),largeur);
                 int nbCaseNourriture = Math.max((int) (Math.random() * hauteur / 2),hauteur);
+                //demande de saisi à l'utilisateur du nb de coup et d'evolution
+                Scanner Sc = new Scanner(System.in);
+                System.out.print("Nombre d'évolution : ");
+                nbEvolutions = Sc.nextInt();
+                System.out.print("Nombre de coups par évolution : ");
+                nbCoups = Sc.nextInt();
                 simulation.lancerSimulation(largeur, hauteur, nbfourmis,nbCaseFourmiliere  ,nbCaseNourriture,nbEvolutions,nbCoups);
 
                 System.out.println("Voulez-vous sauvegarder la carte du monde ? Si oui taper le nom du fichier dans lequel vous voulez la sauvegarder\n si non n");
@@ -56,19 +57,33 @@ public class Jeu {
                 int nbfourm=sc.nextInt();
                 if(nbfourm==0)
                     nbfourm = (int) (Math.random() * 1000)+6;
+                //demande de saisi à l'utilisateur du nb de coup et d'evolution
+                sc = new Scanner(System.in);
+                System.out.print("Nombre d'évolution : ");
+                nbEvolutions = sc.nextInt();
+                System.out.print("Nombre de coups par évolution : ");
+                nbCoups = sc.nextInt();
+
                 simulation.lancerSimulation("Cartes/" + nomfichiercarte, nbfourm,nbEvolutions,nbCoups);
                 break;
             case 3:
                 //tester le comportement d'une fourmi isolement
-                /*System.out.println("Veuillez saisir un nom de fichier pour la carte: ");
-                sc.nextLine(); // on  vide la ligne
-                nomfichiercarte = sc.nextLine();
-
                 System.out.println("Veuillez saisir un nom de fichier pour la fourmi: ");
                 sc.nextLine(); // on  vide la ligne
-                nomfichiercarte = sc.nextLine();
+                nomfichier = sc.nextLine();
+                System.out.print("Nombre de coups: ");
+                nbCoups = sc.nextInt();
+                System.out.println("Voulez-vous rentrer une carte du monde ? oui : o, non : n");
+                String choix=sc.nextLine();
+                if(choix.length()==1 && choix.equals("o")){
+                    System.out.println("Veuillez saisir un nom de fichier: ");
+                    sc.nextLine(); // on  vide la ligne
+                    nomfichiercarte = sc.nextLine();
+                    simulation.testercomportementFourmi(nomfichier,nomfichiercarte,nbCoups);
+                }
+                simulation.testercomportementFourmi(nomfichier,nbCoups);
 
-                break;*/
+                break;
         }
 
         /*System.out.println("Voulez vous sauvegarder les paramètres de la partie ? Si oui rentrer un nom de fichier");

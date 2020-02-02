@@ -185,19 +185,22 @@ public class Simulation {
         }
     }
 
+    public void testercomportementFourmi(String nomFichier,String nomFichierCarte, int nbCoups) throws InvalidMapSizeException, InvalidFileFormatException, IOException {
+        //fichier deseriailiser comportement de la fourmmi
+        monMonde = new Monde(nomFichierCarte, 1);
+        for (int j = 0; j < nbCoups; j++) {
+            //.agir();
+        }
+        //affichage du score
+    }
 
-    //probleme manque le nb de case nourriture
-    /*public void sauvegarderParametre(String nomFichier) throws IOException {
-        nomFichier = System.getProperty("user.dir") + "\\Module_Projet_Java\\Sauvegardes\\" + nomFichier;
-
-        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), StandardCharsets.UTF_8));
-        //on ecrit la carte du monde
-        writer.write(monMonde.getCarte().getHauteur() + " " + monMonde.getCarte().getLargeur() + "\n" + monMonde.getCarte().getGrille().toString() + "\n");
-        //Puis le nombre de fourmis et de fourmiliere
-        //manque le nombre de case nourriture.
-        writer.write(monMonde.getFourmis().length + " \n" + monMonde.lesFourmilieres().size() + "\n");
-        writer.close();
-    }*/
+    public void testercomportementFourmi(String nomFichier, int nbCoups) throws InvalidNbCaseDiffException {
+        monMonde=new Monde(5,5,1,5,5);
+        for (int j = 0; j < nbCoups; j++) {
+            //.agir();
+        }
+        //score
+    }
 }
 
 
