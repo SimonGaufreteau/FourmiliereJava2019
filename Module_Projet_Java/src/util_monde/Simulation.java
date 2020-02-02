@@ -8,7 +8,8 @@ import util_fourmi.Fourmi;
 import util_fourmi.ProgrammeGenetique;
 import util_fourmi.Score;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Simulation {
@@ -185,21 +186,36 @@ public class Simulation {
         }
     }
 
-    public void testercomportementFourmi(String nomFichier,String nomFichierCarte, int nbCoups) throws InvalidMapSizeException, InvalidFileFormatException, IOException {
+    public void testercomportementFourmi(ProgrammeGenetique prgG,String nomFichierCarte, int nbCoups) throws InvalidMapSizeException, InvalidFileFormatException, IOException, InvalidDirectionException {
         //fichier deseriailiser comportement de la fourmmi
-        monMonde = new Monde(nomFichierCarte, 1);
+        monMonde= new Monde(nomFichierCarte,prgG);
         for (int j = 0; j < nbCoups; j++) {
-            //.agir();
+            monMonde.getFourmis()[0].agir();
         }
-        //affichage du score
+        System.out.println(monMonde.getCarte());
+        System.out.println("position de depart : "+ monMonde.getFourmis()[0].getPosition());
+        System.out.println("Score : "+monMonde.getFourmis()[0].getScore().getPoint());
+
     }
 
-    public void testercomportementFourmi(String nomFichier, int nbCoups) throws InvalidNbCaseDiffException {
+    public void testercomportementFourmi(ProgrammeGenetique prgG, int nbCoups) throws InvalidNbCaseDiffException, InvalidDirectionException {
         monMonde=new Monde(5,5,1,5,5);
         for (int j = 0; j < nbCoups; j++) {
-            //.agir();
+            monMonde.getFourmis()[0].agir();
         }
-        //score
+        System.out.println(monMonde.getCarte());
+        System.out.println("position de depart : "+ monMonde.getFourmis()[0].getPosition());
+        System.out.println("Score : "+monMonde.getFourmis()[0].getScore().getPoint());
+    }
+
+    public void sauvegarderParametre(String nomFichier) throws IOException {
+        nomFichier = System.getProperty("user.dir") + "\\Module_Projet_Java\\Sauvegardes\\" + nomFichier;
+
+        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), StandardCharsets.UTF_8));
+        writer.write("Hauteur de la carte : " + monMonde.getCarte().getHauteur() + " " + "Largeur de la carte :" + monMonde.getCarte().getLargeur() + "\n" + monMonde.getCarte().toString() + "\n");
+        writer.write("Nombre total de fourmis :" + monMonde.getFourmis().length + " \n" + "Nombre de fourmilières :" + monMonde.lesFourmilieres().size() + "\n");
+        writer.write("Nombre de nourriture:" + monMonde.laNourriture().size() + "\n");
+        writer.close();
     }
 }
 

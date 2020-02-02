@@ -7,6 +7,7 @@ import exceptions_monde.InvalidMapSizeException;
 import exceptions_monde.InvalidNbCaseDiffException;
 import exceptions_monde.OutOfMapException;
 import util_fourmi.Fourmi;
+import util_fourmi.ProgrammeGenetique;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,16 +21,19 @@ public class Monde  {
     Constructeur avec Carte à charger. On prend en argument le nom du fichier contenant la carte
      */
     public Monde(String nomCarte, int nbFourmi) throws InvalidMapSizeException, InvalidFileFormatException, IOException {
-        //int x,y;
         this.carte = new Carte(nomCarte);            //throws les exception ci-dessus en cas de mauvais fichier, mauvais format, etc...
         this.fourmis = new Fourmi[nbFourmi];
         for (int i = 0; i < nbFourmi; i++) {
-           // y = (int) (Math.random() * (getCarte().getHauteur())); // on prend un nombre au hasard entre 0 et la hauteur -1)
-            //x = (int) (Math.random() * (getCarte().getLargeur())); // meme chose avec la largeur
             Case posF = new Case(0, 0, this.carte);
             this.fourmis[i] = new Fourmi(posF, lesFourmilieres());
 
         }
+    }
+    public Monde(String nomCarte, ProgrammeGenetique prgG) throws IOException, InvalidMapSizeException, InvalidFileFormatException {
+        this.carte = new Carte(nomCarte);            //throws les exception ci-dessus en cas de mauvais fichier, mauvais format, etc...
+        this.fourmis = new Fourmi[1];
+        Case posF = new Case(0, 0, this.carte);
+        this.fourmis[0] = new Fourmi(posF,lesFourmilieres(),prgG);
     }
 
     public Monde(Carte carte, Fourmi[] fourmis) {
@@ -77,6 +81,20 @@ public class Monde  {
     public void sauvegarder(String nomFichier) throws IOException {
         this.carte.sauvegarder(nomFichier);
     }
+
+    public ArrayList<CaseNourriture> laNourriture() {
+        ArrayList nourriture = new ArrayList();
+        Case[][] grille = carte.getGrille();
+        for (int x = 0; x < carte.getLargeur(); x++) {
+            for (int y = 0; y < carte.getHauteur(); y++) {
+                if (grille[x][y] instanceof CaseNourriture) {
+                    nourriture.add(grille[x][y]);
+                }
+            }
+        }
+        return nourriture;
+    }
+
 
     public Carte getCarte() {
         return carte;
