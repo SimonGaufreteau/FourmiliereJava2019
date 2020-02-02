@@ -208,13 +208,13 @@ public class Simulation {
         System.out.println("Score : "+monMonde.getFourmis()[0].getScore().getPoint());
     }
 
-    public void sauvegarderParametre(String nomFichier) throws IOException {
+    public void sauvegarderParametre(String nomFichier, int nbevol, int nbcoups) throws IOException {
         nomFichier = System.getProperty("user.dir") + "\\Module_Projet_Java\\Sauvegardes\\" + nomFichier;
 
         Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), StandardCharsets.UTF_8));
         writer.write("Hauteur de la carte : " + monMonde.getCarte().getHauteur() + " " + "Largeur de la carte :" + monMonde.getCarte().getLargeur() + "\n" + monMonde.getCarte().toString() + "\n");
         writer.write("Nombre total de fourmis :" + monMonde.getFourmis().length + " \n" + "Nombre de fourmilières :" + monMonde.lesFourmilieres().size() + "\n");
-        writer.write("Nombre de nourriture:" + monMonde.laNourriture().size() + "\n");
+        writer.write("Nombre de nourriture:" + monMonde.laNourriture().size() + "\n" + "Nombre d'évolution :"+ nbevol + "\n Nombre de coups par évolution :" + nbcoups);
         writer.close();
     }
 }

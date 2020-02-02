@@ -74,6 +74,7 @@ public class Jeu {
                 sc.nextLine(); // on  vide la ligne
                 nomfichier = sc.nextLine();
                 System.out.print("Nombre de coups: ");
+                nbEvolutions=0;
                 nbCoups = sc.nextInt();
                 System.out.println("Voulez-vous rentrer une carte du monde ? oui : o, non : n");
                 sc.nextLine();
@@ -87,17 +88,20 @@ public class Jeu {
                 }
                 ProgrammeGenetique prg = Serialization.deserialiseProgrammeGenetique(nomfichier);
                 simulation.testercomportementFourmi(prg,nbCoups);
-
+                break;
+            default :
+                nbEvolutions=0;
+                nbCoups=0;
                 break;
         }
 
         System.out.println("Voulez vous sauvegarder les paramètres de la partie ? Si oui rentrer un nom de fichier, si non rentrez n");
         String nomFichierParametre = sc.nextLine();
         if (nomFichierParametre.length() != 1) {
-            simulation.sauvegarderParametre(nomFichierParametre);
+            simulation.sauvegarderParametre(nomFichierParametre,nbEvolutions,nbCoups);
         } else {
             if (nomFichierParametre.charAt(0) != 'n') {
-                simulation.sauvegarderParametre(nomFichierParametre);
+                simulation.sauvegarderParametre(nomFichierParametre,nbEvolutions,nbCoups);
             }
         }
 
