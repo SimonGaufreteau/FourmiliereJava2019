@@ -58,18 +58,18 @@ public class Jeu {
                 int nbfourm = sc.nextInt();
                 if (nbfourm == 0)
                     nbfourm = (int) (Math.random() * 1000) + 6;
-                simulation.lancerSimulation("Module_Projet_Java\\Cartes\\" + nomFichierCarte, nbfourm, nbEvolutions, nbCoups);
+                simulation.lancerSimulation("Cartes\\" + nomFichierCarte, nbfourm, nbEvolutions, nbCoups);
                 break;
             case 3:
                 //tester le comportement d'une fourmi isolement
                 System.out.println("Veuillez saisir un nom de fichier pour la carte: ");
                 nomFichierCarte = sc.nextLine();
-                sc.nextLine();
+                String t=sc.nextLine();
                 System.out.println("Veuillez saisir un nom de fichier pour la fourmi: ");
                 String nomFichierFourmi = sc.nextLine();
                 ProgrammeGenetique p = Serialization.deserialiseProgrammeGenetique(nomFichierFourmi);
                 //Lancer la simulation
-                simulation.lancerSimulation("Cartes\\" + nomFichierCarte, 1, nbEvolutions, nbCoups, p);
+                simulation.lancerSimulation("Cartes\\" + t, 1, nbEvolutions, nbCoups, p);
                 break;
         }
         System.out.println("Voulez vous sauvegarder les paramètres de la partie ? Si oui rentrer un nom de fichier");

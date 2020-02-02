@@ -90,7 +90,7 @@ public class Simulation {
             }
             affichagefindepartie(mesFourmis, nbFourmisMeilleures);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -118,7 +118,7 @@ public class Simulation {
             }
             affichagefindepartie(mesFourmis, nbFourmisMeilleures);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -129,11 +129,13 @@ public class Simulation {
             }
         }
         triFourmis(mesFourmis);
+        scoreFourmi = new Score[mesFourmis.length];
         for (int i = 0; i < mesFourmis.length; i++) {
             scoreFourmi[i] = mesFourmis[i].getScore();
             System.out.println(i + " : " + scoreFourmi[i].getPoint());
         }
         // MUTATION
+        if(mesFourmis.length<nbFourmisMeilleures) nbFourmisMeilleures=mesFourmis.length;
         Fourmi[] meilleuresFourmis = new Fourmi[nbFourmisMeilleures];
         //System.out.println("Meilleures fourmis : " + nbFourmisMeilleures + " (" + POURCENTAGE_FOURMIS_MEILLEURES*100 + "%)");
         //System.out.println("Fourmis à muter : " + nbFourmisMuter);
@@ -142,11 +144,13 @@ public class Simulation {
             meilleuresFourmis[i] = mesFourmis[i];
             mesFourmis[i] = new Fourmi(mesFourmis[i].getIntelligence().clone(), monMonde.lesFourmilieres(), monMonde.getCarte());
         }
-        Fourmi[] fourmisApresMut = new Fourmi[nbFourmisMuter];
-        fourmisApresMut = muterFourmisCroisement(meilleuresFourmis, nbFourmisMuter, nbFourmisMuter2);
+        if(nbFourmisMuter>0) {
+            Fourmi[] fourmisApresMut = new Fourmi[nbFourmisMuter];
+            fourmisApresMut = muterFourmisCroisement(meilleuresFourmis, nbFourmisMuter, nbFourmisMuter2);
 
-        for (int i = nbFourmisMeilleures; i < mesFourmis.length; i++) {
-            mesFourmis[i] = fourmisApresMut[i - nbFourmisMeilleures];
+            for (int i = nbFourmisMeilleures; i < mesFourmis.length; i++) {
+                mesFourmis[i] = fourmisApresMut[i - nbFourmisMeilleures];
+            }
         }
         monMonde.getCarte().razCaseNourriture(); // On remet les cases nourritures à leur quantité initiale pour la simulation suivante
     }
@@ -221,6 +225,7 @@ public class Simulation {
         System.out.println("Le score moyen est : " + mesFourmis[0].getScore().scoreMoyen(scoreFourmi) + "\n");
         System.out.println("Voulez-vous afficher les meilleures fourmis (arbres génétiques) ? \n o : oui \n n : non ");
         String choix = Sc.nextLine();
+        if (nbFourmisMeilleures>mesFourmis.length) nbFourmisMeilleures=mesFourmis.length;
         if (choix.length() == 1 && choix.equals("o")) {
             triFourmis(mesFourmis);
             for (int i = 0; i < nbFourmisMeilleures; i++) {

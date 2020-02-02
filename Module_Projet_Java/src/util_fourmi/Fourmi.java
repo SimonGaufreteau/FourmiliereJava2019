@@ -218,7 +218,7 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter {
 
                 }
             }
-            System.out.println(noeudEnCours.getValeurNoeud());
+            //System.out.println(noeudEnCours.getValeurNoeud());
             if ((noeudEnCours.getValeurNoeud()).equals("act_allerGauche")) {
                 deplacer('G');
             } else if ((noeudEnCours.getValeurNoeud()).equals("act_allerDroite")) {
