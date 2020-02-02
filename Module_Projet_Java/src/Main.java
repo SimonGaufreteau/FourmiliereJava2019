@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException, InvalidFileFormatException, InvalidDirectionException, InvalidNbCaseDiffException, InvalidMapSizeException, CloneNotSupportedException {
+    public static void main(String[] args) throws IOException, InvalidFileFormatException, InvalidDirectionException, InvalidNbCaseDiffException, InvalidMapSizeException, CloneNotSupportedException, ClassNotFoundException {
         Jeu jeu = new Jeu();
         jeu.jeu();
 
