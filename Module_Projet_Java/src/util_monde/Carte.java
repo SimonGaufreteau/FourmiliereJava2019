@@ -12,7 +12,7 @@ Classe de génération et de manipulation de la Utile_Monde.Carte (du Utile_Mond
 Attributs : Une hauteur , une largeur et un tableau de tableaux de Cases représentant la grille.
 
 Note : On accède aux éléments de la grille de la facon suivante :
-grille[x][y] où "x" est l'index de colonne et "y" l'index de ligne
+grille[l][h] où "l" est l'index de ligne et "h" l'index de colonne
 */
 
 public class Carte implements Cloneable {
@@ -24,13 +24,13 @@ public class Carte implements Cloneable {
     On initialise toutes les Cases avec le constructeur de base (voir classe "Utile_Monde.Case") pour n'avoir que des cases "simples".
     */
     // création d'une carte "vide" (sans nourriture ni fourmiliere)
-    public Carte( int largeur,int hauteur) {
-        this.hauteur=hauteur;
-        this.largeur=largeur;
-        this.grille=new Case[largeur][hauteur];
-        for (int x=0; x<largeur; x++){
-            for (int y=0; y<hauteur; y++) {
-                this.grille[x][y]=new Case(x,y,this);
+    public Carte(int hauteur, int largeur) {
+        this.hauteur = hauteur;
+        this.largeur = largeur;
+        this.grille = new Case[largeur][hauteur];
+        for (int x = 0; x < largeur; x++) {
+            for (int y = 0; y < hauteur; y++) {
+                this.grille[x][y] = new Case(x, y, this);
             }
         }
     }
@@ -39,37 +39,37 @@ public class Carte implements Cloneable {
     // RETIRER DE LA LISTE DES POSSIBLES CELLES DEJA TIREES
     public Carte(int largeur, int hauteur, int nbFourmiliere, int nbNourriture) throws InvalidNbCaseDiffException {
         this(largeur, hauteur);
-        if(nbFourmiliere+nbNourriture>(largeur*hauteur)){
+        if (nbFourmiliere + nbNourriture > (largeur * hauteur)) {
             throw new InvalidNbCaseDiffException();
         }
         //creation d'une liste avec toutes les possibilites de cases
-        ArrayList<Coordonnee> possibilites= new ArrayList<Coordonnee>();
-        for (int x=0; x<largeur; x++) {
+        ArrayList<Coordonnee> possibilites = new ArrayList<Coordonnee>();
+        for (int x = 0; x < largeur; x++) {
             for (int y = 0; y < hauteur; y++) {
-                possibilites.add(new Coordonnee(x,y));
+                possibilites.add(new Coordonnee(x, y));
             }
         }
-        int aleatoire,x,y;
+        int aleatoire, x, y;
         Coordonnee C;
         /*tant qu'il n'y a pas le bon nombre de case fourmiliere on tire un couple au sort
          on crée une fourmiliere avec ses coordonnées
         on retire ce couple de la liste des possibilités
          */
-        for(int i=0;i<nbFourmiliere;i++){
-            aleatoire= (int)(Math.random()*possibilites.size());
-            C=possibilites.get(aleatoire);
-            x=C.getX();
-            y=C.getY();
-            this.grille[x][y]=new CaseFourmiliere(x,y,this);
+        for (int i = 0; i < nbFourmiliere; i++) {
+            aleatoire = (int) (Math.random() * possibilites.size());
+            C = possibilites.get(aleatoire);
+            x = C.getX();
+            y = C.getY();
+            this.grille[y][x] = new CaseFourmiliere(x, y, this);
             possibilites.remove(C);
         }
         // même chose avec les cases nourritures
-        for(int i=0;i<nbNourriture;i++){
-            aleatoire= (int)(Math.random()*possibilites.size());
-            C=possibilites.get(aleatoire);
-            x=C.getX();
-            y=C.getY();
-            this.grille[x][y]=new CaseNourriture(x,y,100,this);
+        for (int i = 0; i < nbNourriture; i++) {
+            aleatoire = (int) (Math.random() * possibilites.size());
+            C = possibilites.get(aleatoire);
+            x = C.getX();
+            y = C.getY();
+            this.grille[y][x] = new CaseNourriture(x, y, 100, this);
             possibilites.remove(C);
         }
     }
@@ -88,44 +88,44 @@ public class Carte implements Cloneable {
 
         //On recupère la taille de la grille se trouvant à la première ligne sous le format suivant : "10 8" (ici 10 pour hauteur et 8 pour largeur)
         //(On vérifiera par la suite la bonne correspondance de ces valeurs)
-        try{
-            String premiereLigne =iterator.next();
+        try {
+            String premiereLigne = iterator.next();
             String[] premierSplit = premiereLigne.split(" ");
             this.hauteur = Integer.parseInt(premierSplit[0]);
             this.largeur = Integer.parseInt(premierSplit[1]);
-            this.grille =new Case[this.hauteur][this.largeur];
+            this.grille = new Case[this.hauteur][this.largeur];
         } catch (Exception e) {
             throw new InvalidFileFormatException(nomCarte);
         }
 
         //On compte la taille de la grille manuellement avec "hauteur" et "largeur_reelle", pour vérifier que le format est respecté
-        int hauteur=0;
+        int hauteur = 0;
         int largeur_reelle;
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
 
             //On récupère la ligne dans l, si la taille n'est pas la bonne (en enlevant les espaces entre les caractères), on throw une exception
-            l=iterator.next();
-            if (l.split(" ").length!=this.largeur){
-                throw new InvalidMapSizeException(this.largeur,l.split(" ").length);
+            l = iterator.next();
+            if (l.split(" ").length != this.largeur) {
+                throw new InvalidMapSizeException(this.largeur, l.split(" ").length);
             }
 
-            largeur_reelle=0;
-            for (int largeur_actuelle = 0 ; largeur_actuelle < l.length() ;largeur_actuelle++) {
+            largeur_reelle = 0;
+            for (int largeur_actuelle = 0; largeur_actuelle < l.length(); largeur_actuelle++) {
                 //on réalise un switch sur chaque caractère de la ligne
 
                 car = l.charAt(largeur_actuelle);
                 switch (car) {
                     case 'C':
                         //A chaque fois qu'on a un caractere reconnu, on incremente la largeur "reelle" de la ligne
-                        this.grille[largeur_reelle][hauteur] = new Case(largeur_reelle, hauteur,this);
+                        this.grille[largeur_reelle][hauteur] = new Case(largeur_reelle, hauteur, this);
                         largeur_reelle++;
                         break;
                     case 'F':
-                        this.grille[largeur_reelle][hauteur] = new CaseFourmiliere(largeur_reelle, hauteur,this);
+                        this.grille[largeur_reelle][hauteur] = new CaseFourmiliere(largeur_reelle, hauteur, this);
                         largeur_reelle++;
                         break;
                     case 'N':
-                        this.grille[largeur_reelle][hauteur] = new CaseNourriture(largeur_reelle,hauteur,7,this);
+                        this.grille[largeur_reelle][hauteur] = new CaseNourriture(largeur_reelle, hauteur, 7, this);
                         largeur_reelle++;
                         break;
                 }
@@ -133,17 +133,18 @@ public class Carte implements Cloneable {
             hauteur++;
         }
         //Fin de la boucle while du parcours des lignes. On vérifie si la taille recue est bien celle attendue.
-        if (hauteur!=this.hauteur){
-            throw new InvalidMapSizeException(this.hauteur,hauteur);
+        if (hauteur != this.hauteur) {
+            throw new InvalidMapSizeException(this.hauteur, hauteur);
         }
     }
 
-    public Carte(){}
+    public Carte() {
+    }
 
     //Méthode permettant de renvoyer la liste des lignes d'un fichier
-    private  List<String> getLignes(String nomCarte) throws IOException {
-        List<String> lignes  = new ArrayList<>();
-        nomCarte = System.getProperty("user.dir")+ "\\Module_Projet_Java\\"+nomCarte;
+    private List<String> getLignes(String nomCarte) throws IOException {
+        List<String> lignes = new ArrayList<>();
+        nomCarte = System.getProperty("user.dir") + "\\Module_Projet_Java\\" + nomCarte;
         BufferedReader reader = new BufferedReader(new FileReader(nomCarte));
         String line;
         while ((line = reader.readLine()) != null) {
@@ -154,48 +155,50 @@ public class Carte implements Cloneable {
     }
 
     /*Calcul de la distance entre deux cases, nécessaires à la fourmi pour rentrer au plus proche*/
-    public  int distanceEntreDeuxCases(Case case1, Case case2){
+    public int distanceEntreDeuxCases(Case case1, Case case2) {
         int xMin = case1.getX(); //récupèration des coordonnées des cases
-        int xMax= case2.getX();
+        int xMax = case2.getX();
         int yMin = case1.getY();
         int yMax = case2.getY();
-        if(case1.getX() > case2.getX()){
-            xMin=case2.getX();
-            xMax=case1.getX();
+        if (case1.getX() > case2.getX()) {
+            xMin = case2.getX();
+            xMax = case1.getX();
         }
-        if(case1.getY() > case2.getY()){
-            yMin=case2.getY();
-            yMax=case1.getY();
+        if (case1.getY() > case2.getY()) {
+            yMin = case2.getY();
+            yMax = case1.getY();
         }
         //calcul de la distance dans un monde torique
-        int deltaX = Math.min(xMax-xMin,(largeur-xMax)+xMin);
-        int deltaY = Math.min(yMax-yMin,(hauteur-yMax)+yMin);
+        int deltaX = Math.min(xMax - xMin, (largeur - xMax) + xMin);
+        int deltaY = Math.min(yMax - yMin, (largeur - yMax) + yMin);
         return deltaX + deltaY;
     }
+
     /*Pour rentrer à la fourmilière la plus proche la fourmi doit savoir dans quelle direction partir, il faut donc examiner
      * les cases voisines pour calculer leur distance à la fourmilière. */
     public Case getVoisin(int x, int y, char direction) throws InvalidDirectionException {
-        switch (direction){
+        switch (direction) {
             //en fonction de la direction, donne la case voisine
             case 'H':
-                if(y==0) {
-                    return grille[x][hauteur-1];
+                if (y == 0) {
+                    return grille[x][hauteur - 1];
                 }
-                return grille[x][y-1];
+                return grille[x][y - 1];
             case 'D':
-                if(x==largeur-1){
+                if (x == largeur - 1) {
                     return grille[0][y];
                 }
-                return grille[x+1][y];
+                return grille[x + 1][y];
             case 'B':
-                if(y==hauteur-1){
+                if (y == hauteur - 1) {
                     return grille[x][0];
                 }
-                return grille[x][y+1];
+                return grille[x][y + 1];
             case 'G':
-                if(x==0){
-                    return grille[largeur-1][y]; }
-                return grille[x-1][y];
+                if (x == 0) {
+                    return grille[largeur - 1][y];
+                }
+                return grille[x - 1][y];
             default:
                 throw new InvalidDirectionException(direction);
         }
@@ -219,10 +222,10 @@ public class Carte implements Cloneable {
     //Méthode de sauveagarde de la carte. On prend en paramètre un nom de carte à sauvegarder dans le dossier "Sauvegardes"
     //Throws une IOException si on a un problème d'ouverture du fichier en écriture
     public void sauvegarder(String nomFichier) throws IOException {
-        nomFichier = System.getProperty("user.dir")+ "\\Module_Projet_Java\\Sauvegardes\\"+nomFichier;
+        nomFichier = System.getProperty("user.dir") + "\\Module_Projet_Java\\Sauvegardes\\" + nomFichier;
 
         Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), StandardCharsets.UTF_8));
-        writer.write(hauteur + " "+largeur + "\n"+this.toString());
+        writer.write(hauteur + " " + largeur + "\n" + this.toString());
         writer.close();
     }
 
@@ -248,6 +251,12 @@ public class Carte implements Cloneable {
         }
     }
 
+    public Carte clone() throws CloneNotSupportedException {
+        Carte c = (Carte) super.clone();
+        c.grille = (Case[][]) this.grille.clone();
+        return c;
+    }
+
 
     /*Affichage d'une Carte sous le format suivant :
     C N C C C
@@ -257,10 +266,10 @@ public class Carte implements Cloneable {
     (C = Case normale, N = Nourriture, F = Fourmiliere)
     (Voir toString() de chaque case pour detail)
     * */
-    public String toString(){
+    public String toString() {
         StringBuilder s = new StringBuilder();
-        for (int y=0;y<hauteur;y++){            //Affichage une par une des lignes
-            for (int x=0;x<largeur;x++){        //Affichage d'une ligne
+        for (int y = 0; y < hauteur; y++) {            //Affichage une par une des lignes
+            for (int x = 0; x < largeur; x++) {        //Affichage d'une ligne
                 s.append(grille[x][y].toString()).append(" ");
             }
             s.append("\n");
@@ -268,13 +277,13 @@ public class Carte implements Cloneable {
         return s.toString();
     }
 
-    class Coordonnee{
+    class Coordonnee {
         private int x;
         private int y;
 
-        Coordonnee(int x,int y){
-            this.x=x;
-            this.y=y;
+        Coordonnee(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
 
         public int getX() {

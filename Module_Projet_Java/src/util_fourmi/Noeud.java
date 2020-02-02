@@ -9,14 +9,15 @@ public class Noeud implements Serializable, Cloneable {
         this.text = text;
     }
 
-    public String getText () {
+    public String getText() {
         return text;
     }
 
     public Noeud clone() throws CloneNotSupportedException {
         Noeud n = (Noeud) super.clone();
         return n;
-        }
+    }
+
     public String toString() {
         return text;
     }
