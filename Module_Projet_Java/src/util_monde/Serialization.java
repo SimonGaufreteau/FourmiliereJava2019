@@ -26,7 +26,7 @@ public class Serialization {
         try {
             // serialisation : ecriture de l'objet dans le flux de sortie
             //oos.writeObject("L'arbre de la fourmi est le suivant : ");
-            oos.writeObject(programmeGenetique);
+            oos.writeObject(programmeGenetique.toString());
             // on vide le tampon
             oos.flush();
         } finally {
