@@ -69,7 +69,7 @@ public class Carte implements Cloneable {
             C = possibilites.get(aleatoire);
             x = C.getX();
             y = C.getY();
-            this.grille[x][y] = new CaseNourriture(x, y, 100, this);
+            this.grille[x][y] = new CaseNourriture(x, y, 1000, this);
             possibilites.remove(C);
         }
     }
@@ -242,11 +242,12 @@ public class Carte implements Cloneable {
         return largeur;
     }
 
-    public void razCaseNourriture(){
+    public void 
+        CaseNourriture(){
         for (int y=0;y<hauteur;y++){            //Affichage une par une des lignes
             for (int x=0;x<largeur;x++){        //Affichage d'une ligne
                 if(this.grille[x][y] instanceof CaseNourriture)
-                    ((CaseNourriture) grille[x][y]).setQuantiteNourriture(100);
+                    ((CaseNourriture) grille[x][y]).setQuantiteNourriture(1000);
             }
         }
     }
