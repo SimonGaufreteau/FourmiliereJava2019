@@ -227,7 +227,7 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
             }
             else if((noeudEnCours.getValeurNoeud()).equals("act_ramasser")){
                 if(ramasser()){ // Si la fourmi a pu ramasser de la nourriture
-                    score.augmenterScore(1);
+                    score.augmenterScore(0);
                 }
             }
             else if((noeudEnCours.getValeurNoeud()).equals("act_rentrer")){
@@ -236,7 +236,7 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter{
             }
             else if((noeudEnCours.getValeurNoeud()).equals("act_deposer")){
                 if(deposer()){
-                    score.augmenterScore(5);
+                    score.augmenterScore(10);
                 }
             }
         }
