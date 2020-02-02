@@ -50,6 +50,11 @@ public class Fourmi implements Ramasser, Deposer, Deplacer, Detecter {
         this.position = new Case(cartecourante);
     }
 
+    public Fourmi(ProgrammeGenetique p) throws IOException {
+        this();
+        this.intelligence=p;
+    }
+
     public Score getScore() {
         //pour afficher le score on a besoin de le récupérer
         return score;

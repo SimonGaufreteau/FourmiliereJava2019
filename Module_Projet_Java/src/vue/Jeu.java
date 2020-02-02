@@ -54,7 +54,6 @@ public class Jeu {
                 System.out.println("Veuillez saisir un nom de fichier : ");
                 sc.nextLine();
                 String nomFichierCarte = sc.nextLine();
-                Serialization.deserialiseCarte(nomFichierCarte);
                 System.out.println("Combien de fourmis voulez vous ? (0 pour un nombre aléatoire) ");
                 int nbfourm = sc.nextInt();
                 if (nbfourm == 0)
@@ -65,10 +64,11 @@ public class Jeu {
                 //tester le comportement d'une fourmi isolement
                 System.out.println("Veuillez saisir un nom de fichier pour la carte: ");
                 nomFichierCarte = sc.nextLine();
-                Serialization.deserialiseCarte("Module_Projet_Java\\Sauvegardes\\"+nomFichierCarte);
+                //Deserialiser la carte avec les méthode dans Monde ou dans Carte, à voir si c'est pas mieux de le faire dans lancerSimulation comme les autres cas.
                 System.out.println("Veuillez saisir un nom de fichier pour la fourmi: ");
                 String nomFichierFourmi = sc.nextLine();
-                Serialization.deserialiseProgrammeGenetique(nomFichierFourmi);
+                ProgrammeGenetique p = Serialization.deserialiseProgrammeGenetique(nomFichierFourmi);
+                //Lancer la simulation
                 break;
         }
         System.out.println("Voulez vous sauvegarder les paramètres de la partie ? Si oui rentrer un nom de fichier");
