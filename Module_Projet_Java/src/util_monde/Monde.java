@@ -1,4 +1,3 @@
-
 package util_monde;
 
 
@@ -83,11 +82,12 @@ public class Monde implements Cloneable {
         return fourmis;
     }
 
+
     public void setCases(Case[] cases) throws OutOfMapException {
         this.carte.setCases(cases);
     }
 
-    //fonction qui renvoi une liste de caseForurmilieres
+    //fonction qui renvoie une liste de caseFourmilieres
     public ArrayList<CaseFourmiliere> lesFourmilieres() {
         ArrayList fourmilieres = new ArrayList();
         Case[][] grille = carte.getGrille();
@@ -101,6 +101,20 @@ public class Monde implements Cloneable {
         return fourmilieres;
     }
 
+    public ArrayList<CaseNourriture> laNourriture() {
+        ArrayList nourriture = new ArrayList();
+        Case[][] grille = carte.getGrille();
+        for (int x = 0; x < carte.getLargeur(); x++) {
+            for (int y = 0; y < carte.getHauteur(); y++) {
+                if (grille[x][y] instanceof CaseNourriture) {
+                    nourriture.add(grille[x][y]);
+                }
+            }
+        }
+        return nourriture;
+    }
+
+
     public Monde clone() throws CloneNotSupportedException {
         Monde m = (Monde) super.clone();
         m.carte = (Carte) this.carte.clone();
@@ -111,12 +125,7 @@ public class Monde implements Cloneable {
     //Affichage du Monde sous forme de String.
     //Affichage de la Carte + des fourmis.
     public String toString() {
-        StringBuilder s = new StringBuilder("Affichage de la Carte :\n" + carte.toString()); /* + "\nAffichage des Fourmis :\n");
-        int i=1;
-        for (Fourmi fourmi : fourmis) {
-            s.append("Fourmi " + i + " : " + fourmi.toString()).append("\n\n");
-            i++;
-        }*/
+        StringBuilder s = new StringBuilder("Affichage de la Carte :\n" + carte.toString());
         return s.toString();
     }
 }

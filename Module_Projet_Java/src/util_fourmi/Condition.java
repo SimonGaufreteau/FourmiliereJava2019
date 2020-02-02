@@ -2,7 +2,7 @@ package util_fourmi;
 
 public class Condition extends Noeud {
 
-    public Condition(String text){
+    public Condition(String text) {
         super(text);
     }
 
