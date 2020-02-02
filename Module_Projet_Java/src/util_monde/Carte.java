@@ -60,7 +60,7 @@ public class Carte implements Cloneable {
             C = possibilites.get(aleatoire);
             x = C.getX();
             y = C.getY();
-            this.grille[y][x] = new CaseFourmiliere(x, y, this);
+            this.grille[x][y] = new CaseFourmiliere(x, y, this);
             possibilites.remove(C);
         }
         // même chose avec les cases nourritures
@@ -69,7 +69,7 @@ public class Carte implements Cloneable {
             C = possibilites.get(aleatoire);
             x = C.getX();
             y = C.getY();
-            this.grille[y][x] = new CaseNourriture(x, y, 100, this);
+            this.grille[x][y] = new CaseNourriture(x, y, 100, this);
             possibilites.remove(C);
         }
     }
